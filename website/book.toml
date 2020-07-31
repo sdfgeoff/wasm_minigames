@@ -1,0 +1,11 @@
+[book]
+authors = ["sdfgeoff"]
+language = "en"
+multilingual = false
+src = "src"
+title = "wasm_games_in_rust"
+
+
+[output.html]
+additional-css = ["custom.css"]
+additional-js = ["custom.js"]
