@@ -13,4 +13,4 @@ before_script:
   - cargo install-update -a
 
 script:
-  - mdbook build website/src
+  - mdbook build $TRAVIS_BUILD_DIR/website
