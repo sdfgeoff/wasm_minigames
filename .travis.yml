@@ -14,3 +14,13 @@ before_script:
 
 script:
   - mdbook build $TRAVIS_BUILD_DIR/website
+
+
+deploy:
+  provider: pages
+  skip-cleanup: true
+  github-token: $GITHUB_TOKEN
+  local-dir: $TRAVIS_BUILD_DIR/website/book
+  keep-history: false
+  on:
+    branch: master
