@@ -23,11 +23,10 @@ let element = document
     .expect("No element with selector");
 
 element.set_class_name("loaded");
-};
 ```
-There's a fair bit of unwrapping going on there, and it isn't ideal. However,
-I'm not sure there really is any good way for the program to handle the place
-where it's trying to draw not existing, so it will do for now.
+There's a fair bit of unwrap/expecting going on there, and it isn't ideal.
+However, I'm not sure there really is any good way for the program to handle
+the place where it's trying to draw not existing, so it will do for now.
 
 To get this code to compile, you need a bunch of things:
 
