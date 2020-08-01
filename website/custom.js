@@ -1,5 +1,5 @@
 function load(id) {
-    var module_path = '../games/' + id + '/core.js'
+    var module_path = './games/' + id + '/core.js'
     var canvas = document.getElementById(id)
     console.log("Loading", module_path)
 
