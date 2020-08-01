@@ -4,8 +4,7 @@ function load(id) {
     console.log("Loading", module_path)
 
     canvas.className="loading"
-    canvas.onclick=null
-
+    
     import(module_path)
     .then((module) => {
         module.default().then(function(obj){
@@ -15,6 +14,12 @@ function load(id) {
             console.error("Failed to load:", e)
         })
     });
+}
 
-    
+const canvases = document.querySelectorAll("canvas");
+for (canvas of canvases) {
+    canvas.tabIndex = 1
+    canvas.addEventListener("click", function() {
+        load(canvas.id)
+    }, {'once':true})
 }

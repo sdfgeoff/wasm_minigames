@@ -1,12 +1,8 @@
 # Cancel the load animation
 
-So, there's a load animation that's invoked when you click on a canvas. Using
-the example from the previous page:
-
-<canvas onclick="load(this.id)" id="trivial"></canvas>
-
-It loads continously. To stop the load animation, the webassembly needs
-to change the classname of the canvas to "loaded" rather than "loading".
+On this page, when clicking on a canvas, it sets the css style to "loading"
+which creates a load animation. To stop the load animation, the webassembly
+needs to change the classname of the canvas to "loaded" rather than "loading".
 To do this we need to access the DOM.
 
 You may have noticed that in the rust on the previous page the ID of the
@@ -14,7 +10,7 @@ canvas gets passed in. This allows us to find the element on the page.
 
 In JS we would use `document.getElementById(id)`. For some reason this doesn't
 exist in web-sys, so instead we can use `document.query_selector`:
-```
+```rust
 let window = window().unwrap();
 let document = window.document().unwrap();
 let element = document
@@ -31,7 +27,7 @@ the place where it's trying to draw not existing, so it will do for now.
 To get this code to compile, you need a bunch of things:
 
 In your Cargo.toml you need a bunch of features from the web-sys crate:
-```
+```toml
 [dependencies.web-sys]
 version = "0.3.4"
 features = [
@@ -47,6 +43,6 @@ thing, which is in `wasm_bindgen::JsCast;`. This allows casting from a generic
 
 The result:
 
-<canvas onclick="load(this.id)" id="cancel_load"></canvas>
+<canvas id="cancel_load"></canvas>
 
 When you click it, it goes black - the contents of the `loaded` style

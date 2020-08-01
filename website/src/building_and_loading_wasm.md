@@ -4,19 +4,19 @@ WASM builds have some requirements. For example, you need to define the library
 type as `cdylib`.
 
 It's probably easiest to look at a working Cargo.toml:
-```
+```toml
 {{#include ../src/games/trivial/Cargo.toml}}
 ```
 
 
-Rust has a great tool called "wasm-pack" which makes the process of building
+Rust has a great tool called [wasm-pack](https://github.com/rustwasm/wasm-pack) which makes the process of building
 and deploying WASM code nice and simple. It's designed to work with bundlers,
 but to avoid the gigabyte of dependencies that webpack pulls in, I decided to
 go for the simplest output type: "web".
 
 My invocation of `wasm-pack` is:
 
-```
+```shell
 wasm-pack build --out-dir $(OUT_DIR) --target web --dev
 # OR
 wasm-pack build --out-dir $(OUT_DIR) --target web --release
@@ -28,25 +28,25 @@ The only files we need are `core_bg.wasm` (the actual webassembly) and `core.js`
 Now you need to load it from HTML/js. For all the examples in this book, loading
 is an invocation of the function:
 
-```
+```javascript
 {{#include ../custom.js}}
 ```
 
 using an element like:
 
-```
-<canvas onclick="load(this.id)" id="trivial"></canvas>
+```html
+<canvas id="trivial"></canvas>
 ```
 
 A very simple rust webassembly program looks like:
 
-```
+```rust
 {{#include ../src/games/trivial/lib.rs}}
 ```
 
 All up this creates:
 
-<canvas onclick="load(this.id)" id="trivial"></canvas>
+<canvas id="trivial"></canvas>
 
 You'll notice when you click on it it fades through a bunch of colors. That's
 the loading animation for the webassembly I made (in CSS). Normally this would
@@ -62,5 +62,5 @@ App Started
 ```
 
 The first message comes from the javascript. The other two come from the WASM.
-The message will only appear once. This is because the javascript that loads it
-removes the `onclick` handler that invokes it.
+The message will only appear once, as the javascript prevents the WAS loading
+twice.
