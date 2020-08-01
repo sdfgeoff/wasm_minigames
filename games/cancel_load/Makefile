@@ -12,6 +12,7 @@ dev: static_files
 	rm $(OUT_DIR)/core_bg.d.ts
 	rm $(OUT_DIR)/core.d.ts
 	rm $(OUT_DIR)/package.json
+	rm $(OUT_DIR)/.gitignore
 
 
 release: static_files
