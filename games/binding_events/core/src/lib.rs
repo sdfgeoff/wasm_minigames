@@ -6,6 +6,8 @@ use wasm_bindgen::prelude::{wasm_bindgen, Closure};
 use wasm_bindgen::JsCast;
 use web_sys::{window, HtmlCanvasElement, MouseEvent, KeyEvent, Event};
 
+mod app;
+
 // Pull in the console.log function so we can debug things more easily
 #[wasm_bindgen]
 extern "C" {
@@ -17,7 +19,7 @@ extern "C" {
 // created using `new Core()`
 #[wasm_bindgen]
 pub struct Core {
-    app: Rc<RefCell<App>>,
+    app: Rc<RefCell<app::App>>,
     canvas: HtmlCanvasElement,
 }
 
@@ -39,9 +41,8 @@ impl Core {
         element.set_class_name("loaded");
 
         let canvas: HtmlCanvasElement = element.dyn_into().expect("Not a canvas");
-        canvas.focus();
 
-        let app = Rc::new(RefCell::new(App::new(canvas.clone())));
+        let app = Rc::new(RefCell::new(app::App::new(canvas.clone())));
 
         Self { app, canvas }
     }
@@ -70,7 +71,7 @@ impl Core {
         { // Mouse events
             let anim_app = self.app.clone();
 
-            let callback = Closure::wrap(Box::new(move |event: web_sys::MouseEvent| {
+            let callback = Closure::wrap(Box::new(move |event: MouseEvent| {
                 anim_app.borrow_mut().mouse_event(event);
             }) as Box<dyn FnMut(_)>);
 
@@ -89,7 +90,7 @@ impl Core {
             self.canvas.set_tab_index(1); // Canvas elements ignore key events unless they have a tab index
             let anim_app = self.app.clone();
 
-            let callback = Closure::wrap(Box::new(move |event: web_sys::KeyEvent| {
+            let callback = Closure::wrap(Box::new(move |event: KeyEvent| {
                 let e: Event = event.clone().dyn_into().unwrap();
                 e.stop_propagation();
                 e.prevent_default();
@@ -107,26 +108,4 @@ impl Core {
 
 fn make_callback(closure: &Closure<dyn FnMut()>) -> &Function {
     return closure.as_ref().unchecked_ref();
-}
-
-
-struct App {
-    canvas: HtmlCanvasElement,
-}
-
-impl App {
-    fn new(canvas: HtmlCanvasElement) -> Self {
-        Self { canvas }
-    }
-
-    fn animation_frame(&mut self) {
-        log("Animation Frame")
-    }
-
-    fn mouse_event(&mut self, event: MouseEvent) {
-        log(&format!("Mouse Event {:?}", event));
-    }
-    fn key_event(&mut self, event: KeyEvent) {
-        log(&format!("Key Event {:?}", event));
-    }
 }

@@ -93,6 +93,11 @@ fire for canvas' when they have a tabindex and the canvas is focused. I wasted
 a good hour or two on this thinking that mdbook was gobbling the input with its
 document-level event handler....
 
+Another gotcha with key events is that we need to stop the browser respoding to
+them. This is easy enough with `e.stop_propagation()` and `e.prevent_default()`
+which both prevent other handlers on the page and the browser from seeing the
+event.
+
 <canvas id="binding_events"></canvas>
 
 Once again there's nothing visible, but if you check the console you'll see all

@@ -296,6 +296,9 @@ async function init(input) {
     }
     const imports = {};
     imports.wbg = {};
+    imports.wbg.__wbg_log_0bd2a3f5b8e5e0fe = function(arg0, arg1) {
+        console.log(getStringFromWasm0(arg0, arg1));
+    };
     imports.wbg.__wbindgen_object_drop_ref = function(arg0) {
         takeObject(arg0);
     };
@@ -307,9 +310,6 @@ async function init(input) {
         }
         var ret = false;
         return ret;
-    };
-    imports.wbg.__wbg_log_0bd2a3f5b8e5e0fe = function(arg0, arg1) {
-        console.log(getStringFromWasm0(arg0, arg1));
     };
     imports.wbg.__wbindgen_object_clone_ref = function(arg0) {
         var ret = getObject(arg0);
@@ -340,9 +340,6 @@ async function init(input) {
     imports.wbg.__wbg_settabIndex_623a2705945c0950 = function(arg0, arg1) {
         getObject(arg0).tabIndex = arg1;
     };
-    imports.wbg.__wbg_focus_f5a9f4b6a353d1d1 = handleError(function(arg0) {
-        getObject(arg0).focus();
-    });
     imports.wbg.__wbg_instanceof_HtmlCanvasElement_d2d7786f00856e0a = function(arg0) {
         var ret = getObject(arg0) instanceof HTMLCanvasElement;
         return ret;
@@ -395,16 +392,16 @@ async function init(input) {
     imports.wbg.__wbindgen_throw = function(arg0, arg1) {
         throw new Error(getStringFromWasm0(arg0, arg1));
     };
-    imports.wbg.__wbindgen_closure_wrapper48 = function(arg0, arg1, arg2) {
+    imports.wbg.__wbindgen_closure_wrapper46 = function(arg0, arg1, arg2) {
         var ret = makeMutClosure(arg0, arg1, 20, __wbg_adapter_17);
         return addHeapObject(ret);
     };
     imports.wbg.__wbindgen_closure_wrapper50 = function(arg0, arg1, arg2) {
-        var ret = makeMutClosure(arg0, arg1, 20, __wbg_adapter_14);
+        var ret = makeMutClosure(arg0, arg1, 20, __wbg_adapter_20);
         return addHeapObject(ret);
     };
-    imports.wbg.__wbindgen_closure_wrapper52 = function(arg0, arg1, arg2) {
-        var ret = makeMutClosure(arg0, arg1, 20, __wbg_adapter_20);
+    imports.wbg.__wbindgen_closure_wrapper48 = function(arg0, arg1, arg2) {
+        var ret = makeMutClosure(arg0, arg1, 20, __wbg_adapter_14);
         return addHeapObject(ret);
     };
 
