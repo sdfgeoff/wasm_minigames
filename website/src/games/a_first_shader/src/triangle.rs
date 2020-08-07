@@ -1,8 +1,7 @@
-use web_sys::{WebGl2RenderingContext, WebGlBuffer, WebGlProgram, WebGlShader};
 use wasm_bindgen::{JsCast, JsValue};
+use web_sys::{WebGl2RenderingContext, WebGlBuffer, WebGlProgram, WebGlShader};
 
-
-/// An error to represent problems with a shader. 
+/// An error to represent problems with a shader.
 #[derive(Debug)]
 pub enum ShaderError {
     /// Call to gl.create_shader returned null
@@ -10,7 +9,7 @@ pub enum ShaderError {
 
     /// Call to create_program returned null
     ShaderProgramAllocError,
-    
+
     ShaderCompileError {
         shader_type: u32,
         compiler_output: String,
@@ -36,8 +35,6 @@ pub enum TriangleError {
     ShaderError(ShaderError),
 }
 
-
-
 impl From<JsValue> for TriangleError {
     fn from(err: JsValue) -> TriangleError {
         TriangleError::JsError(err)
@@ -50,18 +47,14 @@ impl From<ShaderError> for TriangleError {
     }
 }
 
-
-
 pub struct FirstTriangle {
     position_buffer: WebGlBuffer,
     program: WebGlProgram,
     attrib_vertex_positions: u32,
 }
 
-
 impl FirstTriangle {
     pub fn new(gl: &WebGl2RenderingContext) -> Result<Self, TriangleError> {
-
         let position_buffer = upload_array_f32(gl, vec![-1.0, 1.0, 1.0, 1.0, 0.0, -1.0])?;
 
         let program = init_shader_program(
@@ -70,20 +63,18 @@ impl FirstTriangle {
             include_str!("resources/shader.frag"),
         )?;
 
-        let attrib_vertex_positions = gl.get_attrib_location(&program, "aVertexPosition")  as u32;
+        let attrib_vertex_positions = gl.get_attrib_location(&program, "aVertexPosition") as u32;
 
-
-        return Ok(Self {
+        Ok(Self {
             position_buffer,
             program,
-            attrib_vertex_positions
+            attrib_vertex_positions,
         })
     }
 
-
     pub fn render(&mut self, gl: &WebGl2RenderingContext) {
         gl.use_program(Some(&self.program));
-        
+
         gl.bind_buffer(
             WebGl2RenderingContext::ARRAY_BUFFER,
             Some(&self.position_buffer),
@@ -105,11 +96,7 @@ impl FirstTriangle {
             3, // vertex count
         );
     }
-
 }
-
-
-
 
 fn upload_array_f32(
     gl: &WebGl2RenderingContext,
@@ -139,7 +126,6 @@ fn upload_array_f32(
     Ok(position_buffer)
 }
 
-
 fn load_shader(
     gl: &WebGl2RenderingContext,
     shader_type: u32,
@@ -165,7 +151,6 @@ fn load_shader(
     }
     Ok(shader)
 }
-
 
 pub fn init_shader_program(
     gl: &WebGl2RenderingContext,
