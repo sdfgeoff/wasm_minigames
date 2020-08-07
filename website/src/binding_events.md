@@ -24,20 +24,19 @@ struct App {
 }
 
 impl App {
-    fn new(canvas: HtmlCanvasElement) -> Self {
-
-        Self {
-            canvas
-        }
+    pub fn new(canvas: HtmlCanvasElement) -> Self {
+        Self { canvas }
     }
 
-    fn animation_frame(&mut self) {
+    pub fn animation_frame(&mut self) {
         log("Animation Frame")
-
     }
 
-    fn handle_event(&mut self, event: Event) {
-        log(&format!("Event {:?}", event));
+    pub fn mouse_event(&mut self, event: MouseEvent) {
+        log(&format!("Mouse Event {:?}", event));
+    }
+    pub fn key_event(&mut self, event: KeyEvent) {
+        log(&format!("Key Event {:?}", event));
     }
 }
 ```

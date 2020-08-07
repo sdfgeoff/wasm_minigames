@@ -10,7 +10,7 @@ void main() {
 	FragColor = vec4(
 		screen_pos.x,
 		screen_pos.y,
-		0.0,
+		1.0,
 		1.0
 	);
 }

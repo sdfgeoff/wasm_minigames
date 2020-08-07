@@ -30,4 +30,4 @@ fmt:
 static_files:
 	mkdir -p $(OUT_DIR)
 	cp $(SRC_DIR)/Cargo.toml $(OUT_DIR)/Cargo.toml
-	cp $(SRC_DIR)/src/lib.rs $(OUT_DIR)/lib.rs
+	cp -r $(SRC_DIR)/src $(OUT_DIR)/

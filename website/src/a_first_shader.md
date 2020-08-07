@@ -22,5 +22,18 @@ need to:
 1. Provide a matching vertex and fragment shader (that compile with no errors)
 2. Provide a bunch of vertices for the shader to operate on
 
+Porting from the Mozilla tutorials wasn't too hard, but:
+1. Because Rust is amazing, you have to in a bunch of error checking for JS errors
+2. I stripped out all the uniforms for now to make this example simpler (and because Rust doesn't seem to have the mat4 object)
+
+After that, we have:
 
 <canvas id="a_first_shader"></canvas>
+
+A triangle!
+
+Most of the ported code for is in the file `triangle.rs`:
+```rust
+{{#include ../src/games/a_first_shader/src/triangle.rs}}
+```
+
