@@ -24,20 +24,19 @@ struct App {
 }
 
 impl App {
-    fn new(canvas: HtmlCanvasElement) -> Self {
-
-        Self {
-            canvas
-        }
+    pub fn new(canvas: HtmlCanvasElement) -> Self {
+        Self { canvas }
     }
 
-    fn animation_frame(&mut self) {
+    pub fn animation_frame(&mut self) {
         log("Animation Frame")
-
     }
 
-    fn handle_event(&mut self, event: Event) {
-        log(&format!("Event {:?}", event));
+    pub fn mouse_event(&mut self, event: MouseEvent) {
+        log(&format!("Mouse Event {:?}", event));
+    }
+    pub fn key_event(&mut self, event: KeyEvent) {
+        log(&format!("Key Event {:?}", event));
     }
 }
 ```
@@ -92,6 +91,11 @@ There were a bunch of gotchas with key events. For some reason, key events only
 fire for canvas' when they have a tabindex and the canvas is focused. I wasted
 a good hour or two on this thinking that mdbook was gobbling the input with its
 document-level event handler....
+
+Another gotcha with key events is that we need to stop the browser respoding to
+them. This is easy enough with `e.stop_propagation()` and `e.prevent_default()`
+which both prevent other handlers on the page and the browser from seeing the
+event.
 
 <canvas id="binding_events"></canvas>
 
