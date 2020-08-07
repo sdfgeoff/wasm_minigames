@@ -24,7 +24,8 @@ need to:
 
 Porting from the Mozilla tutorials wasn't too hard, but:
 1. Because Rust is amazing, you have to in a bunch of error checking for JS errors
-2. I stripped out all the uniforms for now to make this example simpler (and because Rust doesn't seem to have the mat4 object)
+2. I stripped out all the uniforms for now to make this example simpler
+3. Because Rust doesn't seem to have the mat4 object, I removed the perspective matrix projection from the vertex shader
 
 After that, we have:
 
