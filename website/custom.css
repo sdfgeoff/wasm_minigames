@@ -1,29 +1,14 @@
 canvas {
-    height: 320px;
-    width: 480px;
+    height: 480px;
+    width: 640px;
     background: grey url("click_icon.svg") no-repeat center;
     background-size: 100px 100px;
 }
 
 canvas.loading {
-    background: red;
-    animation: colorfade 1.2s infinite ease-in-out;
+    background: black url("loading.gif") no-repeat center;
 }
 
 canvas.loaded {
     background: black;
 }
-
-
-@keyframes colorfade {
-  0% { 
-    background-color: #500;
-  } 33% { 
-    background-color: #050;
-  } 66% { 
-    background-color: #005;
-  } 100% { 
-    background-color: #500;
-  }
-}
-	

@@ -48,9 +48,9 @@ All up this creates:
 
 <canvas id="trivial"></canvas>
 
-You'll notice when you click on it it fades through a bunch of colors. That's
-the loading animation for the webassembly I made (in CSS). Normally this would
-get cancelled from inside the WASM binary, but this example doesn't.
+You'll notice when you click on it plays a loading animation. That's done in
+in CSS. Normally this would get cancelled from inside the WASM binary, but
+this example doesn't.
 
 To check if this example is working, you have to look at the browser console.
 You should see something like:

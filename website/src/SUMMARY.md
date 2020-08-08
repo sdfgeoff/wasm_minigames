@@ -5,3 +5,4 @@
 - [Cancel the load animation](./cancel_the_load_animation.md)
 - [Binding Events](./binding_events.md)
 - [A First Shader](./a_first_shader.md)
+- [Fixing the Resolution](./fixing_the_resolution.md)
