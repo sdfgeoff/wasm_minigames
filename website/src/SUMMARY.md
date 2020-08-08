@@ -6,3 +6,4 @@
 - [Binding Events](./binding_events.md)
 - [A First Shader](./a_first_shader.md)
 - [Fixing the Resolution](./fixing_the_resolution.md)
+- [Passing in Uniforms](./passing_in_uniforms.md)
