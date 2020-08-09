@@ -22,10 +22,6 @@ pub enum ShaderError {
 
     /// I think this means that the Vertex and Fragment shaders incompatible
     ShaderLinkError(),
-
-    /// Rust code is trying to find a uniform and one of that name does not
-    /// exist
-    MissingUniform(String),
 }
 
 /// An error with this whole object.
@@ -57,8 +53,8 @@ pub struct Quad {
     position_buffer: WebGlBuffer,
     program: WebGlProgram,
     attrib_vertex_positions: u32,
-    uniform_resolution: WebGlUniformLocation,
-    uniform_time: WebGlUniformLocation,
+    uniform_resolution: Option<WebGlUniformLocation>,
+    uniform_time: Option<WebGlUniformLocation>,
 
     pub time: f32,
     pub resolution: (u32, u32),
@@ -76,8 +72,8 @@ impl Quad {
         )?;
 
         let attrib_vertex_positions = gl.get_attrib_location(&program, "aVertexPosition") as u32;
-        let uniform_resolution = get_uniform_location(&gl, &program, "iResolution")?;
-        let uniform_time = get_uniform_location(&gl, &program, "iTime")?;
+        let uniform_resolution = gl.get_uniform_location(&program, "iResolution");
+        let uniform_time = gl.get_uniform_location(&program, "iTime");
 
         Ok(Self {
             position_buffer,
@@ -93,9 +89,9 @@ impl Quad {
     pub fn render(&mut self, gl: &WebGl2RenderingContext) {
         gl.use_program(Some(&self.program));
 
-        gl.uniform1f(Some(&self.uniform_time), self.time);
+        gl.uniform1f(self.uniform_time.as_ref(), self.time);
         gl.uniform2f(
-            Some(&self.uniform_resolution),
+            self.uniform_resolution.as_ref(),
             self.resolution.0 as f32,
             self.resolution.1 as f32,
         );
@@ -123,14 +119,6 @@ impl Quad {
     }
 }
 
-fn get_uniform_location(
-    gl: &WebGl2RenderingContext,
-    program: &WebGlProgram,
-    name: &str,
-) -> Result<WebGlUniformLocation, ShaderError> {
-    gl.get_uniform_location(&program, name)
-        .ok_or(ShaderError::MissingUniform(name.to_string()))
-}
 
 fn upload_array_f32(
     gl: &WebGl2RenderingContext,

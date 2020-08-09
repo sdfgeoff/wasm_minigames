@@ -22,30 +22,28 @@ shadertoy](https://www.shadertoy.com/view/tt2XzG), written [by
 For this I passed in a floating point number for time, and a float vec2 for
 resolution: 
 ```
-fn get_uniform_location(
-    gl: &WebGl2RenderingContext,
-    program: &WebGlProgram,
-    name: &str,
-) -> Result<WebGlUniformLocation, ShaderError> {
-    gl.get_uniform_location(&program, name)
-        .ok_or(ShaderError::MissingUniform(name.to_string()))
-}
+let uniform_resolution = gl.get_uniform_location(&program, "iResolution");
+let uniform_time = gl.get_uniform_location(&program, "iTime");
 
 << snip >>
 
-let uniform_resolution = get_uniform_location(&gl, &program, "iResolution")?;
-let uniform_time = get_uniform_location(&gl, &program, "iTime")?;
+gl.use_program(Some(&self.program));
 
-<< snip >>
-
-gl.uniform1f(Some(&self.uniform_time), self.time);
-gl.uniform2f(Some(&self.uniform_resolution), self.resolution.0 as f32, self.resolution.1 as f32);
+gl.uniform1f(self.uniform_time.as_ref(), self.time);
+gl.uniform2f(
+    self.uniform_resolution.as_ref(),
+    self.resolution.0 as f32,
+    self.resolution.1 as f32,
+);
 ```
 
 There are some gotcha's. The uniform name has to exist in the shader and be used.
 So if you have the a shader that declares `uniform float iTime` but then never
 uses it, the uniform will be compiled out, and `get_uniform_location` will
-return `None`.
+return `None`. Because the `gl.uniform*` functions can handle None, the result
+is simply that it has no effect.
 
-Another gotcha is that the program must be active when you set the uniform value.
+Another gotcha is that the program must be active (
+`gl.use_program(Some(&self.program));`
+) when you set the uniform value.
 Otherwise you'll get a warning in console and nothing will happen.

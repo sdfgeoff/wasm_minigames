@@ -7,3 +7,4 @@
 - [A First Shader](./a_first_shader.md)
 - [Fixing the Resolution](./fixing_the_resolution.md)
 - [Passing in Uniforms](./passing_in_uniforms.md)
+- [Binding Textures](./binding_textures.md)
