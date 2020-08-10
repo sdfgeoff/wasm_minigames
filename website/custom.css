@@ -12,3 +12,7 @@ canvas.loading {
 canvas.loaded {
     background: black;
 }
+
+canvas.error {
+    background: black url("error.svg") no-repeat center;
+}
