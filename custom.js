@@ -1,8 +1,5 @@
-function load(id) {
-    var module_path = './' + id + '/core.js'
-    var canvas = document.getElementById(id)
+function load(canvas, module_path) {
     console.log("Loading", module_path)
-
     canvas.className = "loading"
     
     import(module_path)
@@ -22,8 +19,10 @@ function load(id) {
 
 const canvases = document.querySelectorAll("canvas");
 for (canvas of canvases) {
+    var id = canvas.id
+    var module_path = './' + id + '/pkg/'+ id +'.js' // Path to WASM JS bindings
     canvas.tabIndex = 1
     canvas.addEventListener("click", function() {
-        load(canvas.id)
+        load(canvas, module_path)
     }, {'once':true})
 }

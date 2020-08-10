@@ -1,5 +1,5 @@
 [package]
-name = "core"
+name = "building_and_loading_wasm"
 version = "0.1.0"
 authors = ["Geoffrey Irons <sdfgeoff@gmail.com>"]
 edition = "2018"
