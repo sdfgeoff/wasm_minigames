@@ -13,7 +13,7 @@ before_script:
   - cargo install-update -a
 
 script:
-  - mdbook build $TRAVIS_BUILD_DIR
+  - cd $TRAVIS_BUILD_DIR; make
 
 
 deploy:
