@@ -43,6 +43,6 @@ thing, which is in `wasm_bindgen::JsCast;`. This allows casting from a generic
 
 The result:
 
-<canvas id="cancel_load"></canvas>
+<canvas id="cancel_load_animation"></canvas>
 
 When you click it, it goes black - the contents of the `loaded` style

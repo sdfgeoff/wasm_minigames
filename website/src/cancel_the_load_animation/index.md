@@ -1,1 +1,0 @@
-# Cancel the load animation
