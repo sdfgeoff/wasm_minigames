@@ -1,8 +1,11 @@
 language: rust
-sudo: false
+os: linux
+dist: xenial
 
 cache:
-  - cargo
+  directories:
+    - $TRAVIS_BUILD_DIR/src/target
+    - $HOME/.cargo
 
 rust:
   - stable
@@ -10,17 +13,19 @@ rust:
 before_script:
   - (test -x $HOME/.cargo/bin/cargo-install-update || cargo install cargo-update)
   - (test -x $HOME/.cargo/bin/mdbook || cargo install --vers "^0.3" mdbook)
+  - (test -x $HOME/.cargo/bin/wasm-pack || cargo install --vers "^0.9" wasm-pack)
   - cargo install-update -a
 
 script:
-  - mdbook build $TRAVIS_BUILD_DIR
+  - cd $TRAVIS_BUILD_DIR; make
 
 
 deploy:
+  strategy: git
   provider: pages
-  skip-cleanup: true
-  github-token: $GITHUB_TOKEN
-  local-dir: $TRAVIS_BUILD_DIR/book
-  keep-history: false
+  cleanup: false
+  token: $GITHUB_TOKEN
+  local_dir: $TRAVIS_BUILD_DIR/book
+  keep_history: false
   on:
     branch: master
