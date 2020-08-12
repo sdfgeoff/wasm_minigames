@@ -1,10 +1,11 @@
 language: rust
-sudo: false
+os: linux
+dist: xenial
 
 cache:
-  - cargo
   directories:
-    - src/target
+    - $TRAVIS_BUILD_DIR/target
+    - $HOME/.cargo
 
 rust:
   - stable
@@ -20,10 +21,11 @@ script:
 
 
 deploy:
+  strategy: git
   provider: pages
-  skip-cleanup: true
-  github-token: $GITHUB_TOKEN
-  local-dir: $TRAVIS_BUILD_DIR/book
-  keep-history: false
+  cleanup: false
+  token: $GITHUB_TOKEN
+  local_dir: $TRAVIS_BUILD_DIR/book
+  keep_history: false
   on:
     branch: master
