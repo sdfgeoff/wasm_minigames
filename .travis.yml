@@ -3,6 +3,8 @@ sudo: false
 
 cache:
   - cargo
+  directories:
+    - src/target
 
 rust:
   - stable
