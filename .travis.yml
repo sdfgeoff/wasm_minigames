@@ -4,7 +4,7 @@ dist: xenial
 
 cache:
   directories:
-    - $TRAVIS_BUILD_DIR/target
+    - $TRAVIS_BUILD_DIR/src/target
     - $HOME/.cargo
 
 rust:
