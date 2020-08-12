@@ -4,6 +4,8 @@ use web_sys::{
     WebGlUniformLocation,
 };
 
+use super::texture::{bind_2d_texture_to_uniform, load_texture, TextureUnit};
+
 /// An error to represent problems with a shader.
 #[derive(Debug)]
 pub enum ShaderError {
@@ -56,11 +58,13 @@ pub struct Quad {
     attrib_vertex_positions: u32,
     uniform_resolution: Option<WebGlUniformLocation>,
     uniform_time: Option<WebGlUniformLocation>,
-    uniform_image_texture: Option<WebGlUniformLocation>,
+    uniform_image_texture_1: Option<WebGlUniformLocation>,
+    uniform_image_texture_2: Option<WebGlUniformLocation>,
 
     pub time: f32,
     pub resolution: (u32, u32),
-    pub image_texture: WebGlTexture,
+    pub image_texture_1: WebGlTexture,
+    pub image_texture_2: WebGlTexture,
 }
 
 impl Quad {
@@ -77,10 +81,13 @@ impl Quad {
         let attrib_vertex_positions = gl.get_attrib_location(&program, "aVertexPosition") as u32;
         let uniform_resolution = gl.get_uniform_location(&program, "iResolution");
         let uniform_time = gl.get_uniform_location(&program, "iTime");
-        let uniform_image_texture = gl.get_uniform_location(&program, "image_texture");
+        let uniform_image_texture_1 = gl.get_uniform_location(&program, "image_texture_1");
+        let uniform_image_texture_2 = gl.get_uniform_location(&program, "image_texture_2");
 
-        let image_texture = super::texture::load_texture(&gl, include_bytes!("resources/test.png"))
-            .expect("Failed to laod texture");
+        let image_texture_1 = load_texture(&gl, include_bytes!("resources/test.png"))
+            .expect("Failed to load texture");
+        let image_texture_2 = load_texture(&gl, include_bytes!("resources/test2.png"))
+            .expect("Failed to load texture");
 
         Ok(Self {
             position_buffer,
@@ -88,10 +95,12 @@ impl Quad {
             attrib_vertex_positions,
             uniform_resolution,
             uniform_time,
-            uniform_image_texture,
+            uniform_image_texture_1,
+            uniform_image_texture_2,
             resolution: (100, 100),
             time: 0.0,
-            image_texture,
+            image_texture_1,
+            image_texture_2,
         })
     }
 
@@ -105,15 +114,18 @@ impl Quad {
             self.resolution.1 as f32,
         );
 
-        // Tell WebGL we want to affect texture unit 0
-        gl.active_texture(WebGl2RenderingContext::TEXTURE0);
-        // Bind the texture to texture unit 0
-        gl.bind_texture(
-            WebGl2RenderingContext::TEXTURE_2D,
-            Some(&self.image_texture),
+        bind_2d_texture_to_uniform(
+            &gl,
+            &self.uniform_image_texture_1,
+            &self.image_texture_1,
+            TextureUnit::Unit0,
         );
-        // Tell the shader we bound the texture to texture unit 0
-        gl.uniform1i(self.uniform_image_texture.as_ref(), 0);
+        bind_2d_texture_to_uniform(
+            &gl,
+            &self.uniform_image_texture_2,
+            &self.image_texture_2,
+            TextureUnit::Unit1,
+        );
 
         gl.bind_buffer(
             WebGl2RenderingContext::ARRAY_BUFFER,
