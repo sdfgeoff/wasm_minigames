@@ -2,7 +2,7 @@ WORKSPACE_DIR = ${CURDIR}/src/
 WASM_PACK = wasm-pack
 WASM_PACK_FLAGS = --target web --no-typescript
 
-BOOK_DIR = ${CURDIR}/src/
+BOOK_DIR = ${CURDIR}/
 
 MDBOOK = mdbook
 
@@ -10,7 +10,7 @@ all: book
 
 
 book: wasm
-	$(MDBOOK) build $(BOOK_DOR)
+	$(MDBOOK) build $(BOOK_DIR)
 
 wasm:
 	cd $(WORKSPACE_DIR); wasm-pack build $(WASM_PACK_FLAGS) a_first_shader --release
