@@ -6,10 +6,10 @@ BOOK_DIR = ${CURDIR}/src/
 
 MDBOOK = mdbook
 
-all: wasm book
+all: book
 
 
-book:
+book: wasm
 	$(MDBOOK) build $(BOOK_DOR)
 
 wasm:
