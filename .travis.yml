@@ -19,6 +19,8 @@ before_script:
 script:
   - cd $TRAVIS_BUILD_DIR; make
 
+before_deploy:
+  - rm src/*/pkg/.gitignore
 
 deploy:
   strategy: git
