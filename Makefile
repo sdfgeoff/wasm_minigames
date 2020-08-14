@@ -11,6 +11,7 @@ all: book
 
 book: wasm
 	$(MDBOOK) build $(BOOK_DIR)
+	rm $(BOOK_DIR)/*/pkg/.gitignore
 
 wasm:
 	cd $(WORKSPACE_DIR); wasm-pack build $(WASM_PACK_FLAGS) a_first_shader --release
@@ -20,8 +21,5 @@ wasm:
 	cd $(WORKSPACE_DIR); wasm-pack build $(WASM_PACK_FLAGS) cancel_load_animation --release
 	cd $(WORKSPACE_DIR); wasm-pack build $(WASM_PACK_FLAGS) fixing_resolution --release
 	cd $(WORKSPACE_DIR); wasm-pack build $(WASM_PACK_FLAGS) passing_in_uniforms --release
-	#cd $(WORKSPACE_DIR); wasm-pack build $(WASM_PACK_FLAGS) swoop_1 --release
-
-prep-deploy:
-	rm $(WORKSPACE_DIR)/*/pkg/.gitignore
+	# cd $(WORKSPACE_DIR); wasm-pack build $(WASM_PACK_FLAGS) render_to_framebuffer --release
 	
