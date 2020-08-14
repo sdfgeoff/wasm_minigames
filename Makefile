@@ -11,7 +11,7 @@ all: book
 
 book: wasm
 	$(MDBOOK) build $(BOOK_DIR)
-	rm $(BOOK_DIR)/*/pkg/.gitignore
+	rm $(BOOK_DIR)/book/*/pkg/.gitignore
 
 wasm:
 	cd $(WORKSPACE_DIR); wasm-pack build $(WASM_PACK_FLAGS) a_first_shader --release
