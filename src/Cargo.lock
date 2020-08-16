@@ -118,7 +118,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "swoop_1"
+name = "swoop_drawing_the_player"
 version = "0.1.0"
 dependencies = [
  "js-sys",

@@ -14,12 +14,12 @@ book: wasm
 	rm $(BOOK_DIR)/book/*/pkg/.gitignore
 
 wasm:
-	cd $(WORKSPACE_DIR); wasm-pack build $(WASM_PACK_FLAGS) a_first_shader --release
-	cd $(WORKSPACE_DIR); wasm-pack build $(WASM_PACK_FLAGS) binding_events --release
-	cd $(WORKSPACE_DIR); wasm-pack build $(WASM_PACK_FLAGS) binding_textures --release
-	cd $(WORKSPACE_DIR); wasm-pack build $(WASM_PACK_FLAGS) building_and_loading_wasm --release
-	cd $(WORKSPACE_DIR); wasm-pack build $(WASM_PACK_FLAGS) cancel_load_animation --release
-	cd $(WORKSPACE_DIR); wasm-pack build $(WASM_PACK_FLAGS) fixing_resolution --release
-	cd $(WORKSPACE_DIR); wasm-pack build $(WASM_PACK_FLAGS) passing_in_uniforms --release
-	# cd $(WORKSPACE_DIR); wasm-pack build $(WASM_PACK_FLAGS) render_to_framebuffer --release
+	#cd $(WORKSPACE_DIR); wasm-pack build $(WASM_PACK_FLAGS) a_first_shader --release
+	#cd $(WORKSPACE_DIR); wasm-pack build $(WASM_PACK_FLAGS) binding_events --release
+	#cd $(WORKSPACE_DIR); wasm-pack build $(WASM_PACK_FLAGS) binding_textures --release
+	#cd $(WORKSPACE_DIR); wasm-pack build $(WASM_PACK_FLAGS) building_and_loading_wasm --release
+	#cd $(WORKSPACE_DIR); wasm-pack build $(WASM_PACK_FLAGS) cancel_load_animation --release
+	#cd $(WORKSPACE_DIR); wasm-pack build $(WASM_PACK_FLAGS) fixing_resolution --release
+	#cd $(WORKSPACE_DIR); wasm-pack build $(WASM_PACK_FLAGS) passing_in_uniforms --release
+	cd $(WORKSPACE_DIR); wasm-pack build $(WASM_PACK_FLAGS) swoop_drawing_the_player --release
 	
