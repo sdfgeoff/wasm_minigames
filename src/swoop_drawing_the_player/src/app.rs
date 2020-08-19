@@ -55,7 +55,8 @@ impl App {
 
             self.canvas.set_width(client_width);
             self.canvas.set_height(client_height);
-            self.ship_sprite.resolution = (client_width, client_height);
+            
+            self.ship_sprite.canvas_resolution = (client_width, client_height);
 
             log(&format!("Resized to {}:{}", client_width, client_height));
         }
