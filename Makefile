@@ -21,5 +21,5 @@ wasm:
 	cd $(WORKSPACE_DIR); wasm-pack build $(WASM_PACK_FLAGS) cancel_load_animation --release
 	cd $(WORKSPACE_DIR); wasm-pack build $(WASM_PACK_FLAGS) fixing_resolution --release
 	cd $(WORKSPACE_DIR); wasm-pack build $(WASM_PACK_FLAGS) passing_in_uniforms --release
-	# cd $(WORKSPACE_DIR); wasm-pack build $(WASM_PACK_FLAGS) render_to_framebuffer --release
+	cd $(WORKSPACE_DIR); wasm-pack build $(WASM_PACK_FLAGS) swoop_drawing_the_player --release
 	
