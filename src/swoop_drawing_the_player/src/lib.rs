@@ -9,6 +9,7 @@ use web_sys::{window, Event, HtmlCanvasElement, KeyboardEvent, MouseEvent};
 mod app;
 mod ship_sprite;
 mod texture;
+mod transform;
 
 // Pull in the console.log function so we can debug things more easily
 #[wasm_bindgen]

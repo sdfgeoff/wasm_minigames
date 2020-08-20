@@ -56,11 +56,11 @@ pub struct ShipSprite {
     position_buffer: WebGlBuffer,
     program: WebGlProgram,
     attrib_vertex_positions: u32,
-    
+
     uniform_ship_engine: Option<WebGlUniformLocation>,
     uniform_ship_texture: Option<WebGlUniformLocation>,
     uniform_ship_color: Option<WebGlUniformLocation>,
-    
+
     uniform_world_to_camera: Option<WebGlUniformLocation>,
     uniform_world_to_sprite: Option<WebGlUniformLocation>,
     uniform_camera_to_clipspace: Option<WebGlUniformLocation>,
@@ -68,8 +68,10 @@ pub struct ShipSprite {
     pub ship_texture: WebGlTexture,
     pub ship_color: (f32, f32, f32, f32),
     pub ship_engine: f32,
-    
-    pub canvas_resolution: (u32, u32),
+
+    pub world_to_camera: [f32; 9],
+    pub world_to_sprite: [f32; 9],
+    pub camera_to_clipspace: [f32; 9],
 }
 
 impl ShipSprite {
@@ -88,7 +90,7 @@ impl ShipSprite {
         let uniform_ship_texture = gl.get_uniform_location(&program, "ship_texture");
         let uniform_ship_engine = gl.get_uniform_location(&program, "ship_engine");
         let uniform_ship_color = gl.get_uniform_location(&program, "ship_color");
-        
+
         let uniform_world_to_camera = gl.get_uniform_location(&program, "world_to_camera");
         let uniform_world_to_sprite = gl.get_uniform_location(&program, "world_to_sprite");
         let uniform_camera_to_clipspace = gl.get_uniform_location(&program, "camera_to_clipspace");
@@ -104,59 +106,42 @@ impl ShipSprite {
             uniform_ship_engine,
             uniform_ship_texture,
             uniform_ship_color,
-            
+
             uniform_world_to_camera,
             uniform_world_to_sprite,
             uniform_camera_to_clipspace,
 
-            ship_color: (0.0, 0.5, 1.0, 1.0),
+            ship_color: (1.0, 1.0, 1.0, 1.0),
             ship_texture,
             ship_engine: 0.0,
-            canvas_resolution: (100, 100)
+
+            world_to_camera: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+            world_to_sprite: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+            camera_to_clipspace: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
         })
     }
 
     pub fn render(&mut self, gl: &WebGl2RenderingContext) {
         gl.use_program(Some(&self.program));
-        
+
         gl.blend_func(WebGl2RenderingContext::ONE, WebGl2RenderingContext::ONE);
 
-		let angle = 0.0;
-		let scale = 1.0;
-		
-		let c = f32::cos(angle) * scale;
-		let s = f32::sin(angle) * scale;
+        gl.uniform_matrix3fv_with_f32_array(
+            self.uniform_world_to_sprite.as_ref(),
+            true,
+            &self.world_to_sprite,
+        );
+        gl.uniform_matrix3fv_with_f32_array(
+            self.uniform_world_to_camera.as_ref(),
+            true,
+            &self.world_to_camera,
+        );
+        gl.uniform_matrix3fv_with_f32_array(
+            self.uniform_camera_to_clipspace.as_ref(),
+            true,
+            &self.camera_to_clipspace,
+        );
 
-        gl.uniform_matrix3fv_with_f32_array(
-			self.uniform_world_to_camera.as_ref(),
-			true,
-			&[
-				c, -s, 0.0,
-				s, c, 0.0,
-				0.0, 0.0, 1.0,
-			]
-        );
-        gl.uniform_matrix3fv_with_f32_array(
-			self.uniform_world_to_sprite.as_ref(),
-			true,
-			&[ // "one unit" is the canvas height, so we use the Y resolution for both of these
-				self.canvas_resolution.1 as f32, 0.0, 0.0,
-				0.0, self.canvas_resolution.1 as f32, 0.0,
-				0.0, 0.0, 1.0,
-			]
-        );
-        gl.uniform_matrix3fv_with_f32_array(
-			self.uniform_camera_to_clipspace.as_ref(),
-			true,
-			&[
-				self.canvas_resolution.0 as f32, 0.0, 0.0,
-				0.0, self.canvas_resolution.1 as f32, 0.0,
-				0.0, 0.0, 1.0,
-			]
-        );
-        
-        
-        
         gl.uniform4f(
             self.uniform_ship_color.as_ref(),
             self.ship_color.0,
@@ -164,10 +149,7 @@ impl ShipSprite {
             self.ship_color.2,
             self.ship_color.3,
         );
-        gl.uniform1f(
-            self.uniform_ship_engine.as_ref(),
-            self.ship_engine
-        );
+        gl.uniform1f(self.uniform_ship_engine.as_ref(), self.ship_engine);
 
         bind_2d_texture_to_uniform(
             &gl,

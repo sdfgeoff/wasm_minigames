@@ -3,6 +3,7 @@ use wasm_bindgen::{JsCast, JsValue};
 use web_sys::{window, HtmlCanvasElement, KeyboardEvent, MouseEvent, WebGl2RenderingContext};
 
 use super::ship_sprite::ShipSprite;
+use super::transform::Transform2d;
 
 // Pull in the console.log function so we can debug things more easily
 #[wasm_bindgen]
@@ -15,6 +16,7 @@ pub struct App {
     canvas: HtmlCanvasElement,
     gl: WebGl2RenderingContext,
     ship_sprite: ShipSprite,
+    canvas_resolution: (u32, u32),
 }
 
 impl App {
@@ -39,7 +41,12 @@ impl App {
             }
         };
 
-        Self { canvas, gl, ship_sprite }
+        Self {
+            canvas,
+            gl,
+            ship_sprite,
+            canvas_resolution: (0, 0),
+        }
     }
 
     fn check_resize(&mut self) {
@@ -55,22 +62,54 @@ impl App {
 
             self.canvas.set_width(client_width);
             self.canvas.set_height(client_height);
-            
-            self.ship_sprite.canvas_resolution = (client_width, client_height);
+
+            self.canvas_resolution = (client_width, client_height);
 
             log(&format!("Resized to {}:{}", client_width, client_height));
         }
     }
 
     pub fn animation_frame(&mut self) {
+        let now = window().unwrap().performance().unwrap().now();
+        let time = (now / 1000.0) as f32;
+
         self.check_resize();
         self.gl.clear(
             WebGl2RenderingContext::COLOR_BUFFER_BIT | WebGl2RenderingContext::DEPTH_BUFFER_BIT,
         );
 
+        let mut ship_sprite_transform = Transform2d::new(0.0, 0.0, f32::sin(time), 0.1);
 
-        self.ship_sprite.render(&self.gl);
+        let camera_transform =
+            Transform2d::new(0.0, 0.0, 0.0, 1.0 / self.canvas_resolution.0 as f32);
+
+        self.ship_sprite.world_to_camera = camera_transform.to_mat3_array();
+        self.ship_sprite.camera_to_clipspace = [
+            self.canvas_resolution.0 as f32,
+            0.0,
+            0.0,
+            0.0,
+            self.canvas_resolution.1 as f32,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+        ];
+
+		// Render the first ship
+        self.ship_sprite.world_to_sprite = ship_sprite_transform.to_mat3_array();
+        self.ship_sprite.ship_color = (0.0, 0.5, 1.0, 1.0);
         self.ship_sprite.ship_engine = 0.0;
+        self.ship_sprite.render(&self.gl);
+
+		// Render another ship
+        ship_sprite_transform.x = f32::sin(time) * 0.5;
+        ship_sprite_transform.y = f32::cos(time) * 0.5;
+        ship_sprite_transform.rot = - std::f32::consts::PI / 2.0 - time;
+        self.ship_sprite.world_to_sprite = ship_sprite_transform.to_mat3_array();
+        self.ship_sprite.ship_color = (1.0, 0.5, 0.0, 1.0);
+        self.ship_sprite.ship_engine = 1.0;
+        self.ship_sprite.render(&self.gl);
     }
 
     pub fn mouse_event(&mut self, event: MouseEvent) {
@@ -78,7 +117,6 @@ impl App {
     }
     pub fn key_event(&mut self, event: KeyboardEvent) {
         log(&format!("Key Event {:?}", event.code()));
-        self.ship_sprite.ship_engine = 1.0;
     }
 }
 
