@@ -22,9 +22,9 @@ vec4 neon(float sdf, vec4 color, float glow_width) {
 
 void main() {
 	vec4 raw_sprite = texture(ship_texture, uv * 0.5 - 0.5);
-	FragColor = neon(0.9 - raw_sprite.r, ship_color, 1.0);
+	FragColor = neon(1.0 - raw_sprite.r, ship_color, 1.0);
 	
 	vec4 engine_color = ship_engine * ship_color;
-	FragColor += neon(0.9 - raw_sprite.b, engine_color, 1.0) * ship_engine;
+	FragColor += neon(1.0 - raw_sprite.b, engine_color, 1.0) * ship_engine;
 }
 
