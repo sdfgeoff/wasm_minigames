@@ -11,3 +11,4 @@
     - [Binding Textures](./binding_textures/index.md)
 - [A First Game: Swoop](./a_first_game_swoop.md)
     - [Drawing The Player Ship](./swoop_drawing_the_player/index.md)
+    - [Drawing The Map](./swoop_drawing_the_map/index.md)
