@@ -1,52 +1,72 @@
-use web_sys::{WebGlProgram, WebGl2RenderingContext, WebGlShader};
+use web_sys::{WebGlProgram, WebGl2RenderingContext, WebGlShader, WebGlBuffer};
+use wasm_bindgen::{JsCast, JsValue};
 
 
-pub trait Shader {
-    fn program() -> WebGlProgram,
-    fn attrib_vertex_positions() -> u32,
-}
-
-
+/// An error to represent problems with a shader.
 #[derive(Debug)]
 pub enum ShaderError {
+    /// Call to gl.create_shader returned null
     ShaderAllocError,
+
+    /// Call to create_program returned null
     ShaderProgramAllocError,
-    ShaderGetInfoError,
-    MissingUniform(String),
+
     ShaderCompileError {
         shader_type: u32,
         compiler_output: String,
     },
+    /// Failed to receive error information about why the shader failed to compile
+    /// Generally this is indicative of trying to get the error when one hasn't occured
+    ShaderGetInfoError,
+
+    /// I think this means that the Vertex and Fragment shaders incompatible
     ShaderLinkError(),
+    
+    /// Failed to create buffer to upload data into
+    BufferCreationFailed,
+    
+    /// Generic javascript error
+    JsError(JsValue),
 }
 
-
-pub struct SimpleShader {
-	pub program: WebGlProgram,
-    pub attrib_vertex_positions: u32,
-}
-
-impl SimpleShader {
-	pub fn new(gl: &WebGl2RenderingContext, vert: &str, frag: &str) -> Result<Self, ShaderError> {
-        let program = init_shader_program(
-            gl,
-            vert,
-            frag,
-        )?;
-
-        let attrib_vertex_positions = gl.get_attrib_location(&program, "aVertexPosition");
-
-        Ok(Self {
-            program,
-            attrib_vertex_positions: attrib_vertex_positions as u32,
-        })
+impl From<JsValue> for ShaderError {
+    fn from(err: JsValue) -> ShaderError {
+        ShaderError::JsError(err)
     }
 }
 
 
 
 
-fn load_shader(
+
+pub fn upload_array_f32(
+    gl: &WebGl2RenderingContext,
+    vertices: Vec<f32>,
+) -> Result<WebGlBuffer, ShaderError> {
+    let position_buffer = gl.create_buffer().ok_or(ShaderError::BufferCreationFailed)?;
+
+    gl.bind_buffer(WebGl2RenderingContext::ARRAY_BUFFER, Some(&position_buffer));
+
+    let memory_buffer = wasm_bindgen::memory()
+        .dyn_into::<js_sys::WebAssembly::Memory>()?
+        .buffer();
+
+    let vertices_location = vertices.as_ptr() as u32 / 4;
+
+    let vert_array = js_sys::Float32Array::new(&memory_buffer)
+        .subarray(vertices_location, vertices_location + vertices.len() as u32);
+
+    gl.buffer_data_with_array_buffer_view(
+        WebGl2RenderingContext::ARRAY_BUFFER,
+        &vert_array,
+        WebGl2RenderingContext::STATIC_DRAW,
+    );
+
+    Ok(position_buffer)
+}
+
+
+pub fn load_shader(
     gl: &WebGl2RenderingContext,
     shader_type: u32,
     shader_text: &str,
@@ -99,3 +119,4 @@ pub fn init_shader_program(
 
     Ok(shader_program)
 }
+

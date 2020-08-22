@@ -3,6 +3,7 @@ use wasm_bindgen::{JsCast, JsValue};
 use web_sys::{window, HtmlCanvasElement, KeyboardEvent, MouseEvent, WebGl2RenderingContext};
 
 use super::ship_sprite::ShipSprite;
+use super::map_sprite::MapSprite;
 use super::transform::Transform2d;
 
 // Pull in the console.log function so we can debug things more easily
@@ -16,15 +17,17 @@ pub struct App {
     canvas: HtmlCanvasElement,
     gl: WebGl2RenderingContext,
     ship_sprite: ShipSprite,
+    map_sprite: MapSprite,
     canvas_resolution: (u32, u32),
 }
 
 impl App {
-    pub fn new(canvas: HtmlCanvasElement) -> Self {
+    pub fn new(canvas: HtmlCanvasElement, options: String) -> Self {
         let gl = get_gl_context(&canvas).expect("No GL Canvas");
 
         gl.clear_color(0.0, 0.0, 0.0, 1.0);
-        gl.enable(WebGl2RenderingContext::DEPTH_TEST);
+        //gl.enable(WebGl2RenderingContext::DEPTH_TEST);
+        gl.enable(WebGl2RenderingContext::BLEND);
         gl.clear(
             WebGl2RenderingContext::COLOR_BUFFER_BIT | WebGl2RenderingContext::DEPTH_BUFFER_BIT,
         );
@@ -36,8 +39,15 @@ impl App {
         let ship_sprite = match ShipSprite::new(&gl) {
             Ok(g) => g,
             Err(err) => {
-                log(&format!("Quad error {:?}", err));
-                panic!("Quad error");
+                log(&format!("Ship Sprite error {:?}", err));
+                panic!("Ship Sprite error");
+            }
+        };
+        let map_sprite = match MapSprite::new(&gl, options) {
+            Ok(g) => g,
+            Err(err) => {
+                log(&format!("Ship Sprite error {:?}", err));
+                panic!("Ship Sprite error");
             }
         };
 
@@ -45,6 +55,7 @@ impl App {
             canvas,
             gl,
             ship_sprite,
+            map_sprite,
             canvas_resolution: (0, 0),
         }
     }
@@ -78,13 +89,10 @@ impl App {
             WebGl2RenderingContext::COLOR_BUFFER_BIT | WebGl2RenderingContext::DEPTH_BUFFER_BIT,
         );
 
-        let mut ship_sprite_transform = Transform2d::new(0.0, 0.0, f32::sin(time), 0.1);
-
         let camera_transform =
             Transform2d::new(0.0, 0.0, 0.0, 1.0 / self.canvas_resolution.1 as f32);
-
-        self.ship_sprite.world_to_camera = camera_transform.to_mat3_array();
-        self.ship_sprite.camera_to_clipspace = [
+        let world_to_camera = camera_transform.to_mat3_array();
+        let camera_to_clipspace = [
             self.canvas_resolution.0 as f32,
             0.0,
             0.0,
@@ -95,7 +103,13 @@ impl App {
             0.0,
             1.0,
         ];
+        
 
+        self.ship_sprite.world_to_camera = world_to_camera;
+        self.ship_sprite.camera_to_clipspace = camera_to_clipspace;
+
+
+        let mut ship_sprite_transform = Transform2d::new(0.0, 0.0, f32::sin(time), 0.1);
 		// Render the first ship
         self.ship_sprite.world_to_sprite = ship_sprite_transform.to_mat3_array();
         self.ship_sprite.ship_color = (0.0, 0.5, 1.0, 1.0);
@@ -110,6 +124,14 @@ impl App {
         self.ship_sprite.ship_color = (1.0, 0.5, 0.0, 1.0);
         self.ship_sprite.ship_engine = 1.0;
         self.ship_sprite.render(&self.gl);
+        
+        
+        let map_sprite_transform = Transform2d::new(0.0, 0.0, 0.0, 1.0);
+        // Render the map
+        self.map_sprite.world_to_camera = world_to_camera;
+        self.map_sprite.camera_to_clipspace = camera_to_clipspace;
+        self.map_sprite.world_to_sprite = map_sprite_transform.to_mat3_array();
+        self.map_sprite.render(&self.gl);
     }
 
     pub fn mouse_event(&mut self, event: MouseEvent) {
