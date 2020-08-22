@@ -22,7 +22,7 @@ pub struct App {
 }
 
 impl App {
-    pub fn new(canvas: HtmlCanvasElement) -> Self {
+    pub fn new(canvas: HtmlCanvasElement, options: String) -> Self {
         let gl = get_gl_context(&canvas).expect("No GL Canvas");
 
         gl.clear_color(0.0, 0.0, 0.0, 1.0);
@@ -43,7 +43,7 @@ impl App {
                 panic!("Ship Sprite error");
             }
         };
-        let map_sprite = match MapSprite::new(&gl) {
+        let map_sprite = match MapSprite::new(&gl, options) {
             Ok(g) => g,
             Err(err) => {
                 log(&format!("Ship Sprite error {:?}", err));
@@ -90,7 +90,7 @@ impl App {
         );
 
         let camera_transform =
-            Transform2d::new(0.0, 0.0, 0.0, 1.0 / self.canvas_resolution.0 as f32);
+            Transform2d::new(0.0, 0.0, 0.0, 1.0 / self.canvas_resolution.1 as f32);
         let world_to_camera = camera_transform.to_mat3_array();
         let camera_to_clipspace = [
             self.canvas_resolution.0 as f32,

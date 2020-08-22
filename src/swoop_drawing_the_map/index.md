@@ -23,7 +23,14 @@ with handling uniforms - which is likely to be pretty shader specific.
 {{#include ./src/shader.rs}}
 ```
 
+
+So anyway, here's drawing the coordinates for the map:
+
+<canvas id="swoop_drawing_the_map-0" options="coords"></canvas>
+
+
 ------------------------------------
+
 
 You may think we would use a texture for the map, just as we did for
 the player ship, however the map has slightly different requirements.
@@ -48,11 +55,71 @@ interesting to race around using a fourier series.
 So how do we get the signed distance field for a circle? Well, the
 distance from a single point is a good start:
 
-```
+```glsl
 float course = length(position - vec2(0.0, 0.0));
 ```
+We're going to define our distance field as negative values being a drivable
+area and positive values being walls. (aka distance to the track).
+So lets expand our circle by the track radius:
+```glsl
+float track_sdf = course - track_radius;
+```
+
+To make things clearer while debugging, let's threshold it so we can
+see where the track edges are:
+```glsl
+FragColor = vec4(vec3(track_sdf > 0.0), 1.0);
+```
+
 This gives us:
 
+<canvas id="swoop_drawing_the_map-1" options="circle_1"></canvas>
 
-<canvas id="swoop_drawing_the_map"></canvas>
+You can see there's a black circle in the middle of the screen. This
+would mean that the player can fly anywhere in that circle. We want the
+player in a track, not an arena.
 
+To turn it into a ring, we can use the abs function to make it 
+symmetric around the current edge, and then offset it to reintroduce 
+some negative (track) area:
+```glsl
+track_sdf = abs(track_sdf) - track_width;
+```
+
+<canvas id="swoop_drawing_the_map-2" options="circle_2"></canvas>
+
+(Note that the blue ship is invisible because the ships use additive
+blending)
+
+Don't understand what is happening here? You're probably not alone.
+Signed distance fields (SDF's) are a bit counter-intuitive at first.
+I can't think of a good way to explain it, but it should become
+evident how it works fairly quickly if you open up shadertoy and have 
+a play yourself.
+
+Flying around a circular track isn't very interesting, so we can use 
+a fourier series to distort it based on the angle from the center:
+
+```
+{{#include ./src/resources/map_fourier_1.frag}}
+```
+
+And the resulting track:
+
+<canvas id="swoop_drawing_the_map-3" options="fourier_1"></canvas>
+
+It shouldn't be hard to port the map function into rust when it comes
+time to write the collision detection.
+
+Now to make it look pretty by adding a grid in the background and
+drawing some lines around the edge:
+
+<canvas id="swoop_drawing_the_map-4" options="visualized"></canvas>
+
+Looks like a pretty small map? That's OK, we can tweak it using the
+`track_width` and `track_base_radius` parameters later.
+
+The final map rendering shader is:
+```
+{{#include ./src/resources/map_visualized.frag}}
+```

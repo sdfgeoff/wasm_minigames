@@ -31,8 +31,8 @@ pub struct Core {
 #[wasm_bindgen]
 impl Core {
     #[wasm_bindgen(constructor)]
-    pub fn new(canvas_id: String) -> Self {
-        log(&format!("WASM Started for canvas {}", canvas_id));
+    pub fn new(canvas_id: String, options: String) -> Self {
+        log(&format!("WASM Started for canvas '{}' with options '{}'", canvas_id, options));
 
         let selector = format!("#{}", canvas_id);
 
@@ -47,7 +47,7 @@ impl Core {
 
         let canvas: HtmlCanvasElement = element.dyn_into().expect("Not a canvas");
 
-        let app = Rc::new(RefCell::new(app::App::new(canvas.clone())));
+        let app = Rc::new(RefCell::new(app::App::new(canvas.clone(), options)));
 
         Self { app, canvas }
     }

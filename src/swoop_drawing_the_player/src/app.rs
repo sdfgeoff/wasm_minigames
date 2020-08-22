@@ -81,7 +81,7 @@ impl App {
         let mut ship_sprite_transform = Transform2d::new(0.0, 0.0, f32::sin(time), 0.1);
 
         let camera_transform =
-            Transform2d::new(0.0, 0.0, 0.0, 1.0 / self.canvas_resolution.0 as f32);
+            Transform2d::new(0.0, 0.0, 0.0, 1.0 / self.canvas_resolution.1 as f32);
 
         self.ship_sprite.world_to_camera = camera_transform.to_mat3_array();
         self.ship_sprite.camera_to_clipspace = [
