@@ -34,7 +34,7 @@ impl MapSprite {
                 "circle_2" => include_str!("resources/map_circle_2.frag"),
                 "fourier_1" => include_str!("resources/map_fourier_1.frag"),
                 "visualized" => include_str!("resources/map_visualized.frag"),
-                _ => panic!("Invalid shader specified")
+                _ => include_str!("resources/map_visualized.frag")
             }
         };
 

@@ -34,3 +34,10 @@ book: wasm
 wasm: $(TARGET_NAMES)
 $(TARGET_NAMES):
 	cd $(WORKSPACE_DIR); wasm-pack build $(WASM_PACK_FLAGS) $@
+	
+	sed 's/{ID}/$@/g' $(BOOK_DIR)/example.html > $(WORKSPACE_DIR)/$@/pkg/index.html
+	cp $(BOOK_DIR)/custom.css $(WORKSPACE_DIR)/$@/pkg/
+	cp $(BOOK_DIR)/example.js $(WORKSPACE_DIR)/$@/pkg/
+	cp $(BOOK_DIR)/src/error.svg $(WORKSPACE_DIR)/$@/pkg/
+	cp $(BOOK_DIR)/src/click_icon.svg $(WORKSPACE_DIR)/$@/pkg/
+	cp $(BOOK_DIR)/src/loading.gif $(WORKSPACE_DIR)/$@/pkg/
