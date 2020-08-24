@@ -13,3 +13,4 @@
     - [Drawing The Player Ship](./swoop_drawing_the_player/index.md)
     - [Drawing The Map](./swoop_drawing_the_map/index.md)
     - [Ship Motion Physics](./swoop_ship_motion_physics/index.md)
+    - [Keyboard Input](./swoop_ship_keyboard_input/index.md)
