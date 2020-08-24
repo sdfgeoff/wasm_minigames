@@ -136,6 +136,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "swoop_ship_keyboard_input"
+version = "0.1.0"
+dependencies = [
+ "js-sys",
+ "wasm-bindgen",
+ "web-sys",
+]
+
+[[package]]
 name = "swoop_ship_motion_physics"
 version = "0.1.0"
 dependencies = [
