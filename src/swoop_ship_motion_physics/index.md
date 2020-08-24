@@ -100,6 +100,5 @@ And we are good to go:
 You'll notice that once you start turning it keeps turning, that's because
 we haven't yet turned the keypress events into something that cleanly
 signals if the player is holding the key down or not.
-
 I was also sneaky and defined the camera transform as the X/Y transform
 of the player.

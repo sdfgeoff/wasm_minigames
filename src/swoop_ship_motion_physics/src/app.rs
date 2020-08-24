@@ -158,7 +158,7 @@ impl App {
         log(&format!("Mouse Event {:?}", event));
     }
     pub fn key_event(&mut self, event: KeyboardEvent) {
-        log(&format!("Key Event {:?}", event.code()));
+        //log(&format!("Key Event {:?}", event.code()));
 
         let player_entity = &mut self.ship_entities[0];
         if event.code() == "KeyW" {
