@@ -2,6 +2,7 @@ use wasm_bindgen::prelude::wasm_bindgen;
 use wasm_bindgen::{JsCast, JsValue};
 use web_sys::{window, HtmlCanvasElement, KeyboardEvent, MouseEvent, WebGl2RenderingContext};
 
+use super::keymap::{KeyMap, KeyState};
 use super::map_sprite::MapSprite;
 use super::ship::Ship;
 use super::ship_sprite::ShipSprite;
@@ -119,9 +120,9 @@ impl App {
             player_ship.angular_thrust -= 1.0
         }
         self.key_map.update();
-        
+
         // Physics
-        
+
         let now = window().unwrap().performance().unwrap().now();
         let time = now / 1000.0;
 
@@ -131,7 +132,7 @@ impl App {
         for ship in &mut self.ship_entities {
             ship.update(dt as f32);
         }
-        
+
         // Rendering
 
         self.check_resize();
@@ -183,82 +184,17 @@ impl App {
     }
     pub fn keydown_event(&mut self, event: KeyboardEvent) {
         if !event.repeat() {
-            self.key_map.set_state_from_str(&event.code(), KeyState::JustPressed);
+            self.key_map
+                .set_state_from_str(&event.code(), KeyState::JustPressed);
         }
     }
-    
+
     pub fn keyup_event(&mut self, event: KeyboardEvent) {
-        self.key_map.set_state_from_str(&event.code(), KeyState::JustReleased);
+        self.key_map
+            .set_state_from_str(&event.code(), KeyState::JustReleased);
     }
 }
 
 fn get_gl_context(canvas: &HtmlCanvasElement) -> Result<WebGl2RenderingContext, JsValue> {
     Ok(canvas.get_context("webgl2")?.unwrap().dyn_into()?)
-}
-
-
-#[derive(Debug)]
-enum KeyState {
-    JustPressed,
-    Down,
-    JustReleased,
-    Up,
-}
-
-impl KeyState {
-    fn update(&self) -> KeyState {
-        match self {
-            KeyState::JustPressed => KeyState::Down,
-            KeyState::Down => KeyState::Down,
-            KeyState::JustReleased => KeyState::Up,
-            KeyState::Up => KeyState::Up,
-        }
-    }
-    
-    fn active(&self) -> bool {
-        match self {
-            KeyState::JustPressed => true,
-            KeyState::Down => true,
-            KeyState::JustReleased => false,
-            KeyState::Up => false,
-        }
-    }
-}
-
-
-#[derive(Debug)]
-struct KeyMap {
-    forwards: KeyState,
-    backwards: KeyState,
-    turn_left: KeyState,
-    turn_right: KeyState,
-}
-
-impl KeyMap {
-    fn new() -> Self {
-        Self {
-            forwards: KeyState::Up,
-            backwards: KeyState::Up,
-            turn_left: KeyState::Up,
-            turn_right: KeyState::Up,
-        }
-    }
-    
-    fn update(&mut self) {
-        self.forwards = self.forwards.update();
-        self.backwards = self.backwards.update();
-        self.turn_left = self.turn_left.update();
-        self.turn_right = self.turn_right.update();
-    }
-    
-    
-    fn set_state_from_str(&mut self, code: &str, new_state: KeyState) {
-        match code {
-            "KeyW" => {self.forwards = new_state},
-            "KeyS" => {self.backwards = new_state},
-            "KeyA" => {self.turn_left = new_state},
-            "KeyD" => {self.turn_right = new_state},
-            _ => ()
-        };
-    }
 }

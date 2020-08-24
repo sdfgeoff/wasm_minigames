@@ -167,3 +167,8 @@ self.key_map.update();
 And the result is:
 <canvas id="swoop_ship_keyboard_input"></canvas>
 
+Why implement it all this way? Why not convert the key string to an 
+enum then use a hashmap to store key state, and make the KeyMap more 
+generic? The same reason I didn't factor out generic "sprite drawing 
+code" - I'm not trying to make a game engine here, and this is the 
+simplest way to get the job done.

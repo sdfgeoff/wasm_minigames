@@ -7,6 +7,7 @@ use wasm_bindgen::JsCast;
 use web_sys::{window, Event, HtmlCanvasElement, KeyboardEvent, MouseEvent};
 
 mod app;
+mod keymap;
 mod map_sprite;
 mod shader;
 mod ship;
@@ -127,7 +128,7 @@ impl Core {
 
                 anim_app1.borrow_mut().keydown_event(event);
             }) as Box<dyn FnMut(_)>);
-            
+
             let keyup_callback = Closure::wrap(Box::new(move |event: KeyboardEvent| {
                 let e: Event = event.clone().dyn_into().unwrap();
                 e.stop_propagation();
@@ -137,9 +138,12 @@ impl Core {
             }) as Box<dyn FnMut(_)>);
 
             self.canvas
-                .add_event_listener_with_callback("keydown", keydown_callback.as_ref().unchecked_ref())
+                .add_event_listener_with_callback(
+                    "keydown",
+                    keydown_callback.as_ref().unchecked_ref(),
+                )
                 .unwrap();
-                
+
             self.canvas
                 .add_event_listener_with_callback("keyup", keyup_callback.as_ref().unchecked_ref())
                 .unwrap();
