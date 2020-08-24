@@ -11,3 +11,5 @@ as (pretty much) a single file.
 
 Either way, this book chronicles my adventures into creating WASM games from
 scratch in Rust.
+All the code is available on [github](https://github.com/sdfgeoff/wasm_minigames).
+
