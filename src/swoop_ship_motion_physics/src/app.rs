@@ -31,7 +31,7 @@ pub struct App {
 }
 
 impl App {
-    pub fn new(canvas: HtmlCanvasElement, options: String) -> Self {
+    pub fn new(canvas: HtmlCanvasElement, _options: String) -> Self {
         let gl = get_gl_context(&canvas).expect("No GL Canvas");
 
         gl.clear_color(0.0, 0.0, 0.0, 1.0);
@@ -52,7 +52,7 @@ impl App {
                 panic!("Ship Sprite error");
             }
         };
-        let map_sprite = match MapSprite::new(&gl, options) {
+        let map_sprite = match MapSprite::new(&gl) {
             Ok(g) => g,
             Err(err) => {
                 log(&format!("Ship Sprite error {:?}", err));
