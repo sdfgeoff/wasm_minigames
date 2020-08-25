@@ -1,5 +1,5 @@
-use wasm_bindgen::prelude::{wasm_bindgen};
-use web_sys::{HtmlCanvasElement, MouseEvent, KeyEvent};
+use wasm_bindgen::prelude::wasm_bindgen;
+use web_sys::{HtmlCanvasElement, KeyEvent, MouseEvent};
 
 // Pull in the console.log function so we can debug things more easily
 #[wasm_bindgen]
@@ -7,7 +7,6 @@ extern "C" {
     #[wasm_bindgen(js_namespace = console)]
     fn log(s: &str);
 }
-
 
 pub struct App {
     canvas: HtmlCanvasElement,

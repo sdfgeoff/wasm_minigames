@@ -96,16 +96,16 @@ impl App {
             1.0,
         ];
 
-		// Render the first ship
+        // Render the first ship
         self.ship_sprite.world_to_sprite = ship_sprite_transform.to_mat3_array();
         self.ship_sprite.ship_color = (0.0, 0.5, 1.0, 1.0);
         self.ship_sprite.ship_engine = 0.0;
         self.ship_sprite.render(&self.gl);
 
-		// Render another ship
+        // Render another ship
         ship_sprite_transform.x = f32::sin(time) * 0.5;
         ship_sprite_transform.y = f32::cos(time) * 0.5;
-        ship_sprite_transform.rot = - std::f32::consts::PI / 2.0 - time;
+        ship_sprite_transform.rot = -std::f32::consts::PI / 2.0 - time;
         self.ship_sprite.world_to_sprite = ship_sprite_transform.to_mat3_array();
         self.ship_sprite.ship_color = (1.0, 0.5, 0.0, 1.0);
         self.ship_sprite.ship_engine = 1.0;

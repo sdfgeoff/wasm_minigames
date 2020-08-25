@@ -1,10 +1,6 @@
-use web_sys::{
-    WebGl2RenderingContext, WebGlBuffer, WebGlProgram,
-    WebGlUniformLocation,
-};
+use web_sys::{WebGl2RenderingContext, WebGlBuffer, WebGlProgram, WebGlUniformLocation};
 
 use super::shader::{init_shader_program, upload_array_f32, ShaderError};
-
 
 pub struct MapSprite {
     position_buffer: WebGlBuffer,
@@ -23,10 +19,13 @@ pub struct MapSprite {
 impl MapSprite {
     pub fn new(gl: &WebGl2RenderingContext, options: String) -> Result<Self, ShaderError> {
         let map_size = 100.0;
-        let position_buffer =
-            upload_array_f32(gl, vec![-map_size, map_size, map_size, map_size, -map_size, -map_size, map_size, -map_size])?;
-        
-        
+        let position_buffer = upload_array_f32(
+            gl,
+            vec![
+                -map_size, map_size, map_size, map_size, -map_size, -map_size, map_size, -map_size,
+            ],
+        )?;
+
         let frag_shader = {
             match options.as_ref() {
                 "coords" => include_str!("resources/map_coords.frag"),
@@ -34,15 +33,11 @@ impl MapSprite {
                 "circle_2" => include_str!("resources/map_circle_2.frag"),
                 "fourier_1" => include_str!("resources/map_fourier_1.frag"),
                 "visualized" => include_str!("resources/map_visualized.frag"),
-                _ => include_str!("resources/map_visualized.frag")
+                _ => include_str!("resources/map_visualized.frag"),
             }
         };
 
-        let program = init_shader_program(
-            gl,
-            include_str!("resources/map.vert"),
-            frag_shader,
-        )?;
+        let program = init_shader_program(gl, include_str!("resources/map.vert"), frag_shader)?;
 
         let attrib_vertex_positions = gl.get_attrib_location(&program, "aVertexPosition") as u32;
 

@@ -29,7 +29,7 @@ impl MapSprite {
         let program = init_shader_program(
             gl,
             include_str!("resources/map.vert"),
-            include_str!("resources/map.frag")
+            include_str!("resources/map.frag"),
         )?;
 
         let attrib_vertex_positions = gl.get_attrib_location(&program, "aVertexPosition") as u32;
