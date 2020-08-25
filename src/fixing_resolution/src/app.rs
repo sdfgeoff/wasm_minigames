@@ -45,22 +45,19 @@ impl App {
         }
     }
 
-
     fn check_resize(&mut self) {
         let client_width = self.canvas.client_width();
         let client_height = self.canvas.client_height();
         let canvas_width = self.canvas.width() as i32;
         let canvas_height = self.canvas.height() as i32;
-        
+
         if client_width != canvas_width || client_height != canvas_height {
             self.canvas.set_width(client_width as u32);
             self.canvas.set_height(client_height as u32);
-            self.gl
-                .viewport(0, 0, client_width, client_height);
+            self.gl.viewport(0, 0, client_width, client_height);
             log(&format!("Resized to {}:{}", client_width, client_height));
         }
     }
-    
 
     pub fn animation_frame(&mut self) {
         self.check_resize();
@@ -78,7 +75,6 @@ impl App {
     pub fn key_event(&mut self, event: KeyEvent) {
         log(&format!("Key Event {:?}", event));
     }
-
 }
 
 fn get_gl_context(canvas: &HtmlCanvasElement) -> Result<WebGl2RenderingContext, JsValue> {

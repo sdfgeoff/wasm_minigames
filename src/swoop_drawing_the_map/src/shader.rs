@@ -1,6 +1,5 @@
-use web_sys::{WebGlProgram, WebGl2RenderingContext, WebGlShader, WebGlBuffer};
 use wasm_bindgen::{JsCast, JsValue};
-
+use web_sys::{WebGl2RenderingContext, WebGlBuffer, WebGlProgram, WebGlShader};
 
 /// An error to represent problems with a shader.
 #[derive(Debug)]
@@ -21,10 +20,10 @@ pub enum ShaderError {
 
     /// I think this means that the Vertex and Fragment shaders incompatible
     ShaderLinkError(),
-    
+
     /// Failed to create buffer to upload data into
     BufferCreationFailed,
-    
+
     /// Generic javascript error
     JsError(JsValue),
 }
@@ -35,15 +34,13 @@ impl From<JsValue> for ShaderError {
     }
 }
 
-
-
-
-
 pub fn upload_array_f32(
     gl: &WebGl2RenderingContext,
     vertices: Vec<f32>,
 ) -> Result<WebGlBuffer, ShaderError> {
-    let position_buffer = gl.create_buffer().ok_or(ShaderError::BufferCreationFailed)?;
+    let position_buffer = gl
+        .create_buffer()
+        .ok_or(ShaderError::BufferCreationFailed)?;
 
     gl.bind_buffer(WebGl2RenderingContext::ARRAY_BUFFER, Some(&position_buffer));
 
@@ -64,7 +61,6 @@ pub fn upload_array_f32(
 
     Ok(position_buffer)
 }
-
 
 pub fn load_shader(
     gl: &WebGl2RenderingContext,
@@ -92,7 +88,6 @@ pub fn load_shader(
     Ok(shader)
 }
 
-
 pub fn init_shader_program(
     gl: &WebGl2RenderingContext,
     vert_source: &str,
@@ -119,4 +114,3 @@ pub fn init_shader_program(
 
     Ok(shader_program)
 }
-

@@ -1,11 +1,9 @@
 use web_sys::{
-    WebGl2RenderingContext, WebGlBuffer, WebGlProgram, WebGlTexture,
-    WebGlUniformLocation,
+    WebGl2RenderingContext, WebGlBuffer, WebGlProgram, WebGlTexture, WebGlUniformLocation,
 };
 
-use super::texture::{bind_2d_texture_to_uniform, load_texture, TextureUnit};
 use super::shader::{init_shader_program, upload_array_f32, ShaderError};
-
+use super::texture::{bind_2d_texture_to_uniform, load_texture, TextureUnit};
 
 pub struct ShipSprite {
     position_buffer: WebGlBuffer,

@@ -119,7 +119,6 @@ impl Quad {
     }
 }
 
-
 fn upload_array_f32(
     gl: &WebGl2RenderingContext,
     vertices: Vec<f32>,

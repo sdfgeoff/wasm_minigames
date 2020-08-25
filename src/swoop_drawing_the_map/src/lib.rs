@@ -7,11 +7,11 @@ use wasm_bindgen::JsCast;
 use web_sys::{window, Event, HtmlCanvasElement, KeyboardEvent, MouseEvent};
 
 mod app;
-mod texture;
-mod shader;
-mod transform;
 mod map_sprite;
+mod shader;
 mod ship_sprite;
+mod texture;
+mod transform;
 
 // Pull in the console.log function so we can debug things more easily
 #[wasm_bindgen]
@@ -32,7 +32,10 @@ pub struct Core {
 impl Core {
     #[wasm_bindgen(constructor)]
     pub fn new(canvas_id: String, options: String) -> Self {
-        log(&format!("WASM Started for canvas '{}' with options '{}'", canvas_id, options));
+        log(&format!(
+            "WASM Started for canvas '{}' with options '{}'",
+            canvas_id, options
+        ));
 
         let selector = format!("#{}", canvas_id);
 
