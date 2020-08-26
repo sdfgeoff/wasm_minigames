@@ -221,5 +221,6 @@ And there we have it, simple physics completed:
 <canvas id="swoop_ship_collision_physics"></canvas>
 
 You'll notice you can get some jitter when pushing other ships into 
-walls and corners. We'll see if that's a problem when we scale the map 
-up.
+walls and corners. This is because we aren't doing any of the clever 
+stuff normal physics engines do to allow object stacking. We'll see if 
+that's a problem when we scale the map up.
