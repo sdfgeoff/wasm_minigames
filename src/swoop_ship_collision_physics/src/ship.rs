@@ -55,9 +55,9 @@ impl Ship {
     }
 }
 
+/// Ensure a number is between pi and -pi
+/// Not sure if this is the optimal way, but it works
 fn wrap_angle(angle: f32) -> f32 {
-    // Ensure a number is between pi and -pi
-    // Not sure if this is the optimal way, but it works
     let angle = angle + std::f32::consts::PI; // Work between 0 and 2PI;
     let sig = f32::signum(angle);
     let mag = f32::abs(angle) % (2.0 * std::f32::consts::PI);

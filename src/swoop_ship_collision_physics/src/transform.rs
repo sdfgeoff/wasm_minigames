@@ -1,4 +1,4 @@
-type Vec2 = (f32, f32);
+pub type Vec2 = (f32, f32);
 
 /// A non-generic transform in 2D. Only supports rotations translations
 /// and a uniform scaling.
@@ -23,10 +23,7 @@ impl Transform2d {
 }
 
 pub fn vect_between(trans1: &Transform2d, trans2: &Transform2d) -> Vec2 {
-    (
-        trans1.x - trans2.x,
-        trans1.y - trans2.y,
-    )
+    (trans1.x - trans2.x, trans1.y - trans2.y)
 }
 
 pub fn length(vect: Vec2) -> f32 {
@@ -35,8 +32,5 @@ pub fn length(vect: Vec2) -> f32 {
 
 pub fn normalize(vect: Vec2) -> Vec2 {
     let len = length(vect);
-    (
-        vect.0 / len,
-        vect.1 / len,
-    )
+    (vect.0 / len, vect.1 / len)
 }

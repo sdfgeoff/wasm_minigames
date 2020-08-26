@@ -8,7 +8,9 @@ use web_sys::{window, Event, HtmlCanvasElement, KeyboardEvent, MouseEvent};
 
 mod app;
 mod keymap;
+mod map;
 mod map_sprite;
+mod physics;
 mod shader;
 mod ship;
 mod ship_sprite;

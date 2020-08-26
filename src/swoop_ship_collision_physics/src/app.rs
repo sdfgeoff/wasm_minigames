@@ -2,17 +2,18 @@ use wasm_bindgen::prelude::wasm_bindgen;
 use wasm_bindgen::{JsCast, JsValue};
 use web_sys::{window, HtmlCanvasElement, KeyboardEvent, MouseEvent, WebGl2RenderingContext};
 
-use std::rc::Rc;
-use std::cell::RefCell;
-
 use super::keymap::{KeyMap, KeyState};
+use super::map::Map;
 use super::map_sprite::MapSprite;
+use super::physics::calc_ship_physics;
 use super::ship::Ship;
 use super::ship_sprite::ShipSprite;
-use super::transform::{Transform2d, vect_between, length, normalize};
+use super::transform::Transform2d;
 
 const CYAN_SHIP: (f32, f32, f32, f32) = (0.0, 0.5, 1.0, 1.0);
 const YELLOW_SHIP: (f32, f32, f32, f32) = (1.0, 0.5, 0.0, 1.0);
+const PINK_SHIP: (f32, f32, f32, f32) = (1.0, 0.0, 0.5, 1.0);
+const PURPLE_SHIP: (f32, f32, f32, f32) = (0.5, 0.0, 1.0, 1.0);
 
 // Pull in the console.log function so we can debug things more easily
 #[wasm_bindgen]
@@ -26,6 +27,7 @@ pub struct App {
     gl: WebGl2RenderingContext,
     ship_sprite: ShipSprite,
     map_sprite: MapSprite,
+    map: Map,
     key_map: KeyMap,
 
     prev_time: f64,
@@ -68,7 +70,16 @@ impl App {
         let ship_entities = vec![
             Ship::new(CYAN_SHIP, Transform2d::new(0.0, 0.0, 0.0, 0.1)),
             Ship::new(YELLOW_SHIP, Transform2d::new(0.0, 0.1, 0.0, 0.1)),
+            Ship::new(PINK_SHIP, Transform2d::new(0.0, 0.2, 0.0, 0.1)),
+            Ship::new(PURPLE_SHIP, Transform2d::new(0.0, 0.3, 0.0, 0.1)),
         ];
+
+        let map = Map {
+            sin_consts: [0.2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+            cos_consts: [0.0, -0.2, 0.0, 0.1, 0.0, 0.0, 0.05, 0.0],
+            track_base_radius: 0.5,
+            track_width: 0.1,
+        };
 
         let now = window().unwrap().performance().unwrap().now();
         let prev_time = now / 1000.0;
@@ -78,6 +89,7 @@ impl App {
             gl,
             ship_sprite,
             map_sprite,
+            map,
             key_map: KeyMap::new(),
             canvas_resolution: (0, 0),
             ship_entities,
@@ -125,8 +137,6 @@ impl App {
             }
             self.key_map.update();
         }
-            
-
 
         {
             // Physics
@@ -135,48 +145,8 @@ impl App {
 
             let dt = time - self.prev_time;
             self.prev_time = time;
-            
-            // Motion
-            for ship in &mut self.ship_entities {
-                ship.update(dt as f32);
-            }
-            
-            const SHIP_RADIUS: f32 = 0.1;
-        
-            // Collisions
-            let ship_refs: Vec<Rc<RefCell<&mut Ship>>> = self.ship_entities.iter_mut().map(|x| Rc::new(RefCell::new(x))).collect();
-            let mut collisions = vec!();
-            for ship1 in &ship_refs {
-                for ship2 in &ship_refs {
-                    if ship1.as_ptr() == ship2.as_ptr() {
-                        continue;
-                    }
-                    // TODO: remove duplicate iterations ie (ship1, ship2), (ship2, ship1), then can remove *0.5 in collision response
-                    // TODO: Collisions with map
-                    
-                    let normal = vect_between(&ship1.borrow().position, &ship2.borrow().position);
-                    let len = length(normal);
-                    if len < SHIP_RADIUS {
-                        collisions.push(CollisionEvent {
-                            obj1: ship1.clone(),
-                            obj2: ship2.clone(),
-                            normal: normalize(normal),
-                            overlap: len - SHIP_RADIUS,
-                        });
-                    }
-                }
-            }
-            //log(&format!("collisions {:?}", collisions));
-            for pair in collisions {
-                let mut ship1 = pair.obj1.borrow_mut();
-                let mut ship2 = pair.obj2.borrow_mut();
-                
-                ship1.position.x -= pair.normal.0 * pair.overlap * 0.5;
-                ship1.position.y -= pair.normal.1 * pair.overlap * 0.5;
-                ship2.position.x += pair.normal.0 * pair.overlap * 0.5;
-                ship2.position.y += pair.normal.1 * pair.overlap * 0.5;
-            }
-        
+
+            calc_ship_physics(&mut self.ship_entities, &self.map, dt as f32);
         }
         {
             // Rendering
@@ -244,13 +214,4 @@ impl App {
 
 fn get_gl_context(canvas: &HtmlCanvasElement) -> Result<WebGl2RenderingContext, JsValue> {
     Ok(canvas.get_context("webgl2")?.unwrap().dyn_into()?)
-}
-
-
-#[derive(Debug)]
-struct CollisionEvent<'a> {
-    obj1: Rc<RefCell<&'a mut Ship>>,
-    obj2: Rc<RefCell<&'a mut Ship>>,
-    normal: (f32, f32),
-    overlap: f32,
 }
