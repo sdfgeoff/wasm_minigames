@@ -14,3 +14,4 @@
     - [Drawing The Map](./swoop_drawing_the_map/index.md)
     - [Ship Motion Physics](./swoop_ship_motion_physics/index.md)
     - [Keyboard Input](./swoop_ship_keyboard_input/index.md)
+    - [Ship Collision Physics](./swoop_ship_collision_physics/index.md)
