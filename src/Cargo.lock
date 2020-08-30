@@ -179,6 +179,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "swoop_ship_spawn_points"
+version = "0.1.0"
+dependencies = [
+ "itertools",
+ "js-sys",
+ "wasm-bindgen",
+ "web-sys",
+]
+
+[[package]]
 name = "syn"
 version = "1.0.38"
 source = "registry+https://github.com/rust-lang/crates.io-index"
