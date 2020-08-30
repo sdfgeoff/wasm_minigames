@@ -37,7 +37,7 @@ $(TARGET_NAMES):
 	
 	
 	sed 's/{ID}/$@/g' $(BOOK_DIR)/example.html > $(WORKSPACE_DIR)/$@/pkg/index.html
-	cp $(BOOK_DIR)/custom.css $(WORKSPACE_DIR)/$@/pkg/
+	cp $(BOOK_DIR)/example.css $(WORKSPACE_DIR)/$@/pkg/
 	cp $(BOOK_DIR)/example.js $(WORKSPACE_DIR)/$@/pkg/
 	cp $(BOOK_DIR)/src/error.svg $(WORKSPACE_DIR)/$@/pkg/
 	cp $(BOOK_DIR)/src/click_icon.svg $(WORKSPACE_DIR)/$@/pkg/
