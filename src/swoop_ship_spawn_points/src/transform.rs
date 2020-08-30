@@ -10,7 +10,6 @@ pub struct Transform2d {
     pub scale: f32,
 }
 
-
 pub struct PolarCoordinate {
     pub radius: f32,
     pub angle: f32,
@@ -20,11 +19,10 @@ impl PolarCoordinate {
     pub fn to_cartesian(&self) -> Vec2 {
         (
             f32::sin(self.angle) * self.radius,
-            f32::cos(self.angle) * self.radius
+            f32::cos(self.angle) * self.radius,
         )
     }
 }
-
 
 impl Transform2d {
     pub fn new(x: f32, y: f32, rot: f32, scale: f32) -> Self {

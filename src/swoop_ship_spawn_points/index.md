@@ -121,39 +121,100 @@ direction it was moving to the direction it was facing.
 
 Now we can place our four ships along the start line:
 ```rust
-    {
+        fn start_game(&mut self) {
+        self.map_sprite.set_to_map(&self.gl, &self.map);
+
+        {
             // Position the ships on the start line
             const SHIP_SPACING: f32 = 0.12;
             let start_position = self.map.get_start_position();
             let startline_angle = self.map.get_track_direction(start_position.angle);
-            
-            let startline_normal = (
-                f32::cos(startline_angle),
-                f32::sin(startline_angle),
-            );
-            
+
+            let startline_tangent = (f32::cos(startline_angle), f32::sin(startline_angle));
+            let startline_normal = (-f32::sin(startline_angle), f32::cos(startline_angle));
+
             let num_ships = self.ship_entities.len();
-            
+
             for (id, ship) in self.ship_entities.iter_mut().enumerate() {
-                let offset = ((id as f32) - (num_ships as f32) * 0.5) * SHIP_SPACING;
-                
+                let offset = ((id as f32) - ((num_ships - 1) as f32) * 0.5);
+
                 let offset_vec = (
-                    startline_normal.0 * offset,
-                    startline_normal.1 * offset
+                    (startline_tangent.0 * offset - startline_normal.0) * SHIP_SPACING,
+                    (startline_tangent.1 * offset - startline_normal.1) * SHIP_SPACING,
                 );
-                
+
                 let ship_start_position = start_position.to_cartesian();
                 ship.position.x = ship_start_position.0 + offset_vec.0;
                 ship.position.y = ship_start_position.1 + offset_vec.1;
                 ship.position.rot = startline_angle;
-                
+
                 ship.velocity.x = 0.0;
                 ship.velocity.y = 0.0;
                 ship.velocity.rot = 0.0;
             }
         }
+    }
 ```
 
-And the result is:
+Note that we use the normal of the startline to offset the ships behind
+the startline slightly.
+
+
+As a final act, we need to display the startline to the player. We
+can add a new function to our map fragment shader:
+
+```glsl
+
+uniform vec2 start_line_tangent;
+uniform vec2 start_line_position;
+
+<< snip >>
+
+float startline(vec2 world_coordinates) {
+    vec2 delta = world_coordinates - start_line_position;
+    float projected_dist = dot(delta, start_line_tangent);
+    
+    vec2 start_line_coords = delta - projected_dist * start_line_tangent;
+    float dist_from_line = length(start_line_coords);
+    float dist_from_center = projected_dist;
+    
+    float start_line_ends = - 1.0 + abs(dist_from_center);
+    
+    float start_line = max(dist_from_line, start_line_ends);
+    
+    return start_line + track_background_line_fade;
+}
+
+<< snip >>
+
+void main() {
+    float track = map_function(uv);
+    
+    float edge_sdf = map_edges(track);
+    
+    
+    float map_visualized = edge_sdf;
+    if (track > 0.0) {
+        float background_grid = background_grid(uv);
+        map_visualized = min(edge_sdf, background_grid);
+    } else {
+        float startline_sdf = startline(uv);
+        map_visualized = min(edge_sdf, startline_sdf);
+    }
+    
+    
+    FragColor = neon(
+        map_visualized,
+        vec4(0.9, 0.9, 0.9, 1.0), 0.1
+    );
+}
+```
+
+Note that in the `startline` function there is the variable 
+"start_line_ends" this is used to prevent the startline from continuing 
+across to the other side of the map (the max function is like a 
+modeling "intersection" operation).
+
+And the result of all this is:
 
 <canvas id="swoop_ship_spawn_points"></canvas>

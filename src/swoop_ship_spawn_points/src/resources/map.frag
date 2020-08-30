@@ -15,6 +15,9 @@ uniform float track_width;
 uniform float sin_consts[8];
 uniform float cos_consts[8];
 
+uniform vec2 start_line_tangent;
+uniform vec2 start_line_position;
+
 
 float map_function(vec2 position) {
     float course = length(position - vec2(0.0, 0.0));
@@ -59,16 +62,35 @@ float map_edges(float track) {
     return abs(track) / track_edge_line_width;
 }
 
+float startline(vec2 world_coordinates) {
+    vec2 delta = world_coordinates - start_line_position;
+    float projected_dist = dot(delta, start_line_tangent);
+    
+    vec2 start_line_coords = delta - projected_dist * start_line_tangent;
+    float dist_from_line = length(start_line_coords);
+    float dist_from_center = projected_dist;
+    
+    float start_line_ends = - 1.0 + abs(dist_from_center);
+    
+    float start_line = max(dist_from_line, start_line_ends);
+    
+    return start_line + track_background_line_fade;
+}
+
 
 void main() {
     float track = map_function(uv);
     
     float edge_sdf = map_edges(track);
-    float background_grid = background_grid(uv);
+    
     
     float map_visualized = edge_sdf;
     if (track > 0.0) {
+        float background_grid = background_grid(uv);
         map_visualized = min(edge_sdf, background_grid);
+    } else {
+        float startline_sdf = startline(uv);
+        map_visualized = min(edge_sdf, startline_sdf);
     }
     
     

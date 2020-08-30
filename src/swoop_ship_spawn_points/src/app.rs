@@ -98,37 +98,34 @@ impl App {
         game.start_game();
         game
     }
-    
+
     fn start_game(&mut self) {
         self.map_sprite.set_to_map(&self.gl, &self.map);
-        
-        
+
         {
             // Position the ships on the start line
             const SHIP_SPACING: f32 = 0.12;
             let start_position = self.map.get_start_position();
             let startline_angle = self.map.get_track_direction(start_position.angle);
-            
-            let startline_normal = (
-                f32::cos(startline_angle),
-                f32::sin(startline_angle),
-            );
-            
+
+            let startline_tangent = (f32::cos(startline_angle), f32::sin(startline_angle));
+            let startline_normal = (-f32::sin(startline_angle), f32::cos(startline_angle));
+
             let num_ships = self.ship_entities.len();
-            
+
             for (id, ship) in self.ship_entities.iter_mut().enumerate() {
-                let offset = ((id as f32) - (num_ships as f32) * 0.5) * SHIP_SPACING;
-                
+                let offset = ((id as f32) - ((num_ships - 1) as f32) * 0.5);
+
                 let offset_vec = (
-                    startline_normal.0 * offset,
-                    startline_normal.1 * offset
+                    (startline_tangent.0 * offset - startline_normal.0) * SHIP_SPACING,
+                    (startline_tangent.1 * offset - startline_normal.1) * SHIP_SPACING,
                 );
-                
+
                 let ship_start_position = start_position.to_cartesian();
                 ship.position.x = ship_start_position.0 + offset_vec.0;
                 ship.position.y = ship_start_position.1 + offset_vec.1;
                 ship.position.rot = startline_angle;
-                
+
                 ship.velocity.x = 0.0;
                 ship.velocity.y = 0.0;
                 ship.velocity.rot = 0.0;
