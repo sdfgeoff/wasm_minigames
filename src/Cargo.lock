@@ -133,6 +133,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "swoop_core_gameplay"
+version = "0.1.0"
+dependencies = [
+ "itertools",
+ "js-sys",
+ "wasm-bindgen",
+ "web-sys",
+]
+
+[[package]]
 name = "swoop_drawing_the_map"
 version = "0.1.0"
 dependencies = [
