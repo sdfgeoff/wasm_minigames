@@ -1,16 +1,4 @@
-# Core Gameplay
-
-Being able to fly around the map is one thing, but a major part of
-this being a game is that you are scored somehow on your ability to fly.
-The core gameplay loop of this game is:
-
-1. Generate a new map
-2. Fly 5 laps around the map against 3 AI opponents
-3. Display the rankings
-
-Let's tackle these in order
-
-## Generating a new map
+# Map Generation
 
 The map is defined by a Fourier series. To generate a new fourier
 series, we have to come up with a set of constants for it. We can generate
@@ -87,4 +75,4 @@ This is the sort of thing you can fiddle with all day, so we'll leave it
 here and move on.
 
 
-<canvas id="swoop_ship_spawn_points"></canvas>
+<canvas id="swoop_map_generation"></canvas>

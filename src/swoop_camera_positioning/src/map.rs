@@ -86,16 +86,15 @@ impl Map {
             -angle + extra_angle + std::f32::consts::PI
         }
     }
-    
-    
+
     /// Change the sin and cosine constants to change the map course
     pub fn randomize(&mut self) {
         const WAVINESS: f32 = 3.0;
-        for i in 0 .. 8 {
+        for i in 0..8 {
             let rand1 = (random() - 0.5) * 2.0;
             let rand2 = (random() - 0.5) * 2.0;
             let amplitude = WAVINESS / f32::powf((i + 1) as f32, 1.3);
-            
+
             self.sin_consts[i] = rand1 * amplitude;
             self.cos_consts[i] = rand2 * amplitude;
         }

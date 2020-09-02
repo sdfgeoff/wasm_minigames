@@ -78,7 +78,7 @@ impl App {
             sin_consts: [2.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
             cos_consts: [0.0, -2.0, 0.0, 1.0, 0.0, 0.0, 0.5, 0.0],
             track_base_radius: 8.0,
-            track_width: 0.5,
+            track_width: 0.6,
         };
 
         let now = window().unwrap().performance().unwrap().now();
@@ -101,7 +101,7 @@ impl App {
 
     fn start_game(&mut self) {
         self.map.randomize();
-        
+
         self.map_sprite.set_to_map(&self.gl, &self.map);
 
         {
@@ -195,8 +195,8 @@ impl App {
             );
 
             let camera_transform = Transform2d::new(
-                self.ship_entities[0].position.x + self.ship_entities[0].velocity.x * 0.2,
-                self.ship_entities[0].position.y + self.ship_entities[0].velocity.y * 0.2,
+                self.ship_entities[0].position.x,
+                self.ship_entities[0].position.y,
                 0.0,
                 1.0 / self.canvas_resolution.1 as f32,
             );

@@ -16,4 +16,5 @@
     - [Keyboard Input](./swoop_ship_keyboard_input/index.md)
     - [Ship Collision Physics](./swoop_ship_collision_physics/index.md)
     - [Ship Spawn Points](./swoop_ship_spawn_points/index.md)
-    - [Core Gameplay](./swoop_core_gameplay/index.md)
+    - [Map Generation](./swoop_map_generation/index.md)
+    - [Camera Positioning](./swoop_camera_positioning/index.md)

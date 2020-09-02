@@ -1,5 +1,5 @@
 [package]
-name = "swoop_core_gameplay"
+name = "swoop_map_generation"
 version = "0.1.0"
 authors = ["Geoffrey Irons <sdfgeoff@gmail.com>"]
 edition = "2018"
