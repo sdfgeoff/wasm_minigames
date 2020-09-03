@@ -161,6 +161,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "swoop_enemy_racers"
+version = "0.1.0"
+dependencies = [
+ "itertools",
+ "js-sys",
+ "wasm-bindgen",
+ "web-sys",
+]
+
+[[package]]
 name = "swoop_map_generation"
 version = "0.1.0"
 dependencies = [

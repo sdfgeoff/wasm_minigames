@@ -18,3 +18,4 @@
     - [Ship Spawn Points](./swoop_ship_spawn_points/index.md)
     - [Map Generation](./swoop_map_generation/index.md)
     - [Camera Positioning](./swoop_camera_positioning/index.md)
+    - [Enemy Racers](./swoop_enemy_racers/index.md)
