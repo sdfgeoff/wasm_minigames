@@ -133,6 +133,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "swoop_camera_positioning"
+version = "0.1.0"
+dependencies = [
+ "itertools",
+ "js-sys",
+ "wasm-bindgen",
+ "web-sys",
+]
+
+[[package]]
 name = "swoop_drawing_the_map"
 version = "0.1.0"
 dependencies = [
@@ -145,6 +155,16 @@ dependencies = [
 name = "swoop_drawing_the_player"
 version = "0.1.0"
 dependencies = [
+ "js-sys",
+ "wasm-bindgen",
+ "web-sys",
+]
+
+[[package]]
+name = "swoop_map_generation"
+version = "0.1.0"
+dependencies = [
+ "itertools",
  "js-sys",
  "wasm-bindgen",
  "web-sys",
