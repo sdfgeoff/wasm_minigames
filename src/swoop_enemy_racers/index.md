@@ -266,3 +266,9 @@ pub fn calc_ai_control(ship: &mut Ship, skill: f32, map: &Map) {
 And there we have it:
 
 <canvas id="swoop_enemy_racers"></canvas>
+
+I can always beat yellow (no lookahead), often beat yellow (0.5s max 
+lookahead) and am not ever close to purple (1s lookahead). I suppose 
+this makes sense because the players camera only gives about 0.3-0.5 
+seconds of lookahead, so while the AI flies using the same ship 
+limitations as a human, it can see more of the map...
