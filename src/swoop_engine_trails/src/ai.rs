@@ -3,14 +3,6 @@ use super::ship::Ship;
 use super::transform::{PolarCoordinate, Vec2};
 use std::f32::consts::PI;
 
-use wasm_bindgen::prelude::wasm_bindgen;
-
-#[wasm_bindgen]
-extern "C" {
-    #[wasm_bindgen(js_namespace = console)]
-    fn log(s: &str);
-}
-
 pub fn calc_ai_control(ship: &mut Ship, skill: f32, map: &Map) {
     let mut steering = 0.0;
     let mut thrust = 0.0;

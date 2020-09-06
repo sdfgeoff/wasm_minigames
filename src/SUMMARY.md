@@ -19,3 +19,4 @@
     - [Map Generation](./swoop_map_generation/index.md)
     - [Camera Positioning](./swoop_camera_positioning/index.md)
     - [Enemy Racers](./swoop_enemy_racers/index.md)
+    - [Engine Trails](./swoop_engine_trails/index.md)
