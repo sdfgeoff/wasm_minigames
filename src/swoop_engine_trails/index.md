@@ -111,7 +111,7 @@ impl Ship {
 ```
 
 And for each ship we can pass this into our engine trail data storage:
-```
+```rust
 impl App {
     // Trails
     for (ship, trail) in self.ship_entities.iter().zip(self.engine_trails.iter_mut()) {
@@ -186,6 +186,9 @@ matches the actual change in world coordinates.
 
 
 ## Moving the vertices
+Positioning the vertices is done inside the vertex shader - allowing the
+computation to be done in parallel.
+
 Given that our triangle strip ranges from (0, 1), we can compute the position
 of the information in the array using:
 ```glsl
@@ -253,7 +256,7 @@ gl_Position = vec4(pos, 0.0, 1.0);
 
 And we're good to go!
 
-<canvas id="swoop_enemy_racers"></canvas>
+<canvas id="swoop_engine_trails"></canvas>
 
 Now, there is a bit more to it than was described in this page. I added 
 another array called `data_buffer` that contains if the engine is on or 
@@ -268,3 +271,7 @@ There are some limitations to this trail implementation: you can see
 some creasing sometimes on sharp corners/collisions, when you "blip" 
 the throttle you can often observe the 0.25s spacing between datapoints,
 but overall I'm happy with the result.
+
+As a final note, issues with trail rendering can often look amazing. Can
+you figure out what cause this issue?
+![Loopy Trails](trails.png)

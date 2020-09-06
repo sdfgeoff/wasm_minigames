@@ -4,7 +4,6 @@ use std::collections::VecDeque;
 const TIME_PER_SEGMENT: f32 = 0.25;
 const NUM_SEGMENTS: usize = 20;
 
-
 pub struct PathPoint {
     pub position: Vec2,
     pub tangent: Vec2,
@@ -47,7 +46,7 @@ impl EngineTrail {
             }
             assert!(self.path.len() == self.max_length)
         }
-        
+
         // Find the ships actual velocity at this instant of time
         let current_tangent = (
             (self.prev_position.0 - position.0) / dt,
@@ -63,7 +62,7 @@ impl EngineTrail {
             self.path.rotate_right(1);
             self.time_since_emit = dt; // If this is zero, the tangent = 0
         }
-        
+
         {
             // Update the zeroth PathPoint with information about the
             // ship from this instant.
@@ -79,11 +78,11 @@ impl EngineTrail {
     pub fn length(&self) -> i32 {
         self.path.len() as i32
     }
-    
-    /// Because the trail is divided into segments, the segments 
-    /// position (segment_id / chain_length) does not precisely 
-    /// represent it's distance from the head of the chain. This number 
-    /// represents the difference between a segments position in the 
+
+    /// Because the trail is divided into segments, the segments
+    /// position (segment_id / chain_length) does not precisely
+    /// represent it's distance from the head of the chain. This number
+    /// represents the difference between a segments position in the
     /// chain and it's actual distance from the head.
     /// To get the trail to fade smoothly, you can use the formula:
     /// `distance_from_head = interpolated_segment_id / chain_length + offset`
@@ -102,7 +101,7 @@ impl EngineTrail {
             point_buffer.push(point.position.1);
             point_buffer.push(point.tangent.0);
             point_buffer.push(point.tangent.1);
-            
+
             data_buffer.push(point.intensity);
             data_buffer.push(0.0);
             data_buffer.push(0.0);

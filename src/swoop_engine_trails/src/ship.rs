@@ -53,7 +53,7 @@ impl Ship {
 
         self.position.rot = wrap_angle(self.position.rot);
     }
-    
+
     pub fn get_engine_position(&self) -> Vec2 {
         let offset = self.position.transform_vec((0.0, -0.4));
         (self.position.x + offset.0, self.position.y + offset.1)
