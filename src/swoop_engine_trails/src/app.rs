@@ -235,7 +235,7 @@ impl App {
             for (ship, trail) in self.ship_entities.iter().zip(self.engine_trails.iter_mut()) {
                 trail.update(
                     dt as f32,
-                    (ship.position.x, ship.position.y),
+                    ship.get_engine_position(),
                     f32::abs(ship.linear_thrust),
                 );
             }

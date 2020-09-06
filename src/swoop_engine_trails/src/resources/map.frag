@@ -4,7 +4,7 @@ precision mediump float;
 in vec2 uv;
 out vec4 FragColor;
 
-const float track_background_grid_spacing = 5.0;
+const float track_background_grid_spacing = 2.0;
 const float track_background_line_fade = 0.04;
 const float track_background_line_width = 1.0;
 const float track_edge_line_width = 0.5;

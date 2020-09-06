@@ -1,16 +1,9 @@
-use super::transform::{length, Vec2};
+use super::transform::Vec2;
 use std::collections::VecDeque;
-
-use wasm_bindgen::prelude::wasm_bindgen;
 
 const TIME_PER_SEGMENT: f32 = 0.25;
 const NUM_SEGMENTS: usize = 20;
 
-#[wasm_bindgen]
-extern "C" {
-    #[wasm_bindgen(js_namespace = console)]
-    fn log(s: &str);
-}
 
 pub struct PathPoint {
     pub position: Vec2,
@@ -40,6 +33,9 @@ impl EngineTrail {
     pub fn update(&mut self, dt: f32, position: Vec2, intensity: f32) {
         self.time_since_emit += dt;
 
+        // Ensure the path is completely full of points. Because they
+        // have a tangent of zero, they will render with zero width
+        // so not be visible.
         if self.path.len() != self.max_length {
             self.path.clear();
             for _ in 0..self.max_length {
@@ -51,7 +47,8 @@ impl EngineTrail {
             }
             assert!(self.path.len() == self.max_length)
         }
-
+        
+        // Find the ships actual velocity at this instant of time
         let current_tangent = (
             (self.prev_position.0 - position.0) / dt,
             (self.prev_position.1 - position.1) / dt,
@@ -59,12 +56,17 @@ impl EngineTrail {
         self.prev_position.0 = position.0;
         self.prev_position.1 = position.1;
 
+        // If it's time to add a new segment, rotate the array, making
+        // the current zeroth PathPoint into the first PathPoint, the
+        // first PathPoint into the second PathPoint etc.
         if self.time_since_emit > TIME_PER_SEGMENT {
             self.path.rotate_right(1);
             self.time_since_emit = dt; // If this is zero, the tangent = 0
         }
-
+        
         {
+            // Update the zeroth PathPoint with information about the
+            // ship from this instant.
             let first = self.path.get_mut(0).expect("path invalid");
             first.position.0 = position.0;
             first.position.1 = position.1;
@@ -77,11 +79,11 @@ impl EngineTrail {
     pub fn length(&self) -> i32 {
         self.path.len() as i32
     }
-
-    /// Because the trail is divided into segments, the segments
-    /// position (segment_id / chain_length) does not precisely
-    /// represent it's distance from the head of the chain. This number
-    /// represents the difference between a segments position in the
+    
+    /// Because the trail is divided into segments, the segments 
+    /// position (segment_id / chain_length) does not precisely 
+    /// represent it's distance from the head of the chain. This number 
+    /// represents the difference between a segments position in the 
     /// chain and it's actual distance from the head.
     /// To get the trail to fade smoothly, you can use the formula:
     /// `distance_from_head = interpolated_segment_id / chain_length + offset`
@@ -100,7 +102,7 @@ impl EngineTrail {
             point_buffer.push(point.position.1);
             point_buffer.push(point.tangent.0);
             point_buffer.push(point.tangent.1);
-
+            
             data_buffer.push(point.intensity);
             data_buffer.push(0.0);
             data_buffer.push(0.0);

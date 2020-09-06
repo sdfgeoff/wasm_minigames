@@ -1,11 +1,4 @@
-use wasm_bindgen::prelude::wasm_bindgen;
 use web_sys::{WebGl2RenderingContext, WebGlBuffer, WebGlProgram, WebGlUniformLocation};
-
-#[wasm_bindgen]
-extern "C" {
-    #[wasm_bindgen(js_namespace = console)]
-    fn log(s: &str);
-}
 
 use super::engine_trail::EngineTrail;
 use super::shader::{init_shader_program, upload_array_f32, ShaderError};
