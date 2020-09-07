@@ -76,6 +76,7 @@ impl MapSprite {
         })
     }
 
+    /// Configure the shader for a specific map object
     pub fn set_to_map(&mut self, gl: &WebGl2RenderingContext, map: &Map) {
         gl.use_program(Some(&self.program));
 
@@ -105,6 +106,7 @@ impl MapSprite {
         );
     }
 
+    /// Render the map sprite.
     pub fn render(&mut self, gl: &WebGl2RenderingContext) {
         gl.use_program(Some(&self.program));
 

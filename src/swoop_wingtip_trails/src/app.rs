@@ -235,16 +235,10 @@ impl App {
             calc_ship_physics(&mut self.ship_entities, &self.map, dt as f32);
         }
 
-        self.camera.set_target_information(
-            &(
-                self.ship_entities[0].position.x,
-                self.ship_entities[0].position.y,
-            ),
-            &(
-                self.ship_entities[0].velocity.x,
-                self.ship_entities[0].velocity.y,
-            ),
-        );
+        self.camera.target_position.0 = self.ship_entities[0].position.x;
+        self.camera.target_position.1 = self.ship_entities[0].position.y;
+        self.camera.target_velocity.0 = self.ship_entities[0].velocity.x;
+        self.camera.target_velocity.1 = self.ship_entities[0].velocity.y;
         self.camera.update(dt as f32);
 
         {

@@ -1,15 +1,6 @@
-use wasm_bindgen::prelude::wasm_bindgen;
-
-#[wasm_bindgen]
-extern "C" {
-    #[wasm_bindgen(js_namespace = console)]
-    fn log(s: &str);
-    #[wasm_bindgen(js_namespace = Math)]
-    fn random() -> f32;
-}
+use js_sys::Math::random;
 
 use super::transform::{length, normalize, PolarCoordinate, Vec2};
-// TODO: rewrite map to be easily portable
 
 pub struct Map {
     pub sin_consts: [f32; 8],
@@ -19,6 +10,8 @@ pub struct Map {
 }
 
 impl Map {
+    /// Compute what radius the track has at a given angle from the track
+    /// center.
     pub fn track_radius(&self, angle: f32) -> f32 {
         let mut track_radius = self.track_base_radius;
         for i in 0..8 {
@@ -29,6 +22,10 @@ impl Map {
         track_radius
     }
 
+    /// Computes the distance from the edge of the track for a given
+    /// Cartesian coordinate. This can be used to check if a coordinate
+    /// is inside or outside the track, and is negative inside the track
+    /// and positive outside the track.
     pub fn distance_field(&self, position: Vec2) -> f32 {
         let course = length(&position);
         let angle = position.1.atan2(position.0);
@@ -55,6 +52,8 @@ impl Map {
         return normalize((dx, dy));
     }
 
+    /// Figure out where the start line should be located. This is
+    /// represented as a polar coordinate from the center of the track.
     pub fn get_start_position(&self) -> PolarCoordinate {
         const ANGLE: f32 = std::f32::consts::PI / 2.0;
         PolarCoordinate {
@@ -91,8 +90,8 @@ impl Map {
     pub fn randomize(&mut self) {
         const WAVINESS: f32 = 3.0;
         for i in 0..8 {
-            let rand1 = (random() - 0.5) * 2.0;
-            let rand2 = (random() - 0.5) * 2.0;
+            let rand1 = (random() as f32 - 0.5) * 2.0;
+            let rand2 = (random() as f32 - 0.5) * 2.0;
             let amplitude = WAVINESS / f32::powf((i + 1) as f32, 1.3);
 
             self.sin_consts[i] = rand1 * amplitude;
@@ -101,6 +100,8 @@ impl Map {
     }
 }
 
+/// Cosine rule/law of cosines:
+/// https://en.wikipedia.org/wiki/Law_of_cosines
 pub fn cosine_rule(a: f32, b: f32, angle: f32) -> f32 {
     f32::sqrt(a * a + b * b - 2.0 * a * b * f32::cos(angle))
 }
