@@ -48,12 +48,12 @@ impl Transform2d {
 
         (c * vec.0 - s * vec.1, s * vec.0 + c * vec.1)
     }
-    
+
     pub fn to_local_direction(&self, vec: Vec2) -> Vec2 {
         let c = f32::cos(self.rot);
         let s = f32::sin(self.rot);
 
-        (c * vec.0 + s * vec.1, - s * vec.0 + c * vec.1)
+        (c * vec.0 + s * vec.1, -s * vec.0 + c * vec.1)
     }
 }
 

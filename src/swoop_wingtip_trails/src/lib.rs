@@ -9,8 +9,6 @@ use web_sys::{window, Event, HtmlCanvasElement, KeyboardEvent, MouseEvent};
 mod ai;
 mod app;
 mod camera;
-mod trail;
-mod trail_sprite;
 mod keymap;
 mod map;
 mod map_sprite;
@@ -19,6 +17,8 @@ mod shader;
 mod ship;
 mod ship_sprite;
 mod texture;
+mod trail;
+mod trail_sprite;
 mod transform;
 
 // Pull in the console.log function so we can debug things more easily

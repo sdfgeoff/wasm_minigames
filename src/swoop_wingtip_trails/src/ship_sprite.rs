@@ -73,11 +73,11 @@ impl ShipSprite {
             camera_to_clipspace: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
         })
     }
-    
+
     pub fn setup(&mut self, gl: &WebGl2RenderingContext) {
         gl.use_program(Some(&self.program));
         gl.blend_func(WebGl2RenderingContext::ONE, WebGl2RenderingContext::ONE);
-        
+
         gl.uniform_matrix3fv_with_f32_array(
             self.uniform_world_to_camera.as_ref(),
             true,
@@ -88,7 +88,7 @@ impl ShipSprite {
             true,
             &self.camera_to_clipspace,
         );
-        
+
         bind_2d_texture_to_uniform(
             &gl,
             &self.uniform_ship_texture,

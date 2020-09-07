@@ -62,16 +62,21 @@ impl Ship {
         let offset_right = self.position.transform_vec((0.43, -0.2));
         let offset_left = self.position.transform_vec((-0.43, -0.2));
         (
-            (self.position.x + offset_left.0, self.position.y + offset_left.1),
-            (self.position.x + offset_right.0, self.position.y + offset_right.1)
-            
+            (
+                self.position.x + offset_left.0,
+                self.position.y + offset_left.1,
+            ),
+            (
+                self.position.x + offset_right.0,
+                self.position.y + offset_right.1,
+            ),
         )
     }
-    
+
     pub fn calc_slip(&self) -> f32 {
         let global_travel = (self.velocity.x, self.velocity.y);
         let local_travel = self.position.to_local_direction(global_travel);
-        
+
         local_travel.0
     }
 }

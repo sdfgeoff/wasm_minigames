@@ -4,8 +4,6 @@ use std::collections::VecDeque;
 const TIME_PER_SEGMENT: f32 = 0.25;
 const NUM_SEGMENTS: usize = 20; // Should be half the "point_buffer" length in the vertex shader as it takes two vec4's to represent the data
 
-
-
 pub struct PathPoint {
     pub position: Vec2,
     pub tangent: Vec2,
@@ -103,7 +101,7 @@ impl Trail {
     }
 
     /// Converts to a buffer containing position/tangent data and
-    /// containing intensity data. 
+    /// containing intensity data.
     /// Each "point" is 8 float values:
     /// position (x and y)
     /// tangent (x and y)

@@ -1,7 +1,7 @@
 use web_sys::{WebGl2RenderingContext, WebGlBuffer, WebGlProgram, WebGlUniformLocation};
 
-use super::trail::Trail;
 use super::shader::{init_shader_program, upload_array_f32, ShaderError};
+use super::trail::Trail;
 
 const SEGMENT_COUNT: i32 = 100;
 
@@ -73,12 +73,11 @@ impl TrailSprite {
             camera_to_clipspace: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
         })
     }
-    
-    
+
     pub fn setup(&mut self, gl: &WebGl2RenderingContext) {
         gl.use_program(Some(&self.program));
         gl.blend_func(WebGl2RenderingContext::ONE, WebGl2RenderingContext::ONE);
-        
+
         gl.uniform_matrix3fv_with_f32_array(
             self.uniform_world_to_sprite.as_ref(),
             true,

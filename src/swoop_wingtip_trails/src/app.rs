@@ -4,14 +4,14 @@ use web_sys::{window, HtmlCanvasElement, KeyboardEvent, MouseEvent, WebGl2Render
 
 use super::ai::calc_ai_control;
 use super::camera::Camera;
-use super::trail::Trail;
-use super::trail_sprite::TrailSprite;
 use super::keymap::{KeyMap, KeyState};
 use super::map::Map;
 use super::map_sprite::MapSprite;
 use super::physics::calc_ship_physics;
 use super::ship::Ship;
 use super::ship_sprite::ShipSprite;
+use super::trail::Trail;
+use super::trail_sprite::TrailSprite;
 use super::transform::Transform2d;
 
 const CYAN_SHIP: (f32, f32, f32, f32) = (0.0, 0.5, 1.0, 1.0);
@@ -95,11 +95,19 @@ impl App {
             const WINGTIP_TRAIL_WIDTH: f32 = 0.02;
             const MAIN_TRAIL_BRIGHTNESS: f32 = 0.3;
             const WINGTIP_TRAIL_BRIGHTNESS: f32 = 1.0;
-            
+
             trails.push((
                 Trail::new(ship.color.clone(), MAIN_TRAIL_WIDTH, MAIN_TRAIL_BRIGHTNESS),
-                Trail::new(ship.color.clone(), WINGTIP_TRAIL_WIDTH, WINGTIP_TRAIL_BRIGHTNESS),
-                Trail::new(ship.color.clone(), WINGTIP_TRAIL_WIDTH, WINGTIP_TRAIL_BRIGHTNESS),
+                Trail::new(
+                    ship.color.clone(),
+                    WINGTIP_TRAIL_WIDTH,
+                    WINGTIP_TRAIL_BRIGHTNESS,
+                ),
+                Trail::new(
+                    ship.color.clone(),
+                    WINGTIP_TRAIL_WIDTH,
+                    WINGTIP_TRAIL_BRIGHTNESS,
+                ),
             ));
         }
 
@@ -242,15 +250,14 @@ impl App {
         {
             // Trails
             for (ship, trail) in self.ship_entities.iter().zip(self.trails.iter_mut()) {
-                
                 trail.0.update(
                     dt as f32,
                     ship.get_engine_position(),
                     f32::abs(ship.linear_thrust),
                 );
-                
+
                 let wingtip_positions = ship.get_wingtip_positions();
-                
+
                 let raw_slip = ship.calc_slip() / 2.5;
                 let base_slip = f32::abs(raw_slip);
                 let left_slip = base_slip + raw_slip / 8.0;
