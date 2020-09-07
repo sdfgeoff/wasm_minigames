@@ -1,5 +1,8 @@
 #version 300 es
-
+/*
+ * Renders a trail interpolating it smoothely using a hermite spline.
+ * Data for the trail is provided in the `point_buffer`.
+ */
 precision mediump float;
 in vec4 aVertexPosition;
 
@@ -7,14 +10,48 @@ uniform mat3 world_to_camera;
 uniform mat3 world_to_sprite;
 uniform mat3 camera_to_clipspace; // Includes canvas resolution/aspect ratio
 
-uniform vec4 point_buffer[40]; // Note: webgl specs require a min of 128 vec4 uniforms, so this could be extended
+
+// The `point_buffer`
+// is filled with vec4's with two vec3's representing each point:
+//     point_buffer[0] = point0.x, point0.y, point0_tangent.x, point0_tangent.y
+//     point_buffer[1] = point0.intensity, point0.brightness, point0.width, placeholder
+//     point_buffer[2] = point1.x, point1.y, point1_ta.....
+//
+// Note: webgl specs require a min of 128 vec4 uniforms, so this could be extended
+uniform vec4 point_buffer[40]; 
+
+
+// The point_buffer_length variable should be set to the number of points
+// in the point buffer. If there are 20 points, the point buffer will have 
+// 40 vec4's in it but the point_buffer_length variable should be set to 20, 
+// because that is how many "points" are in the point buffer.
 uniform int point_buffer_length;
+
+// This represents the how far
+// the start of the trail is from placing a new trail into the point_buffer.
+// This allows gently adding new points without "popping"
 uniform float trail_percent_offset;
 
-out vec2 uv;
-out vec4 data;
-out float segment_percent;
+// Position in the trail as a whole. x goes from -1 to 1 across the trail width
+// Y goes from 0 to 1 with 0 being the head of the trail and 1 being the tail.
+// Note that the Y value does not compensate by the trail_percent_offset.
+// If you want a smoothe value as the trail is extended, use trail_percent instead of
+// uv.y. But if you wish to map textures, maybe you want uv.y directly.
+out vec2 uv; 
+
+// Provides information about the position in the trail, modified smoothly
+// as the trail is extended and interpolated between vertices
 out float trail_percent;
+
+// Used to provide the position inside a segment. This could be used to map texture
+// information, but can also be used for debugging where individual segments are placed
+out float segment_percent;
+
+// Contains some interpolated data about this point. Namely, the non-positional information:
+// intensity, brightness and width.
+out vec4 data;
+
+
 
 void main() {
     mat3 camera_to_world = inverse(world_to_camera);
@@ -24,13 +61,13 @@ void main() {
     
     uv = aVertexPosition.xy;
 
+    // Find the position of the vert in the trail
     float vert_id_raw = uv.y * (float(point_buffer_length) - 1.0);
     segment_percent = mod(vert_id_raw, 1.0);
     float segment = floor(vert_id_raw);
-    int index_here = int(segment);
-    index_here *= 2;
 
     // Find the data that represents this curve segment
+    int index_here = int(segment) * 2;
     vec4 p1 = point_buffer[index_here];
     vec4 p2 = point_buffer[index_here+2];
     vec4 d1 = point_buffer[index_here+1];
