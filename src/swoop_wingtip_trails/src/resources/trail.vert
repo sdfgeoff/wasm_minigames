@@ -3,7 +3,7 @@
  * Renders a trail interpolating it smoothely using a hermite spline.
  * Data for the trail is provided in the `point_buffer`.
  */
-precision mediump float;
+precision highp float;
 in vec4 aVertexPosition;
 
 uniform mat3 world_to_camera;

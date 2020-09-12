@@ -1,14 +1,14 @@
 use super::transform::{length, Transform2d, Vec2};
 
 /// How far ahead of the target to position the camera.
-const PREDICT_FACTOR: f32 = 0.65;
+const PREDICT_FACTOR: f32 = 0.5;
 /// Smooths the camera motion to avoid rapid camera motion if the
 /// velocity or position suddenly change.
 /// Notes:
 ///  - this applies to the zoom as well
 ///  - this applies to the motion after the prediction, so a higher smoothing
 ///    will normaly also need a higher PREDICT_FACTOR
-const SMOOTHING: f32 = 0.4;
+const SMOOTHING: f32 = 0.35;
 
 /// What zoom level to have when the target is not moving
 const ZOOM_BASE: f32 = 1.0;
@@ -75,13 +75,7 @@ impl Camera {
 
     /// Converts the camera position into an array that can be used in
     /// a shader.
-    pub fn get_camera_matrix(&self, base_resolution: f32) -> [f32; 9] {
-        Transform2d::new(
-            self.position.0,
-            self.position.1,
-            0.0,
-            1.0 / base_resolution * self.zoom,
-        )
-        .to_mat3_array()
+    pub fn get_camera_matrix(&self) -> [f32; 9] {
+        Transform2d::new(self.position.0, self.position.1, 0.0, self.zoom).to_mat3_array()
     }
 }

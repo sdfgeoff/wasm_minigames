@@ -15,9 +15,9 @@ pub struct Ship {
 }
 
 impl Ship {
-    pub fn new(color: (f32, f32, f32, f32), start_transform: Transform2d) -> Self {
+    pub fn new(color: (f32, f32, f32, f32)) -> Self {
         Ship {
-            position: start_transform,
+            position: Transform2d::new(0.0, 0.0, 0.0, 0.1),
             velocity: Transform2d::new(0.0, 0.0, 0.0, 0.0),
             linear_thrust: 0.0,
             angular_thrust: 0.0,

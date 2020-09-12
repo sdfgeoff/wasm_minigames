@@ -14,10 +14,15 @@ use super::trail::Trail;
 use super::trail_sprite::TrailSprite;
 use super::transform::Transform2d;
 
-const CYAN_SHIP: (f32, f32, f32, f32) = (0.0, 0.5, 1.0, 1.0);
-const YELLOW_SHIP: (f32, f32, f32, f32) = (1.0, 0.5, 0.0, 1.0);
-const PINK_SHIP: (f32, f32, f32, f32) = (1.0, 0.0, 0.5, 1.0);
+const YELLOW_SHIP: (f32, f32, f32, f32) = (1.0, 0.7, 0.0, 1.0);
+const PINK_SHIP: (f32, f32, f32, f32) = (1.0, 0.0, 0.7, 1.0);
 const PURPLE_SHIP: (f32, f32, f32, f32) = (0.7, 0.0, 1.0, 1.0);
+const CYAN_SHIP: (f32, f32, f32, f32) = (0.0, 0.7, 1.0, 1.0);
+
+//~ const WHITE_SHIP: (f32, f32, f32, f32) = (0.7, 0.7, 0.7, 1.0);
+//~ const RED_SHIP: (f32, f32, f32, f32) = (1.0, 0.0, 0.0, 1.0);
+//~ const GREEN_SHIP: (f32, f32, f32, f32) = (0.0, 1.0, 0.0, 1.0);
+//~ const BLUE_SHIP: (f32, f32, f32, f32) = (0.0, 0.0, 1.0, 1.0);
 
 // Pull in the console.log function so we can debug things more easily
 #[wasm_bindgen]
@@ -83,10 +88,14 @@ impl App {
         };
 
         let ship_entities = vec![
-            Ship::new(CYAN_SHIP, Transform2d::new(0.0, 0.0, 0.0, 0.1)),
-            Ship::new(YELLOW_SHIP, Transform2d::new(0.0, 0.1, 0.0, 0.1)),
-            Ship::new(PINK_SHIP, Transform2d::new(0.0, 0.2, 0.0, 0.1)),
-            Ship::new(PURPLE_SHIP, Transform2d::new(0.0, 0.3, 0.0, 0.1)),
+            Ship::new(CYAN_SHIP),
+            Ship::new(YELLOW_SHIP),
+            Ship::new(PINK_SHIP),
+            Ship::new(PURPLE_SHIP),
+            //~ Ship::new(GREEN_SHIP),
+            //~ Ship::new(BLUE_SHIP),
+            //~ Ship::new(RED_SHIP),
+            //~ Ship::new(WHITE_SHIP)
         ];
 
         let mut trails = vec![];
@@ -156,14 +165,19 @@ impl App {
             let startline_tangent = (f32::cos(startline_angle), f32::sin(startline_angle));
             let startline_normal = (-f32::sin(startline_angle), f32::cos(startline_angle));
 
-            let num_ships = self.ship_entities.len();
+            const NUM_START_COLUMNS: usize = 4;
 
             for (id, ship) in self.ship_entities.iter_mut().enumerate() {
-                let offset = (id as f32) - ((num_ships - 1) as f32) * 0.5;
+                let row = id / NUM_START_COLUMNS;
+                let column = id % NUM_START_COLUMNS;
+                let column_offset = (column as f32) - ((NUM_START_COLUMNS - 1) as f32) * 0.5;
+                let row_offset = row as f32;
 
                 let offset_vec = (
-                    (startline_tangent.0 * offset - startline_normal.0) * SHIP_SPACING,
-                    (startline_tangent.1 * offset - startline_normal.1) * SHIP_SPACING,
+                    (startline_tangent.0 * column_offset - startline_normal.0 * row_offset)
+                        * SHIP_SPACING,
+                    (startline_tangent.1 * column_offset - startline_normal.1 * row_offset)
+                        * SHIP_SPACING,
                 );
 
                 let ship_start_position = start_position.to_cartesian();
@@ -278,15 +292,13 @@ impl App {
                 WebGl2RenderingContext::COLOR_BUFFER_BIT | WebGl2RenderingContext::DEPTH_BUFFER_BIT,
             );
 
-            let world_to_camera = self
-                .camera
-                .get_camera_matrix(self.canvas_resolution.1 as f32);
+            let world_to_camera = self.camera.get_camera_matrix();
             let camera_to_clipspace = [
-                self.canvas_resolution.0 as f32,
+                1.0,
                 0.0,
                 0.0,
                 0.0,
-                self.canvas_resolution.1 as f32,
+                (self.canvas_resolution.1 as f32 / self.canvas_resolution.0 as f32),
                 0.0,
                 0.0,
                 0.0,
@@ -298,10 +310,7 @@ impl App {
             self.ship_sprite.camera_to_clipspace = camera_to_clipspace;
             self.ship_sprite.setup(&self.gl);
             for ship in &self.ship_entities {
-                self.ship_sprite.world_to_sprite = ship.position.to_mat3_array();
-                self.ship_sprite.ship_color = ship.color;
-                self.ship_sprite.ship_engine = ship.linear_thrust;
-                self.ship_sprite.render(&self.gl);
+                self.ship_sprite.render(&self.gl, ship);
             }
 
             let map_sprite_transform = Transform2d::new(0.0, 0.0, 0.0, 1.0);

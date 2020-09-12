@@ -1,6 +1,6 @@
 #version 300 es
 
-precision mediump float;
+precision highp float;
 in vec2 uv;
 out vec4 FragColor;
 
@@ -12,8 +12,8 @@ const float track_edge_line_width = 0.5;
 
 uniform float track_base_radius;
 uniform float track_width;
-uniform float sin_consts[8];
-uniform float cos_consts[8];
+uniform vec4 sin_consts[2];
+uniform vec4 cos_consts[2];
 
 uniform vec2 start_line_tangent;
 uniform vec2 start_line_position;
@@ -22,13 +22,20 @@ uniform vec2 start_line_position;
 float map_function(vec2 position) {
     float course = length(position - vec2(0.0, 0.0));
     float angle = atan(position.y, position.x);
-    float track_radius = track_base_radius;
     
-    for (int i=0; i<8; i++) {
-        float omega = float(i+1);
-        track_radius += cos(angle * omega) * cos_consts[i];
-        track_radius += sin(angle * omega) * sin_consts[i];
-    }
+    vec4 angles_1 = vec4(angle, angle*2.0, angle*3.0, angle*4.0);
+    vec4 angles_2 = vec4(angle*5.0, angle*6.0, angle*7.0, angle*8.0);
+    
+    vec4 sin_consts_1 = sin_consts[0];
+    vec4 sin_consts_2 = sin_consts[1];
+    vec4 cos_consts_1 = cos_consts[0];
+    vec4 cos_consts_2 = cos_consts[1];
+
+    float track_radius = track_base_radius;
+    track_radius += dot(sin(angles_1), sin_consts_1);
+    track_radius += dot(sin(angles_2), sin_consts_2);
+    track_radius += dot(cos(angles_1), cos_consts_1);
+    track_radius += dot(cos(angles_2), cos_consts_2);
 
     float track_sdf = course - track_radius;
     track_sdf = abs(track_sdf) - track_width;

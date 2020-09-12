@@ -80,8 +80,8 @@ impl MapSprite {
     pub fn set_to_map(&mut self, gl: &WebGl2RenderingContext, map: &Map) {
         gl.use_program(Some(&self.program));
 
-        gl.uniform1fv_with_f32_array(self.uniform_sin_consts.as_ref(), &map.sin_consts);
-        gl.uniform1fv_with_f32_array(self.uniform_cos_consts.as_ref(), &map.cos_consts);
+        gl.uniform4fv_with_f32_array(self.uniform_sin_consts.as_ref(), &map.sin_consts);
+        gl.uniform4fv_with_f32_array(self.uniform_cos_consts.as_ref(), &map.cos_consts);
         gl.uniform1f(
             self.uniform_track_base_radius.as_ref(),
             map.track_base_radius,
