@@ -7,6 +7,8 @@ instead we have to use face indices to determine how the vertices are
 joined. We also have to include face normals because faces can now point
 in different directions.
 
+The code for this is based this off the `Binding Textures` page.
+
 ## Loading the STL
 There are two formats for STL's: ascii and binary. For this we'll assume
 correctly formatted binary STL's. Because we're bundling them into the binary
@@ -239,7 +241,7 @@ void main() {
 A trick to providing "lighting" for simple scenes like this is to sample
 an image using the geometry normals. With an image like this:
 
-![Map all pixelated](./src/resources/matcap.png)
+![A matcap made in blender](./src/resources/matcap.png)
 
 It provides a "screen space lighting". As far as I know this is called
 a matcap, and is simple and cheap. So the fragment shader simply looks
