@@ -123,15 +123,9 @@ This results in the render function looking like:
 
         bind_2d_texture_to_uniform(
             &gl,
-            &self.uniform_image_background,
-            &self.image_background,
-            TextureUnit::Unit0,
-        );
-        bind_2d_texture_to_uniform(
-            &gl,
             &self.uniform_image_matcap,
             &self.image_matcap,
-            TextureUnit::Unit1,
+            TextureUnit::Unit0,
         );
 
         gl.enable_vertex_attrib_array(self.attrib_vertex_positions);
@@ -176,5 +170,103 @@ This results in the render function looking like:
     }
 ```
 
+I based this off the `binding_textures` code, so now I did a bunch of
+refactoring including things like:
 
-<canvas id="stl_viewer"></canvas>
+- Renaming it from `quad.rs` to `geometry.rs` and `stl.rs`
+- Moving shader loading and texture loading external to the geometry handling
+
+## Shaders
+The shader for 2D simply wrote the vertex position straight to the screen
+position. If we simply write the x/y position of the vertices to the screen
+position we'll end up with a top view of our object. By multiplying our
+vertex positions by a transformation matrix we can rotate the object around:
+
+```glsl
+#version 300 es
+
+precision mediump float;
+in vec4 vert_pos;
+in vec4 vert_nor;
+
+uniform vec2 iResolution;
+uniform float iTime;
+
+out vec4 screen_pos;
+out vec4 screen_nor;
+
+
+mat4 rot_y(float angle) {
+        float c = cos(angle);
+        float s = sin(angle);
+        return mat4(
+                vec4(c, 0.0, s, 0.0),
+                vec4(0.0, 1.0, 0.0, 0.0),
+                vec4(-s, 0.0, c, 0.0),
+                vec4(0.0, 0.0, 0.0, 1.0)
+        );
+}
+
+mat4 rot_x(float angle) {
+        float c = cos(angle);
+        float s = sin(angle);
+        return mat4(
+                vec4(1.0, 0.0, 0.0, 0.0),
+                vec4(0.0, c, s, 0.0),
+                vec4(0.0, -s, c, 0.0),
+                vec4(0.0, 0.0, 0.0, 1.0)
+        );
+}
+
+
+
+void main() {
+        
+        mat4 pan = rot_y(iTime);
+        mat4 tilt = rot_x(sin(iTime));
+        
+        mat4 mat = tilt * pan;
+        
+        screen_pos = mat * vert_pos;
+        screen_nor = mat * vert_nor;
+	
+        gl_Position = screen_pos;
+        gl_Position.x *= iResolution.y / iResolution.x;
+        gl_Position.w = 1.0;
+}
+```
+
+A trick to providing "lighting" for simple scenes like this is to sample
+an image using the geometry normals. With an image like this:
+
+![Map all pixelated](./src/resources/matcap.png)
+
+It provides a "screen space lighting". As far as I know this is called
+a matcap, and is simple and cheap. So the fragment shader simply looks
+like:
+```glsl
+#version 300 es
+
+precision mediump float;
+in vec4 screen_pos;
+in vec4 screen_nor;
+out vec4 FragColor;
+
+uniform sampler2D image_matcap;
+
+void main() {
+    vec2 matcap_coords = screen_nor.xy * 0.5 + vec2(0.5);
+    vec4 matcap = texture(image_matcap, matcap_coords);
+
+    FragColor = matcap;
+}
+```
+
+The final result is:
+
+<canvas id="stl_viewer_load_stl"></canvas>
+
+You'll noticce there's some clipping on the monkey head ears. This is 
+because clip space runs from `-1.0` to `1.0` on the `z` axis and we 
+aren't doing any manipulation in the vertex shader to compensate for
+this.

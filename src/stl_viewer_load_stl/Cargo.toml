@@ -1,5 +1,5 @@
 [package]
-name = "stl_viewer"
+name = "stl_viewer_load_stl"
 version = "0.1.0"
 authors = ["Geoffrey Irons <sdfgeoff@gmail.com>"]
 edition = "2018"

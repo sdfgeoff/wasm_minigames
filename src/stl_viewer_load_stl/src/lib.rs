@@ -7,8 +7,12 @@ use wasm_bindgen::JsCast;
 use web_sys::{window, Event, HtmlCanvasElement, KeyEvent, MouseEvent};
 
 mod app;
-mod quad;
+mod geometry;
+mod shader;
+mod shader_stl;
+mod stl;
 mod texture;
+mod textures;
 
 // Pull in the console.log function so we can debug things more easily
 #[wasm_bindgen]

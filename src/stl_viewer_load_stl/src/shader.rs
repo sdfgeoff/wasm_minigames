@@ -1,50 +1,25 @@
-use web_sys::{WebGlProgram, WebGl2RenderingContext, WebGlShader};
+use web_sys::{WebGl2RenderingContext, WebGlProgram, WebGlShader};
 
-
-pub trait Shader {
-    fn program() -> WebGlProgram,
-    fn attrib_vertex_positions() -> u32,
-}
-
-
+/// An error to represent problems with a shader.
 #[derive(Debug)]
 pub enum ShaderError {
+    /// Call to gl.create_shader returned null
     ShaderAllocError,
+
+    /// Call to create_program returned null
     ShaderProgramAllocError,
-    ShaderGetInfoError,
-    MissingUniform(String),
+
     ShaderCompileError {
         shader_type: u32,
         compiler_output: String,
     },
+    /// Failed to receive error information about why the shader failed to compile
+    /// Generally this is indicative of trying to get the error when one hasn't occured
+    ShaderGetInfoError,
+
+    /// I think this means that the Vertex and Fragment shaders incompatible
     ShaderLinkError(),
 }
-
-
-pub struct SimpleShader {
-	pub program: WebGlProgram,
-    pub attrib_vertex_positions: u32,
-}
-
-impl SimpleShader {
-	pub fn new(gl: &WebGl2RenderingContext, vert: &str, frag: &str) -> Result<Self, ShaderError> {
-        let program = init_shader_program(
-            gl,
-            vert,
-            frag,
-        )?;
-
-        let attrib_vertex_positions = gl.get_attrib_location(&program, "aVertexPosition");
-
-        Ok(Self {
-            program,
-            attrib_vertex_positions: attrib_vertex_positions as u32,
-        })
-    }
-}
-
-
-
 
 fn load_shader(
     gl: &WebGl2RenderingContext,
@@ -71,7 +46,6 @@ fn load_shader(
     }
     Ok(shader)
 }
-
 
 pub fn init_shader_program(
     gl: &WebGl2RenderingContext,

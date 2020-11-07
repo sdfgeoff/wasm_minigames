@@ -106,13 +106,13 @@ pub fn set_up_image(gl: &GL, img_element: &HtmlImageElement, texture: &WebGlText
 pub fn bind_2d_texture_to_uniform(
     gl: &GL,
     uniform: &Option<WebGlUniformLocation>,
-    texture: &WebGlTexture,
+    texture: &Option<WebGlTexture>,
     texture_unit: TextureUnit,
 ) {
     // Tell WebGL which texture unit we are configuring
     gl.active_texture(texture_unit.as_gl_const());
     // Tell WebGL what texture to load into the texture unit
-    gl.bind_texture(GL::TEXTURE_2D, Some(&texture));
+    gl.bind_texture(GL::TEXTURE_2D, texture.as_ref());
     // Tell WebGL which uniform refers to this texture unit
     gl.uniform1i(uniform.as_ref(), texture_unit.as_int());
 }

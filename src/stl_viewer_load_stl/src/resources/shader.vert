@@ -5,7 +5,6 @@ in vec4 vert_pos;
 in vec4 vert_nor;
 
 uniform vec2 iResolution;
-
 uniform float iTime;
 
 out vec4 screen_pos;
