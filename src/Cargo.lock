@@ -133,6 +133,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "stl_viewer"
+version = "0.1.0"
+dependencies = [
+ "js-sys",
+ "wasm-bindgen",
+ "web-sys",
+]
+
+[[package]]
 name = "swoop_camera_positioning"
 version = "0.1.0"
 dependencies = [
