@@ -23,3 +23,4 @@
     - [Wingtip Trails and Optimizations](./swoop_wingtip_trails/index.md)
 - [STL Viewer](./stl_viewer.md)
     - [Load and Render STL Files](./stl_viewer_load_stl/index.md)
+    - [Camera Lookaround](./stl_viewer_camera_lookaround/index.md)
