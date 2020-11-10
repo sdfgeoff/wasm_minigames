@@ -142,6 +142,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "stl_viewer_background"
+version = "0.1.0"
+dependencies = [
+ "glam",
+ "js-sys",
+ "wasm-bindgen",
+ "web-sys",
+]
+
+[[package]]
 name = "stl_viewer_camera_lookaround"
 version = "0.1.0"
 dependencies = [

@@ -3,7 +3,9 @@ use wasm_bindgen::{JsCast, JsValue};
 use web_sys::{window, HtmlCanvasElement, KeyEvent, MouseEvent, WebGl2RenderingContext};
 
 use super::shader_stl::ShaderStl;
+use super::shader_background::ShaderBackground;
 use super::stl::Stl;
+use super::background::Background;
 use super::textures::StaticTextures;
 use super::camera::Camera;
 
@@ -20,11 +22,16 @@ pub struct App {
     canvas: HtmlCanvasElement,
     gl: WebGl2RenderingContext,
     stl: Stl,
+    background: Background,
     shader_stl: ShaderStl,
+    shader_background: ShaderBackground,
     camera: Camera,
     
     resolution: (u32, u32),
     click_location: Option<(i32, i32)>,
+    
+    dirty: bool,
+    last_render_time: f32,
 }
 
 impl App {
@@ -48,8 +55,22 @@ impl App {
                 panic!("Stl error");
             }
         };
+        let background = match Background::new(&gl) {
+            Ok(g) => g,
+            Err(err) => {
+                log(&format!("Background error {:?}", err));
+                panic!("Background error");
+            }
+        };
 
         let mut shader_stl = match ShaderStl::new(&gl) {
+            Ok(g) => g,
+            Err(err) => {
+                log(&format!("ShaderStl error {:?}", err));
+                panic!("ShaderStl error");
+            }
+        };
+        let mut shader_background = match ShaderBackground::new(&gl) {
             Ok(g) => g,
             Err(err) => {
                 log(&format!("ShaderStl error {:?}", err));
@@ -66,6 +87,7 @@ impl App {
         };
 
         shader_stl.image_matcap = Some(textures.stl_matcap.clone());
+        shader_background.image_matcap = Some(textures.stl_matcap.clone());
         
         let camera = Camera::new();
 
@@ -73,10 +95,14 @@ impl App {
             canvas,
             gl,
             stl,
+            background,
             shader_stl,
+            shader_background,
             camera,
             resolution: (100, 100),
             click_location: None,
+            dirty: true,
+            last_render_time: 0.0
         }
     }
 
@@ -96,27 +122,67 @@ impl App {
             self.camera.aspect = (client_width as f32) / (client_height as f32);
             self.resolution = (client_width, client_height);
 
+            self.dirty = true;
+            
             log(&format!("Resized to {}:{}", client_width, client_height));
         }
     }
 
     pub fn animation_frame(&mut self) {
         self.check_resize();
-        self.gl.clear(
-            WebGl2RenderingContext::COLOR_BUFFER_BIT | WebGl2RenderingContext::DEPTH_BUFFER_BIT,
-        );
-
+        
+        
         let now = window().unwrap().performance().unwrap().now();
         let time = (now / 1000.0) as f32;
         
-
-        let (world_to_camera, camera_to_screen) = self.camera.to_matrices();
-        self.shader_stl.setup(&self.gl, world_to_camera, camera_to_screen);
         
-        self.stl.world_to_model = Mat4::from_translation(Vec3::new(0.0, -25.0, 0.0));
-        self.stl.render(&self.gl, &self.shader_stl);
-        self.stl.world_to_model = Mat4::from_translation(Vec3::new(0.0, 25.0, 0.0));
-        self.stl.render(&self.gl, &self.shader_stl);
+        let time_since_render = time - self.last_render_time;
+        if time_since_render > 0.2 {
+            self.dirty = true;
+        }
+        
+        if self.dirty {
+            self.render();
+            self.dirty = false;
+            self.last_render_time = time;
+        }
+    }
+        
+        
+    fn render(&mut self) {
+        self.gl.clear(
+            WebGl2RenderingContext::COLOR_BUFFER_BIT | WebGl2RenderingContext::DEPTH_BUFFER_BIT,
+        );
+        
+        let (world_to_camera, camera_to_screen) = self.camera.to_matrices();
+        
+        {
+            // Render the background
+            self.shader_background.setup(&self.gl, world_to_camera, camera_to_screen);
+            self.background.render(&self.gl, &self.shader_background);
+        }
+        
+        {
+            // Render the models
+            self.shader_stl.setup(&self.gl, world_to_camera, camera_to_screen);
+        
+            self.stl.world_to_model = Mat4::from_translation(Vec3::new(0.0, -25.0, -25.0));
+            self.stl.color = Vec3::new(0.3, 0.3, 0.3);
+            self.stl.render(&self.gl, &self.shader_stl);
+            
+            self.stl.color = Vec3::new(0.2, 0.2, 0.6);
+            self.stl.world_to_model = Mat4::from_translation(Vec3::new(0.0, 25.0, -25.0));
+            self.stl.render(&self.gl, &self.shader_stl);
+            
+            self.stl.world_to_model = Mat4::from_translation(Vec3::new(0.0, -25.0, 25.0));
+            self.stl.color = Vec3::new(0.8, 0.8, 0.8);
+            self.stl.render(&self.gl, &self.shader_stl);
+            
+            self.stl.world_to_model = Mat4::from_translation(Vec3::new(0.0, 25.0, 25.0));
+            self.stl.color = Vec3::new(0.6, 0.2, 0.2);
+            self.stl.render(&self.gl, &self.shader_stl);
+        }
+        
     }
 
     pub fn mouse_move(&mut self, event: MouseEvent) {
@@ -134,7 +200,7 @@ impl App {
                 self.camera.azimuth += percentage_x;
                 self.camera.elevation -= percentage_y;
                 self.camera.elevation = f32::min(f32::max(self.camera.elevation, -1.4), 1.4);
-                
+                self.dirty = true;
             }
             None => {
             }
@@ -142,9 +208,11 @@ impl App {
     }
     pub fn mouse_down(&mut self, event: MouseEvent) {
         self.click_location = Some((event.client_x(), event.client_y()));
+        self.dirty = true;
     }
     pub fn mouse_up(&mut self, _event: MouseEvent) {
         self.click_location = None;
+        self.dirty = true;
     }
     
     pub fn key_event(&mut self, event: KeyEvent) {
