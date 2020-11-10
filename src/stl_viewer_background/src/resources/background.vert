@@ -6,7 +6,6 @@ in vec2 vert_pos; // In Screen Space
 out vec3 world_pos;
 
 uniform mat4 world_to_camera;
-uniform mat4 world_to_model;
 uniform mat4 camera_to_screen;
 
 void main() {
@@ -21,5 +20,4 @@ void main() {
     gl_Position.xy = vert_pos.xy;
     gl_Position.z = 0.99999;
     gl_Position.w = 1.0;
-
 }

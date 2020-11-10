@@ -32,19 +32,14 @@ void main() {
     
     vec3 reflect = reflect(vec3(0.0, 0.0, -1.0), screen_nor);
     vec4 reflect_world = (camera_to_world * vec4(reflect, 0.0));
-    
     vec3 reflection = sample_background(reflect_world.xyz, 4.0);
     
-    float angle = 1.0 - dot(screen_nor, vec3(0.0, 0.0, 1.0));
-    
-    
-    
+    float fresnel = 1.0 - dot(screen_nor, vec3(0.0, 0.0, 1.0));
     
     vec3 out_col = color;
     out_col = out_col * diffuse;
-    out_col += reflection * angle * 0.5;
-    out_col *= 1.0 - angle * 0.5;
-    
+    out_col += reflection * fresnel * 0.5;
+    out_col *= 1.0 - fresnel * 0.5;
     
     FragColor.rgb = out_col;
     FragColor.a = 1.0;

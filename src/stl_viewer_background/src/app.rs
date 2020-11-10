@@ -130,8 +130,6 @@ impl App {
 
     pub fn animation_frame(&mut self) {
         self.check_resize();
-        
-        
         let now = window().unwrap().performance().unwrap().now();
         let time = (now / 1000.0) as f32;
         

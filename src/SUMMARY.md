@@ -24,3 +24,4 @@
 - [STL Viewer](./stl_viewer.md)
     - [Load and Render STL Files](./stl_viewer_load_stl/index.md)
     - [Camera Lookaround](./stl_viewer_camera_lookaround/index.md)
+    - [Background and Appearance](./stl_viewer_background/index.md)
