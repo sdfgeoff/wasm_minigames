@@ -14,6 +14,7 @@ use super::trail::Trail;
 use super::trail_sprite::TrailSprite;
 use super::transform::Transform2d;
 use super::logo::Logo;
+use super::text_sprite::TextSprite;
 
 const YELLOW_SHIP: (f32, f32, f32, f32) = (1.0, 0.7, 0.0, 1.0);
 const PINK_SHIP: (f32, f32, f32, f32) = (1.0, 0.0, 0.7, 1.0);
@@ -54,6 +55,8 @@ pub struct App {
     ship_entities: Vec<Ship>,
     trails: Vec<(Trail, Trail, Trail)>,
     camera: Camera,
+    
+    text_sprite: TextSprite,
 
     canvas_resolution: (u32, u32),
     
@@ -95,6 +98,13 @@ impl App {
             Err(err) => {
                 log(&format!("Ship Sprite error {:?}", err));
                 panic!("Ship Sprite error");
+            }
+        };
+        let text_sprite = match TextSprite::new(&gl) {
+            Ok(g) => g,
+            Err(err) => {
+                log(&format!("Text Sprite error {:?}", err));
+                panic!("Text Sprite error");
             }
         };
 
@@ -157,6 +167,7 @@ impl App {
             ship_entities,
             trails,
             prev_time,
+            text_sprite,
             game_state: GameState::Menu,
         };
         game.start_game();
@@ -408,6 +419,10 @@ impl App {
             self.map_sprite.camera_to_clipspace = camera_to_clipspace;
             self.map_sprite.world_to_sprite = map_sprite_transform.to_mat3_array();
             self.map_sprite.render(&self.gl);
+            
+            
+            self.text_sprite.setup(&self.gl);
+            self.text_sprite.render(&self.gl);
         }
         
     }

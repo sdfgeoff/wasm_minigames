@@ -18,6 +18,7 @@ mod shader;
 mod ship;
 mod ship_sprite;
 mod texture;
+mod text_sprite;
 mod trail;
 mod trail_sprite;
 mod transform;

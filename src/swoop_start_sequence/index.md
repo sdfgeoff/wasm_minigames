@@ -61,6 +61,8 @@ containing things like:
         
 // And so on
 ```
+The code that does this is pretty ugly (as is a lot of exporter code), 
+and is inside the `resources/logo.blend` file.
 
 To render our logo, we can  move our existing game logic to a "play_game"
 function, and create a new function called "show_logo":
@@ -151,9 +153,165 @@ previous articles.
 
 Now we need to tell the user to press the Enter key...
 
-## Rendering Text
+## Rendering Characters
+Drawing text is a pain - wrapping words, kerning, scaling and a host of
+other quirks. Lets make it as simple as possible: a sprite sheet of 
+signed distance fields for the letters, a monospace font, and shile we're
+at it, why not use a single quad to draw a whole block of text rather
+than a character at a time?
+
+What do I mean by that? Well, if you have a monospace font, you can,
+inside a fragment shader, figure out where in the block of text it is,
+and from there you can determine what character to display:
+
+![How to find a character from the quad](character_decompose.png)
+
+This is how text rendering is done in all those shadertoy examples.
+So, for this we need a spritesheet containing all the characters. With
+the help of python and the python image library we can generate this
+quite easily. But to enable a smaller texture, we really want a distance
+field texture. With a bit more python finagling, We end up with the font
+sheet:
+
+![Font Sheet](src/resources/font.png)
+
+This image is only 128px, and so is ~10kb, but if we treat it like a
+signed distance field and threshold it, we can make it really big. Here 
+it is 100 times enlarged:
+
+![A really big letter B](letter_b.png)
+
+Not so bad - and there shouldn't need to be any text that large!
+
+So now we need to get it into the engine. We've done this before with
+the ship sprite, so I won't go into depth here. The fun part is the
+fragment shader.
+First we need to be able to select a part of the image to sample:
+
+```glsl
+vec4 get_sprite(vec2 uv, vec2 offset, vec2 size) {
+        return texture(font_texture, uv * size + offset);
+}
+```
+
+Our sprite sheet has all the characters the same size, so we can
+index from the bottom up: `A = 10`, `B = 11`, `K = 20` etc.
+So let's convert from these single integer indexes into an offset:
+
+```glsl
+vec4 get_character(vec2 uv, int character) {
+        vec2 offset = vec2(ivec2(
+                character % TILES.x,
+                character / TILES.x
+        )) * CHARACTER_SIZE;
+        return get_sprite(uv, offset, CHARACTER_SIZE);
+}
+```
+
+Now we can draw a single large character across our entire quad. How
+about dividing it into segments:
+```glsl
+        vec2 coord = uv * 0.5 + 0.5;
+
+        coord.x *= float(text_box_size.x);
+        coord.y *= float(text_box_size.y);
+        int letter_id = int(coord.x) + (text_box_size.y - int(coord.y) - 1) * text_box_size.x;
+        coord.x -= floor(coord.x);
+        coord.y -= floor(coord.y);
+```
+The variable `letter_id` tells us which segment we are in. 
+If we were to run `get_character(coord, letter_id)` we would get the
+quad filled with the characters from the font sheet in order. We want
+to spell out a sentence, so let's create an array containing the
+characters we want:
+
+```glsl
+vec4 characters[16] = vec4[16](
+        vec4(0.0, 0.7, 1.0, 25.0),
+        vec4(0.0, 1.0, 0.0, 47.0),
+        vec4(0.7, 0.0, 1.0, 36.0),
+        vec4(1.0, 0.0, 0.0, 60.0),
+        vec4(1.0, 0.0, 0.0, 40.0),
+        vec4(1.0, 0.0, 0.0, 53.0),
+        vec4(1.0, 0.0, 0.0, 69.0),
+        vec4(1.0, 0.0, 0.0, 69.0),
+        vec4(1.0, 0.0, 0.0, 69.0),
+        vec4(1.0, 0.0, 0.0, 69.0),
+        vec4(1.0, 0.0, 0.0, 69.0),
+        vec4(1.0, 0.0, 0.0, 69.0),
+        vec4(1.0, 0.0, 0.0, 69.0),
+        vec4(1.0, 0.0, 0.0, 69.0),
+        vec4(1.0, 0.0, 0.0, 69.0),
+        vec4(1.0, 0.0, 0.0, 69.0)
+);
+
+ivec2 text_box_size = ivec2(8, 2);
+```
+
+I've used a vec4 so the first three can represent color. So we can now
+use the `neon` function from the ship/map/everything to make glowing
+letters.
+```glsl
+        float char_sdf = get_character(coord, int(char_data.a)).r;
+        FragColor = neon(
+                1.0 - smoothstep(0.0, 0.5, char_sdf),
+                vec4(char_data.rgb, 1.0),
+                1.0
+        );
+```
+
+So does it work?
+
+![The world "Player" spelled out](first_letters.png)
+
+Woohoo, technicolor writing in a single quad!
+
+Now you've probably noticed that I put the ship sprite in the red 
+channel of the character sheet. This means that with a small tweak we
+can render the player ship as a character in our text. This may be
+useful for displaying a leader-board.
+
+The tweak to be able to access it is in `get_character`:
+
+```rust
+float get_character(vec2 uv, int character) {
+        vec2 offset = vec2(ivec2(
+                character % TILES.x,
+                character / TILES.x
+        )) * CHARACTER_SIZE;
+        
+        vec2 size = CHARACTER_SIZE;
+        vec4 channel = vec4(0.0, 1.0, 0.0, 0.0);
+        
+        if (character == -1) {
+                size = vec2(1.0);
+                offset = vec2(0.0);
+                channel = vec4(1.0, 0.0, 0.0, 0.0);
+        }
+        vec4 color = get_sprite(uv, offset, size);
+        return dot(color, channel);
+}
+```
+And now we can render a player ship inline as a character - and
+it's high res (128px compared to 16px).
+
+![A bunch of ships](players.png)
 
 
-<canvas id="swoop_wingtip_trails"></canvas>
+## A Rust Interface
+Currently the text is hardcoded into the shader as a bunch of numbers.
+We want to be able to, in rust, have a set of functions like:
+
+```
+characters.extend("asdfasdf", BLUE);
+characters.extend("qwerqwer", RED);
+text.render(characters, (TEXT_BOX_SIZE), (TEXT_BOX_POSITION)
+```
+
+Also, the characters should adjust for screen resizes so they don't 
+distort.
+
+
+<canvas id="swoop_start_sequence"></canvas>
 
 
