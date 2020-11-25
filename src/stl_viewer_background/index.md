@@ -150,7 +150,6 @@ updates when the camera is moving:
         self.click_location = Some((event.client_x(), event.client_y()));
         self.dirty = true;
     }
-    
     ...
 
 ```

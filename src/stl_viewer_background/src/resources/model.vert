@@ -5,6 +5,7 @@ in vec3 vert_pos;
 in vec3 vert_nor;
 
 out vec3 screen_nor;
+out vec3 screen_pos;
 out vec3 world_nor;
 
 out mat4 camera_to_world;
@@ -28,7 +29,7 @@ void main() {
     pos = model_to_screen * pos;
     nor = model_to_camera * nor;        
     
-    vec3 screen_pos = pos.xyz / pos.w;
+    screen_pos = pos.xyz / pos.w;
     screen_nor = nor.xyz;
     
 

@@ -21,6 +21,7 @@
     - [Enemy Racers](./swoop_enemy_racers/index.md)
     - [Engine Trails](./swoop_engine_trails/index.md)
     - [Wingtip Trails and Optimizations](./swoop_wingtip_trails/index.md)
+    - [Start Sequence and Fonts](./swoop_start_sequence/index.md)
 - [STL Viewer](./stl_viewer.md)
     - [Load and Render STL Files](./stl_viewer_load_stl/index.md)
     - [Camera Lookaround](./stl_viewer_camera_lookaround/index.md)

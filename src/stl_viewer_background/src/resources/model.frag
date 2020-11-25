@@ -3,6 +3,7 @@
 precision mediump float;
 in vec3 screen_nor;
 in vec3 world_nor;
+in vec3 screen_pos;
 
 out vec4 FragColor;
 
@@ -40,7 +41,7 @@ void main() {
     out_col = out_col * diffuse;
     out_col += reflection * fresnel * 0.5;
     out_col *= 1.0 - fresnel * 0.5;
-    
+
     FragColor.rgb = out_col;
     FragColor.a = 1.0;
 }

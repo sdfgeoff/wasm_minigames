@@ -267,6 +267,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "swoop_start_sequence"
+version = "0.1.0"
+dependencies = [
+ "itertools",
+ "js-sys",
+ "wasm-bindgen",
+ "web-sys",
+]
+
+[[package]]
 name = "swoop_wingtip_trails"
 version = "0.1.0"
 dependencies = [
