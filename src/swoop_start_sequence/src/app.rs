@@ -14,7 +14,7 @@ use super::trail::Trail;
 use super::trail_sprite::TrailSprite;
 use super::transform::Transform2d;
 use super::logo::Logo;
-use super::text_sprite::TextSprite;
+use super::text_sprite::{TextSprite, TextBox};
 
 const YELLOW_SHIP: (f32, f32, f32, f32) = (1.0, 0.7, 0.0, 1.0);
 const PINK_SHIP: (f32, f32, f32, f32) = (1.0, 0.0, 0.7, 1.0);
@@ -237,8 +237,6 @@ impl App {
     }
     
     pub fn play_game(&mut self, dt: f64) {
-        
-
         {
             // Logic
             let player_ship = &mut self.ship_entities[0];
@@ -376,18 +374,31 @@ impl App {
             self.game_state = GameState::Playing;
             return;
         }
+
+        
+        let mut start_text = TextBox::new(
+            (22, 1),
+            0.05,
+            (0.0, -0.2)
+        );
+        start_text.append_string("Press", &[0.0, 0.7, 1.0]);
+        start_text.append_string(" [ENTER] ", &[0.0, 1.0, 0.7]);
+        start_text.append_string("to start", &[0.0, 0.7, 1.0]);
+
+
         {
             // Rendering
             self.check_resize();
             self.gl.clear(
                 WebGl2RenderingContext::COLOR_BUFFER_BIT | WebGl2RenderingContext::DEPTH_BUFFER_BIT,
             );
+            let screen_aspect_ratio = (self.canvas_resolution.1 as f32) / (self.canvas_resolution.0 as f32);
             let camera_to_clipspace = [
                 1.0,
                 0.0,
                 0.0,
                 0.0,
-                (self.canvas_resolution.1 as f32 / self.canvas_resolution.0 as f32),
+                screen_aspect_ratio,
                 0.0,
                 0.0,
                 0.0,
@@ -408,8 +419,8 @@ impl App {
             
             self.ship_sprite.camera_to_clipspace = camera_to_clipspace;
             self.ship_sprite.world_to_camera = world_to_camera;
+            self.ship_sprite.setup(&self.gl);
             for ship in &self.logo.ships {
-                self.ship_sprite.setup(&self.gl);
                 self.ship_sprite.render(&self.gl, &ship);
             }
             
@@ -420,9 +431,8 @@ impl App {
             self.map_sprite.world_to_sprite = map_sprite_transform.to_mat3_array();
             self.map_sprite.render(&self.gl);
             
-            
             self.text_sprite.setup(&self.gl);
-            self.text_sprite.render(&self.gl);
+            self.text_sprite.render(&self.gl, &start_text, screen_aspect_ratio);
         }
         
     }

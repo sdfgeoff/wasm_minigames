@@ -1,35 +1,21 @@
 #version 300 es
 
 precision mediump float;
+precision highp int;
+
 in vec2 uv;
 out vec4 FragColor;
 
+// Texture to sample to get glyphs
 uniform sampler2D font_texture;
-
+// How many tiles there are in the font texture
 const ivec2 TILES = ivec2(10, 7);
+// Size of a character in the tile sheet
 const vec2 CHARACTER_SIZE = vec2(1.0/10.0, 1.0/7.0);
 
-vec4 characters[16] = vec4[16](
-        vec4(0.0, 0.7, 1.0, -1.0),
-        vec4(1.0, 0.7, 0.0, -1.0),
-        vec4(0.7, 0.0, 1.0, -1.0),
-        vec4(1.0, 0.0, 0.7, -1.0),
-        vec4(1.0, 0.0, 0.0, 69.0),
-        vec4(1.0, 0.0, 0.0, 69.0),
-        vec4(1.0, 0.0, 0.0, 69.0),
-        vec4(1.0, 0.0, 0.0, 69.0),
-        
-        vec4(0.0, 1.0, 0.0, 25.0),
-        vec4(0.0, 1.0, 0.0, 47.0),
-        vec4(0.0, 1.0, 0.0, 36.0),
-        vec4(0.0, 1.0, 0.0, 60.0),
-        vec4(0.0, 1.0, 0.0, 40.0),
-        vec4(0.0, 1.0, 0.0, 53.0),
-        vec4(0.0, 1.0, 0.0, 54.0),
-        vec4(0.0, 1.0, 0.0, 69.0)
-);
+uniform vec4 text_data[64];
+uniform ivec2 text_box_dimensions;
 
-ivec2 text_box_size = ivec2(8, 2);
 
 
 vec4 neon(float sdf, vec4 color, float glow_width) {
@@ -69,13 +55,13 @@ float get_character(vec2 uv, int character) {
 void main() {
         vec2 coord = uv * 0.5 + 0.5;
 
-        coord.x *= float(text_box_size.x);
-        coord.y *= float(text_box_size.y);
-        int letter_id = int(coord.x) + (text_box_size.y - int(coord.y) - 1) * text_box_size.x;
+        coord.x *= float(text_box_dimensions.x);
+        coord.y *= float(text_box_dimensions.y);
+        int letter_id = int(coord.x) + (text_box_dimensions.y - int(coord.y) - 1) * text_box_dimensions.x;
         coord.x -= floor(coord.x);
         coord.y -= floor(coord.y);
         
-        vec4 char_data = characters[letter_id];
+        vec4 char_data = text_data[letter_id];
         
         float char_sdf = get_character(coord, int(char_data.a));
         FragColor = neon(

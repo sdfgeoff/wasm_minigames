@@ -10,7 +10,7 @@ FONT_SIZE = math.floor(IMAGE_SIZE / ROWS) - FILTER_SIZE
 
 
 CHARS = """
-yz:->*    \
+yz:-<>*[] \
 opqrstuvwx
 efghijklmn
 UVWXYZabcd
@@ -26,6 +26,7 @@ FONT = ImageFont.truetype("bedstead.ttf", FONT_SIZE)
 raw_sheet = Image.new("RGBA", (IMAGE_SIZE,IMAGE_SIZE), (0,0,0, 255))
 draw = ImageDraw.Draw(raw_sheet)
     
+ids = {}
 
 for i, character in enumerate(CHARS):
     column = i % COLUMNS
@@ -33,6 +34,8 @@ for i, character in enumerate(CHARS):
     
     col_pix = column * (IMAGE_SIZE / COLUMNS)
     row_pix = row * (IMAGE_SIZE / ROWS)
+
+    ids[character] = i
     
     color = (255, 0, 0, 255)
     
@@ -98,3 +101,4 @@ out_image = ImageChops.add(ship_sprite, sdf)
 out_image.save("font.png")
 out_image.show()
 
+print(i)

@@ -19,7 +19,7 @@ pub enum ShaderError {
     ShaderGetInfoError,
 
     /// I think this means that the Vertex and Fragment shaders incompatible
-    ShaderLinkError(),
+    ShaderLinkError(String),
 
     /// Failed to create buffer to upload data into
     BufferCreationFailed,
@@ -106,10 +106,13 @@ pub fn init_shader_program(
 
     if !(gl.get_program_parameter(&shader_program, WebGl2RenderingContext::LINK_STATUS)).is_truthy()
     {
+        let data = ShaderError::ShaderLinkError(
+            gl.get_program_info_log(&shader_program).or(Some("No Error".to_string())).unwrap()
+        );
         gl.delete_program(Some(&shader_program));
         gl.delete_shader(Some(&vert_shader));
         gl.delete_shader(Some(&frag_shader));
-        return Err(ShaderError::ShaderLinkError());
+        return Err(data);
     }
 
     Ok(shader_program)
