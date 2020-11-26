@@ -106,7 +106,7 @@ function, and create a new function called "show_logo":
     }
 ```
 We can now swap this in place of the previous `animation_frame` function
-to previous our title screen:
+to preview our title screen:
 
 ![Title Screen](logo.png)
 
@@ -156,17 +156,17 @@ Now we need to tell the user to press the Enter key...
 ## Rendering Characters
 Drawing text is a pain - wrapping words, kerning, scaling and a host of
 other quirks. Lets make it as simple as possible: a sprite sheet of 
-signed distance fields for the letters, a monospace font, and shile we're
+signed distance fields for the letters, a monospace font, and while we're
 at it, why not use a single quad to draw a whole block of text rather
-than a character at a time?
+than a quad per character.
 
 What do I mean by that? Well, if you have a monospace font, you can,
-inside a fragment shader, figure out where in the block of text it is,
-and from there you can determine what character to display:
+figure out what character a pixel is part of just by looking at it's
+coordinages. Maybe a diagram will help:
 
 ![How to find a character from the quad](character_decompose.png)
 
-This is how text rendering is done in all those shadertoy examples.
+This is how text rendering is done in shadertoy.
 So, for this we need a spritesheet containing all the characters. With
 the help of python and the python image library we can generate this
 quite easily. But to enable a smaller texture, we really want a distance
@@ -181,7 +181,9 @@ it is 100 times enlarged:
 
 ![A really big letter B](letter_b.png)
 
-Not so bad - and there shouldn't need to be any text that large!
+Not so bad - and there shouldn't need to be any text that large! And you
+do realize that on the character sheet each character is only 16 
+pixels tall?
 
 So now we need to get it into the engine. We've done this before with
 the ship sprite, so I won't go into depth here. The fun part is the
@@ -377,7 +379,7 @@ impl TextBox {
         }
     }
 ```
-Yup, a simple lookup in a vec. It's not `O(1)`, but with only 30 characters
+Yup, a simple lookup in a vec. It's not `O(1)`, but with only 70 characters
 it shouldn't be a problem. Any unknown characters result in `-1` which, if you
 remember, is the ship sprite.
 
@@ -403,7 +405,7 @@ impl App {
         self.render(&self.ships)
     }
 
-    fn self.render(&mut self, &Vec<Ship>){
+    fn render(&mut self, &Vec<Ship>){
         ...
     }
 }
@@ -458,7 +460,96 @@ array of TextBox's may not make much sense. So a vector of references allows
 flexibility in how/where the objects themselves are stored.
 
 ## Countdown
-So, after that whole lot
+So, after that whole lot we can push "Enter" and the game starts immediately.
+As a final part of the start sequence it would be great to have a "3", "2",
+"1", "Go!" countdown.
+
+We could do this as a separate game state in the GameState enum, but I think it
+would be better to do it as part of the GamePlaying state.
+
+Speaking of which, let's refactor the game playing state to a new file while 
+we're at it.
+
+```rust
+pub struct GamePlay {
+    pub map: Map,
+    pub ship_entities: Vec<Ship>,
+    pub trails: Vec<Trail>,
+    pub camera: Camera,
+
+    pub game_duration: f64,
+}
+```
+And I moved all the logic (keyboard control, AI, physics) into this struct's
+`update` function. I've also added a `game_duration` field:
+
+```rust
+impl GamePlay{
+    pub fn new() -> Self {
+
+        << snip >>
+
+        Self {
+            map,
+            ship_entities,
+            trails,
+            camera,
+            game_duration: -3.0
+        }
+    }
+
+    pub fn update(&mut self, dt: f64, key_map: &KeyMap) {
+        self.game_duration += dt;
+        if self.game_duration < 0.0 {
+            // Do the countdown!
+
+        } else {
+            calc_ship_physics(&mut self.ship_entities, &self.map, dt as f32);
+        }
+
+        self.steer_ships(key_map);
+        self.update_trails(dt);
+
+        self.camera.target_position.0 = self.ship_entities[0].position.x;
+        self.camera.target_position.1 = self.ship_entities[0].position.y;
+        self.camera.target_velocity.0 = self.ship_entities[0].velocity.x;
+        self.camera.target_velocity.1 = self.ship_entities[0].velocity.y;
+        self.camera.update(dt as f32);
+    }
+}
+```
+
+Oh hey, now the ships don't move for the first three seconds because the
+physics isn't updated. 
+
+We can now create a text box for the countdown and update it as needed
+
+```rust
+
+    pub fn update(&mut self, dt: f64, key_map: &KeyMap) {
+        self.game_duration += dt;
+        if self.game_duration < 0.0 {
+            // Do the countdown!
+            self.countdown_text.clear();
+            
+            let remaining = -self.game_duration.floor();
+            let diff = 1.0 - remaining - self.game_duration;
+
+            self.countdown_text.append_string(
+                &format!(" {} ", remaining as u8),
+                &[0.0, diff as f32, 0.0]
+            );
+        } else {
+            if self.game_duration < 1.0 {
+                self.countdown_text.clear();
+                self.countdown_text.append_string(&"Go!", &[0.0, 1.0 - self.game_duration as f32, 0.0]);
+            }
+            calc_ship_physics(&mut self.ship_entities, &self.map, dt as f32);
+        }
+````
+
+That was a long one but here we have it: A menu and a countdown at the
+start of the game. 
 
 <canvas id="swoop_start_sequence"></canvas>
 

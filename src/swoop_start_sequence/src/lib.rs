@@ -10,6 +10,7 @@ mod ai;
 mod app;
 mod camera;
 mod keymap;
+mod gameplay;
 mod logo;
 mod main_menu;
 mod map;

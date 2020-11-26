@@ -74,10 +74,10 @@ impl KeyMap {
     /// This code generally comes from a javascript `KeyboardEvent.code()`
     pub fn set_state_from_str(&mut self, code: &str, new_state: KeyState) {
         match code {
-            "KeyW" => self.forwards = new_state,
-            "KeyS" => self.backwards = new_state,
-            "KeyA" => self.turn_left = new_state,
-            "KeyD" => self.turn_right = new_state,
+            "KeyW" | "ArrowUp" => self.forwards = new_state,
+            "KeyS" | "ArrowDown" => self.backwards = new_state,
+            "KeyA" | "ArrowLeft" => self.turn_left = new_state,
+            "KeyD" | "ArrowRight" => self.turn_right = new_state,
             "Enter" => self.start_game = new_state,
             _ => (),
         };

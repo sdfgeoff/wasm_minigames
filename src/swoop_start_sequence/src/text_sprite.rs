@@ -137,7 +137,7 @@ pub struct TextBox {
 
 impl TextBox {
     const VALID_CHARS: &'static str =
-        "0123456789ABCDFEGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz:-<>*[] ";
+        "0123456789ABCDFEGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz:-<>![] ";
 
     pub fn new(box_dimensions: (i32, i32), character_height: f32, anchor: (f32, f32)) -> Self {
         Self {
