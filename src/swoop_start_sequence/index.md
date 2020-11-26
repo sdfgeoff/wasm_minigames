@@ -297,20 +297,168 @@ it's high res (128px compared to 16px).
 
 ![A bunch of ships](players.png)
 
+THe only thing left is a bit of vertex shader tweaking to position
+and resize the text box.
+```glsl
+/// How many characters wide and high the text box is
+uniform ivec2 text_box_dimensions;
+
+/// how tall (in screen space) a single character should be
+uniform float character_height;
+
+/// Where the center of the text box should be located (in screen space)
+uniform vec2 anchor;
+
+/// Aspect ratio of the screen
+uniform float screen_aspect;
+
+<< snip >>
+
+	float character_width = character_height * 5.0 / 9.0;
+	vec2 text_box_size = vec2(
+		character_width * float(text_box_dimensions.x),
+		character_height * float(text_box_dimensions.y)
+	);
+
+	uv = aVertexPosition.xy;
+	vec2 pos = uv * text_box_size + anchor;
+	pos.x *= screen_aspect;
+	gl_Position = vec4(pos, 0.0, 1.0);
+```
+Nothing too complex there, just scaling and positioning
+based on a bunch of uniforms
+
 
 ## A Rust Interface
 Currently the text is hardcoded into the shader as a bunch of numbers.
-We want to be able to, in rust, have a set of functions like:
+We want to be able to use a nicer API for displaying things.
+Perhaps something like:
+```rust
+TextBox::new();
+TextBox.extend("some characters", BLUE);
+
+text_sprite.(TextBox);
+```
+
+
+So let's create a struct that contains all the important properties
+for a text object:
+```rust
+/// The thing that can be drawn with a text sprite.
+pub struct TextBox {
+    data: Vec<f32>,
+
+    // The text box wraps character wise and permits width*height characters to be displayed
+    box_dimensions: (i32, i32),
+
+    /// Height of a single character As percentage of screen size
+    character_height: f32, 
+    
+    /// Where on the screen to draw the text. Positions the center of the text box with the screen ranging from -1.0 to 1.0 on both axis.
+    anchor: (f32, f32)
+}
+```
+
+We need to convert from the character "A" to it's numeric representation.
+My initial implementation was going to be a match statement, then a hashmap.
+After a bit of thinking, I came up with a simple solution:
+```rust
+impl TextBox {
+    const VALID_CHARS: &'static str = "0123456789ABCDFEGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz:-<>*[] ";
+    
+<< snip >>
+
+    /// The Text sprite has characters encoded in a non-standard order.
+    /// This does the conversion
+    fn encode_char(c: char) -> f32 {
+        match Self::VALID_CHARS.find(c) {
+            Some(id) => id as f32,
+            None => -1.0,
+        }
+    }
+```
+Yup, a simple lookup in a vec. It's not `O(1)`, but with only 30 characters
+it shouldn't be a problem. Any unknown characters result in `-1` which, if you
+remember, is the ship sprite.
+
+A simple function to do whole strings at a time:
+```rust
+    pub fn append_string(&mut self, string: &str, color: &[f32; 3]){
+        for c in string.chars() {
+            self.data.extend(color);
+            self.data.push(Self::encode_char(c));
+        }
+    }
+```
+
+After that it's just a case of plumbing the data into the vertex shader.
+
+## A bit of refactoring
+The App struct is becoming quite large, holding a reference to all the sprites,
+all the entities, and all the rendering code. This is also a problem because we
+can't have a function:
+```rust
+impl App {
+    fn game_update(&mut self) {
+        self.render(&self.ships)
+    }
+
+    fn self.render(&mut self, &Vec<Ship>){
+        ...
+    }
+}
+```
+If you're not a rustacean, you probably are wondering why you can't do this.
+Well, the render function is getting passed a mutable reference to self and
+a reference to self.ships. The mutable reference to self contains a reference
+to ships, so we have a mutable and immutable reference to the same memory.
+
+Because we now have to render both the main menu and the game while it's
+playing, a bit of refactoring makes sense. I chose to split out all the
+rendering code into a Renderer struct. This contains all the sprites and
+contains a render function that (essentially) takes the world state:
+```rust
+pub struct Renderer {
+    pub gl: WebGl2RenderingContext,
+    canvas: HtmlCanvasElement,
+    ship_sprite: ShipSprite,
+    pub map_sprite: MapSprite,
+    trail_sprite: TrailSprite,
+    text_sprite: TextSprite,
+
+    canvas_resolution: (u32, u32),
+}
+
+impl Renderer {
+
+<<< snip >>>
+
+pub fn render(
+        &mut self,
+        camera_transform: &Transform2d,
+        ships: Vec<&Ship>,
+        trails: Vec<&Trail>,
+        text_boxes: Vec<&TextBox>,
+    ) {
+            << omitted >>
+    }
+
 
 ```
-characters.extend("asdfasdf", BLUE);
-characters.extend("qwerqwer", RED);
-text.render(characters, (TEXT_BOX_SIZE), (TEXT_BOX_POSITION)
-```
+Why is map_sprite and gl public? Yeah, they shouldn't be. In the previous code
+the map uniforms were only set when the map was updated - which makes sense
+because the map doesn't change very often. I kept this. It is not the best
+architecturally, but there is only one map at a time and this will always(?)
+be the case. I can tell I'm going to regret this later :)
 
-Also, the characters should adjust for screen resizes so they don't 
-distort.
+Why does the render function take a Vector of references rather than a 
+reference to a vector of objects? Thats because the things aren't always
+stored in linear form. Consider the trails which were `Vec<(Trail, Trail, Trail)>` (I did change this though...) or that for the UI, storing a single
+array of TextBox's may not make much sense. So a vector of references allows
+flexibility in how/where the objects themselves are stored.
 
+## Countdown
+So, after that whole lot
 
 <canvas id="swoop_start_sequence"></canvas>
 

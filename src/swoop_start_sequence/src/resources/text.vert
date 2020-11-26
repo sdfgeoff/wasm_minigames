@@ -10,20 +10,20 @@ uniform mat3 camera_to_clipspace; // Includes canvas resolution/aspect ratio
 
 out vec2 uv;
 
+/// How many characters wide and high the text box is
 uniform ivec2 text_box_dimensions;
+
+/// how tall (in screen space) a single character should be
 uniform float character_height;
+
+/// Where the center of the text box should be located (in screen space)
 uniform vec2 anchor;
+
+/// Aspect ratio of the screen
 uniform float screen_aspect;
 
 
 void main() {
-	//~ mat3 camera_to_world = inverse(world_to_camera);
-	//~ mat3 clipspace_to_camera = inverse(camera_to_clipspace);
-	//~ mat3 camera_to_sprite = camera_to_world * world_to_sprite;
-	//~ mat3 sprite_to_clipspace = clipspace_to_camera * camera_to_sprite;
-	
-	//~ vec2 pos = (sprite_to_clipspace * vec3(aVertexPosition.xy, 1.0)).xy;
-	
 	float character_width = character_height * 5.0 / 9.0;
 	vec2 text_box_size = vec2(
 		character_width * float(text_box_dimensions.x),

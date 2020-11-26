@@ -13,7 +13,7 @@ const SMOOTHING: f32 = 0.35;
 /// What zoom level to have when the target is not moving
 const ZOOM_BASE: f32 = 1.0;
 /// How much the camera zooms out per unit velocity.
-const ZOOM_FACTOR: f32 = 0.125;
+const ZOOM_FACTOR: f32 = 0.2; //0.125;
 /// What the zoom is set to after calling "reset"
 const RESET_ZOOM: f32 = 10.0;
 
@@ -75,7 +75,7 @@ impl Camera {
 
     /// Converts the camera position into an array that can be used in
     /// a shader.
-    pub fn get_camera_matrix(&self) -> [f32; 9] {
-        Transform2d::new(self.position.0, self.position.1, 0.0, self.zoom).to_mat3_array()
+    pub fn get_camera_matrix(&self) -> Transform2d {
+        Transform2d::new(self.position.0, self.position.1, 0.0, self.zoom)
     }
 }

@@ -107,7 +107,9 @@ pub fn init_shader_program(
     if !(gl.get_program_parameter(&shader_program, WebGl2RenderingContext::LINK_STATUS)).is_truthy()
     {
         let data = ShaderError::ShaderLinkError(
-            gl.get_program_info_log(&shader_program).or(Some("No Error".to_string())).unwrap()
+            gl.get_program_info_log(&shader_program)
+                .or(Some("No Error".to_string()))
+                .unwrap(),
         );
         gl.delete_program(Some(&shader_program));
         gl.delete_shader(Some(&vert_shader));

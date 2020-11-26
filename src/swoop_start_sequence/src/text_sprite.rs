@@ -12,7 +12,6 @@ extern "C" {
 use super::shader::{init_shader_program, upload_array_f32, ShaderError};
 use super::texture::{bind_2d_texture_to_uniform, load_texture, TextureUnit};
 
-
 pub struct TextSprite {
     position_buffer: WebGlBuffer,
     program: WebGlProgram,
@@ -47,7 +46,7 @@ impl TextSprite {
         let uniform_anchor = gl.get_uniform_location(&program, "anchor");
         let uniform_screen_aspect = gl.get_uniform_location(&program, "screen_aspect");
         let uniform_text_data = gl.get_uniform_location(&program, "text_data");
-        
+
         let font_texture = load_texture(&gl, include_bytes!("resources/font.png"))
             .expect("Failed to load texture");
 
@@ -63,7 +62,7 @@ impl TextSprite {
             uniform_character_height,
             uniform_anchor,
             uniform_text_data,
-            uniform_screen_aspect
+            uniform_screen_aspect,
         })
     }
 
@@ -94,19 +93,23 @@ impl TextSprite {
         gl.enable_vertex_attrib_array(self.attrib_vertex_positions);
     }
 
-    pub fn render(&mut self, gl: &WebGl2RenderingContext, text_box: &TextBox, screen_aspect: f32,) {
-        // gl.uniform1f(
-        //     self.uniform_trail_percent_offset.as_ref(),
-        //     trail.get_percent_offset(),
-        // );
-
+    pub fn render(&mut self, gl: &WebGl2RenderingContext, text_box: &TextBox, screen_aspect: f32) {
         let text_data = text_box.uniform_data();
-        //gl.uniform1i(self.uniform_point_buffer_length.as_ref(), trail.length());
         gl.uniform4fv_with_f32_array(self.uniform_text_data.as_ref(), &text_data);
-        gl.uniform2i(self.uniform_box_dimensions.as_ref(), text_box.box_dimensions.0, text_box.box_dimensions.1);
-        
-        gl.uniform1f(self.uniform_character_height.as_ref(), text_box.character_height);
-        gl.uniform2f(self.uniform_anchor.as_ref(), text_box.anchor.0, text_box.anchor.1);
+        gl.uniform2i(
+            self.uniform_box_dimensions.as_ref(),
+            text_box.box_dimensions.0,
+            text_box.box_dimensions.1,
+        );
+        gl.uniform1f(
+            self.uniform_character_height.as_ref(),
+            text_box.character_height,
+        );
+        gl.uniform2f(
+            self.uniform_anchor.as_ref(),
+            text_box.anchor.0,
+            text_box.anchor.1,
+        );
 
         gl.uniform1f(self.uniform_screen_aspect.as_ref(), screen_aspect);
 
@@ -126,29 +129,31 @@ pub struct TextBox {
     box_dimensions: (i32, i32),
 
     /// Height of a single character As percentage of screen size
-    character_height: f32, 
-    
+    character_height: f32,
+
     /// Where on the screen to draw the text. Positions the center of the text box with the screen ranging from -1.0 to 1.0 on both axis.
-    anchor: (f32, f32)
+    anchor: (f32, f32),
 }
 
 impl TextBox {
-    const VALID_CHARS: &'static str = "0123456789ABCDFEGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz:-<>*[] ";
-    
+    const VALID_CHARS: &'static str =
+        "0123456789ABCDFEGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz:-<>*[] ";
+
     pub fn new(box_dimensions: (i32, i32), character_height: f32, anchor: (f32, f32)) -> Self {
         Self {
-            data: vec!(),
+            data: vec![],
             box_dimensions,
             character_height,
             anchor,
         }
     }
 
-    fn clear(&mut self) {
+    /// Erases the contents of the text box
+    pub fn clear(&mut self) {
         self.data.clear();
     }
 
-    pub fn append_string(&mut self, string: &str, color: &[f32; 3]){
+    pub fn append_string(&mut self, string: &str, color: &[f32; 3]) {
         for c in string.chars() {
             self.data.extend(color);
             self.data.push(Self::encode_char(c));
@@ -159,12 +164,8 @@ impl TextBox {
     /// This does the conversion
     fn encode_char(c: char) -> f32 {
         match Self::VALID_CHARS.find(c) {
-            Some(id) => {
-                id as f32
-            }
-            None => {
-                -1.0
-            }
+            Some(id) => id as f32,
+            None => -1.0,
         }
     }
     // Retrieve the data in a format that can be posted to teh shader
