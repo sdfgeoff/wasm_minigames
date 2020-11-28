@@ -2,6 +2,7 @@ use js_sys::Math::random;
 
 use super::transform::{length, normalize, PolarCoordinate, Vec2};
 
+
 pub struct Map {
     pub sin_consts: [f32; 8],
     pub cos_consts: [f32; 8],
@@ -98,21 +99,54 @@ impl Map {
             self.cos_consts[i] = rand2 * amplitude;
         }
     }
-    
-    pub fn calc_position_on_track(&self, position: Vec2) -> f32 {
-        let ship_angle = PolarCoordinate::from_cartesian(position).angle;
-        let start_angle = self.get_start_position().angle;
+
+    // Returns a value that can be used to check if the player is across the start line
+    // the returned value has the property of switching from 1.0 to 0.0 when the player
+    // crosses the start line. When the passed in position is a long way from the start
+    // line the value is meaningless but will not be near 1.0 or 0.0.
+    pub fn calc_progress_relative_to_startline(&self, position: Vec2) -> f32 {
+        let start_position = self.get_start_position();
+        let start_line_direction = self.get_track_direction(start_position.angle);
+
+        let start_position_cartesian = start_position.to_cartesian();
+
+        let distance_from_startline = (
+            position.0 - start_position_cartesian.0,
+            position.1 - start_position_cartesian.1
+        );
+
+        let s = f32::sin(-start_line_direction);
+        let c = f32::cos(-start_line_direction);
+
+        let position_local = (
+            c*distance_from_startline.0 - s*distance_from_startline.1,
+            s*distance_from_startline.0 + c*distance_from_startline.1
+        );
         
-        // Convert from angle to the range (0.0, 1.0)
-        let ship_progress = (ship_angle + std::f32::consts::PI) / (2.0 * std::f32::consts::PI);
-        let start_progress = (start_angle + std::f32::consts::PI) / (2.0 * std::f32::consts::PI);
-        
-        let mut abs_progress = start_progress - ship_progress;
-        if abs_progress < 0.0 {
-            abs_progress += 1.0;
+        if f32::abs(position_local.0) > self.track_width {
+            // Position is off to the side of the track
+            0.5
+        } else {
+            // Offset so that start line is at position 1.0
+            let progress = position_local.1 + 1.0;
+
+            if progress > 1.5 {
+                // Position is a long way in front of the line
+                0.5
+            } else if progress < 0.5 {
+                // Position is a long way behind the line
+                0.5
+            } else 
+            // Position is near the line. We want the returned
+            // nunmber to be between 0.0 and 1.0 and the discontinuty
+            // to be at the start line. Currently `progress` goes
+            // from 0.5 to 1.5
+            if progress > 1.0 {
+                progress - 1.0
+            } else {
+                progress
+            }
         }
-        
-        abs_progress
     }
 }
 

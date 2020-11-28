@@ -10,7 +10,7 @@ FONT_SIZE = math.floor(IMAGE_SIZE / ROWS) - FILTER_SIZE
 
 
 CHARS = """
-yz:-<>![] \
+yz:-/![]  \
 opqrstuvwx
 efghijklmn
 UVWXYZabcd

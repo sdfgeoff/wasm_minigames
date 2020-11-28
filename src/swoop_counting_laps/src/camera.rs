@@ -11,7 +11,7 @@ const PREDICT_FACTOR: f32 = 0.5;
 const SMOOTHING: f32 = 0.35;
 
 /// What zoom level to have when the target is not moving
-const ZOOM_BASE: f32 = 1.0;
+const ZOOM_BASE: f32 = 1.2;
 /// How much the camera zooms out per unit velocity.
 const ZOOM_FACTOR: f32 = 0.2; //0.125;
 /// What the zoom is set to after calling "reset"
