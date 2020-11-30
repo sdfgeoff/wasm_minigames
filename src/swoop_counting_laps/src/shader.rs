@@ -1,4 +1,5 @@
-use web_sys::{WebGl2RenderingContext, WebGlProgram, WebGlShader};
+use wasm_bindgen::{JsCast, JsValue};
+use web_sys::{WebGl2RenderingContext, WebGlBuffer, WebGlProgram, WebGlShader};
 
 /// An error to represent problems with a shader.
 #[derive(Debug)]
@@ -18,10 +19,50 @@ pub enum ShaderError {
     ShaderGetInfoError,
 
     /// I think this means that the Vertex and Fragment shaders incompatible
-    ShaderLinkError(),
+    ShaderLinkError(String),
+
+    /// Failed to create buffer to upload data into
+    BufferCreationFailed,
+
+    /// Generic javascript error
+    JsError(JsValue),
 }
 
-fn load_shader(
+impl From<JsValue> for ShaderError {
+    fn from(err: JsValue) -> ShaderError {
+        ShaderError::JsError(err)
+    }
+}
+
+pub fn upload_array_f32(
+    gl: &WebGl2RenderingContext,
+    vertices: Vec<f32>,
+) -> Result<WebGlBuffer, ShaderError> {
+    let position_buffer = gl
+        .create_buffer()
+        .ok_or(ShaderError::BufferCreationFailed)?;
+
+    gl.bind_buffer(WebGl2RenderingContext::ARRAY_BUFFER, Some(&position_buffer));
+
+    let memory_buffer = wasm_bindgen::memory()
+        .dyn_into::<js_sys::WebAssembly::Memory>()?
+        .buffer();
+
+    let vertices_location = vertices.as_ptr() as u32 / 4;
+
+    let vert_array = js_sys::Float32Array::new(&memory_buffer)
+        .subarray(vertices_location, vertices_location + vertices.len() as u32);
+
+    gl.buffer_data_with_array_buffer_view(
+        WebGl2RenderingContext::ARRAY_BUFFER,
+        &vert_array,
+        WebGl2RenderingContext::STATIC_DRAW,
+    );
+
+    Ok(position_buffer)
+}
+
+pub fn load_shader(
     gl: &WebGl2RenderingContext,
     shader_type: u32,
     shader_text: &str,
@@ -65,10 +106,15 @@ pub fn init_shader_program(
 
     if !(gl.get_program_parameter(&shader_program, WebGl2RenderingContext::LINK_STATUS)).is_truthy()
     {
+        let data = ShaderError::ShaderLinkError(
+            gl.get_program_info_log(&shader_program)
+                .or(Some("No Error".to_string()))
+                .unwrap(),
+        );
         gl.delete_program(Some(&shader_program));
         gl.delete_shader(Some(&vert_shader));
         gl.delete_shader(Some(&frag_shader));
-        return Err(ShaderError::ShaderLinkError());
+        return Err(data);
     }
 
     Ok(shader_program)

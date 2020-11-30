@@ -1,6 +1,7 @@
 use super::camera::Camera;
 use super::keymap::KeyMap;
 use super::map::Map;
+use super::score::Score;
 use super::ship::Ship;
 use super::text_sprite::TextBox;
 use super::trail::Trail;
@@ -18,22 +19,26 @@ const WINGTIP_TRAIL_BRIGHTNESS: f32 = 1.0;
 const SHIP_SPACING: f32 = 0.12;
 const NUM_START_COLUMNS: usize = 4;
 
+const NUM_LAPS_TO_WIN: usize = 5;
+
 const YELLOW_SHIP: (f32, f32, f32, f32) = (1.0, 0.7, 0.0, 1.0);
 const PINK_SHIP: (f32, f32, f32, f32) = (1.0, 0.0, 0.7, 1.0);
 const PURPLE_SHIP: (f32, f32, f32, f32) = (0.7, 0.0, 1.0, 1.0);
 const CYAN_SHIP: (f32, f32, f32, f32) = (0.0, 0.7, 1.0, 1.0);
-//~ const WHITE_SHIP: (f32, f32, f32, f32) = (0.7, 0.7, 0.7, 1.0);
-//~ const RED_SHIP: (f32, f32, f32, f32) = (1.0, 0.0, 0.0, 1.0);
-//~ const GREEN_SHIP: (f32, f32, f32, f32) = (0.0, 1.0, 0.0, 1.0);
-//~ const BLUE_SHIP: (f32, f32, f32, f32) = (0.0, 0.0, 1.0, 1.0);
+// const WHITE_SHIP: (f32, f32, f32, f32) = (0.7, 0.7, 0.7, 1.0);
+// const RED_SHIP: (f32, f32, f32, f32) = (1.0, 0.0, 0.0, 1.0);
+// const GREEN_SHIP: (f32, f32, f32, f32) = (0.0, 1.0, 0.0, 1.0);
+// const BLUE_SHIP: (f32, f32, f32, f32) = (0.0, 0.0, 1.0, 1.0);
 
 pub struct GamePlay {
     pub map: Map,
     pub ship_entities: Vec<Ship>,
+    scores: Vec<Score>,
     pub trails: Vec<Trail>,
     pub camera: Camera,
 
     pub countdown_text: TextBox,
+    pub leaderboard_text: TextBox,
 
     pub game_duration: f64,
 }
@@ -45,14 +50,18 @@ impl GamePlay {
             Ship::new(YELLOW_SHIP),
             Ship::new(PINK_SHIP),
             Ship::new(PURPLE_SHIP),
-            //~ Ship::new(GREEN_SHIP),
-            //~ Ship::new(BLUE_SHIP),
-            //~ Ship::new(RED_SHIP),
-            //~ Ship::new(WHITE_SHIP)
+            // Ship::new(GREEN_SHIP),
+            // Ship::new(BLUE_SHIP),
+            // Ship::new(RED_SHIP),
+            // Ship::new(WHITE_SHIP)
         ];
 
         let mut trails = vec![];
+        let mut scores = vec![];
+
         for ship in ship_entities.iter() {
+            scores.push(Score::new());
+
             trails.push(Trail::new(
                 ship.color.clone(),
                 MAIN_TRAIL_WIDTH,
@@ -80,14 +89,18 @@ impl GamePlay {
         let camera = Camera::new();
 
         let countdown_text = TextBox::new((3, 1), 0.2, (0.5, 0.5));
+        let leaderboard_text =
+            TextBox::new((7, (ship_entities.len() + 1) as i32), 0.05, (1.0, 0.5));
 
         Self {
             map,
             ship_entities,
             trails,
+            scores,
             camera,
             game_duration: -4.0,
             countdown_text,
+            leaderboard_text,
         }
     }
 
@@ -112,7 +125,8 @@ impl GamePlay {
         // Ai Ships
         let num_ships = self.ship_entities.len() - 2;
         for (id, ship) in self.ship_entities[1..].iter_mut().enumerate() {
-            let skill = id as f32 / num_ships as f32;
+            let mut skill = id as f32 / num_ships as f32;
+            skill = skill * 0.5 + 0.2;
             calc_ai_control(ship, skill, &self.map);
         }
     }
@@ -150,7 +164,7 @@ impl GamePlay {
         if self.game_duration < 1.0 {
             vec![&self.countdown_text]
         } else {
-            vec![]
+            vec![&self.leaderboard_text]
         }
     }
 
@@ -170,8 +184,14 @@ impl GamePlay {
                 self.countdown_text.clear();
                 self.countdown_text
                     .append_string(&"Go!", &[0.0, 1.0 - self.game_duration as f32, 0.0]);
+            } else {
+                self.generate_leaderboard_text();
             }
             calc_ship_physics(&mut self.ship_entities, &self.map, dt as f32);
+
+            for (ship, score) in self.ship_entities.iter().zip(self.scores.iter_mut()) {
+                score.update(&self.map, ship, self.game_duration);
+            }
         }
 
         self.steer_ships(key_map);
@@ -197,6 +217,8 @@ impl GamePlay {
             let startline_tangent = (f32::cos(startline_angle), f32::sin(startline_angle));
             let startline_normal = (-f32::sin(startline_angle), f32::cos(startline_angle));
 
+            let ship_start_position = start_position.to_cartesian();
+
             for (id, ship) in self.ship_entities.iter_mut().enumerate() {
                 let row = id / NUM_START_COLUMNS;
                 let column = id % NUM_START_COLUMNS;
@@ -210,7 +232,6 @@ impl GamePlay {
                         * SHIP_SPACING,
                 );
 
-                let ship_start_position = start_position.to_cartesian();
                 ship.position.x = ship_start_position.0 + offset_vec.0;
                 ship.position.y = ship_start_position.1 + offset_vec.1;
                 ship.position.rot = startline_angle;
@@ -218,6 +239,42 @@ impl GamePlay {
                 ship.velocity.x = 0.0;
                 ship.velocity.y = 0.0;
                 ship.velocity.rot = 0.0;
+
+                self.scores[id].reset(&self.map, ship);
+            }
+        }
+    }
+    pub fn generate_leaderboard_text(&mut self) {
+        self.leaderboard_text.clear();
+
+        let mut ship_and_score_refs: Vec<(&Ship, &Score)> =
+            self.ship_entities.iter().zip(self.scores.iter()).collect();
+        ship_and_score_refs.sort_by(|a, b| a.1.cmp(b.1));
+        let winner_score = ship_and_score_refs.first().expect("No Ships").1;
+
+        self.leaderboard_text.append_string(
+            &format!("Lap {}/{}", winner_score.laps.len(), NUM_LAPS_TO_WIN),
+            &[0.5, 0.5, 0.5],
+        );
+        for (ship, score) in ship_and_score_refs {
+            let color = [ship.color.0, ship.color.1, ship.color.2];
+            if score.laps.len() == winner_score.laps.len() {
+                if let Some(winner_time) = winner_score.laps.last() {
+                    // Same lap - display time
+                    let time = score.laps.last().unwrap() - winner_time;
+                    let seconds = time as u32;
+                    let millis = (time.fract() * 100.0).floor() as u32;
+                    self.leaderboard_text
+                        .append_string(&format!("~ {:02}:{:02}", seconds, millis), &color);
+                } else {
+                    // No-one has any time yet
+                    self.leaderboard_text
+                        .append_string(&format!("~ --:--",), &color);
+                }
+            } else {
+                // This player is at least a lap behind
+                self.leaderboard_text
+                    .append_string(&format!("~ --:--",), &color);
             }
         }
     }

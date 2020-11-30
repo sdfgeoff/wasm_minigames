@@ -4,16 +4,28 @@ use std::rc::Rc;
 use js_sys::Function;
 use wasm_bindgen::prelude::{wasm_bindgen, Closure};
 use wasm_bindgen::JsCast;
-use web_sys::{window, Event, HtmlCanvasElement, KeyEvent, MouseEvent};
+use web_sys::{window, Event, HtmlCanvasElement, KeyboardEvent, MouseEvent};
 
+mod ai;
 mod app;
 mod camera;
-mod geometry;
+mod gameplay;
+mod keymap;
+mod logo;
+mod main_menu;
+mod map;
+mod map_sprite;
+mod physics;
+mod renderer;
+mod score;
 mod shader;
-mod shader_stl;
-mod stl;
+mod ship;
+mod ship_sprite;
+mod text_sprite;
 mod texture;
-mod textures;
+mod trail;
+mod trail_sprite;
+mod transform;
 
 // Pull in the console.log function so we can debug things more easily
 #[wasm_bindgen]
@@ -33,8 +45,11 @@ pub struct Core {
 #[wasm_bindgen]
 impl Core {
     #[wasm_bindgen(constructor)]
-    pub fn new(canvas_id: String) -> Self {
-        log(&format!("WASM Started for canvas {}", canvas_id));
+    pub fn new(canvas_id: String, options: String) -> Self {
+        log(&format!(
+            "WASM Started for canvas '{}' with options '{}'",
+            canvas_id, options
+        ));
 
         let selector = format!("#{}", canvas_id);
 
@@ -49,7 +64,7 @@ impl Core {
 
         let canvas: HtmlCanvasElement = element.dyn_into().expect("Not a canvas");
 
-        let app = Rc::new(RefCell::new(app::App::new(canvas.clone())));
+        let app = Rc::new(RefCell::new(app::App::new(canvas.clone(), options)));
 
         Self { app, canvas }
     }
@@ -83,63 +98,70 @@ impl Core {
 
         {
             // Mouse events
-            let anim_app1 = self.app.clone();
-            let anim_app2 = self.app.clone();
-            let anim_app3 = self.app.clone();
+            let anim_app = self.app.clone();
 
-            let mouse_move = Closure::wrap(Box::new(move |event: MouseEvent| {
-                anim_app1.borrow_mut().mouse_move(event);
-            }) as Box<dyn FnMut(_)>);
-            let mouse_up = Closure::wrap(Box::new(move |event: MouseEvent| {
-                anim_app2.borrow_mut().mouse_up(event);
-            }) as Box<dyn FnMut(_)>);
-            let mouse_down = Closure::wrap(Box::new(move |event: MouseEvent| {
-                anim_app3.borrow_mut().mouse_down(event);
+            let callback = Closure::wrap(Box::new(move |event: MouseEvent| {
+                anim_app.borrow_mut().mouse_event(event);
             }) as Box<dyn FnMut(_)>);
 
-            let mouse_move_ref = mouse_move.as_ref().unchecked_ref();
-            let mouse_up_ref = mouse_up.as_ref().unchecked_ref();
-            let mouse_down_ref = mouse_down.as_ref().unchecked_ref();
+            let callback_ref = callback.as_ref().unchecked_ref();
+            self.canvas
+                .add_event_listener_with_callback("mousedown", callback_ref)
+                .unwrap();
+            self.canvas
+                .add_event_listener_with_callback("mouseup", callback_ref)
+                .unwrap();
+            self.canvas
+                .add_event_listener_with_callback("mousemove", callback_ref)
+                .unwrap();
+            self.canvas
+                .add_event_listener_with_callback("mouseenter", callback_ref)
+                .unwrap();
+            self.canvas
+                .add_event_listener_with_callback("mouseleave", callback_ref)
+                .unwrap();
+            self.canvas
+                .add_event_listener_with_callback("mouseover", callback_ref)
+                .unwrap();
 
-            self.canvas
-                .add_event_listener_with_callback("mousedown", mouse_down_ref)
-                .unwrap();
-            self.canvas
-                .add_event_listener_with_callback("mouseup", mouse_up_ref)
-                .unwrap();
-            self.canvas
-                .add_event_listener_with_callback("mousemove", mouse_move_ref)
-                .unwrap();
-            self.canvas
-                .add_event_listener_with_callback("mouseleave", mouse_up_ref)
-                .unwrap();
-
-            mouse_move.forget();
-            mouse_up.forget();
-            mouse_down.forget();
+            callback.forget();
         }
 
         {
             // keyboard events
             self.canvas.set_tab_index(1); // Canvas elements ignore key events unless they have a tab index
-            let anim_app = self.app.clone();
+            let anim_app1 = self.app.clone();
+            let anim_app2 = self.app.clone();
 
-            let callback = Closure::wrap(Box::new(move |event: KeyEvent| {
+            let keydown_callback = Closure::wrap(Box::new(move |event: KeyboardEvent| {
                 let e: Event = event.clone().dyn_into().unwrap();
                 e.stop_propagation();
                 e.prevent_default();
 
-                anim_app.borrow_mut().key_event(event);
+                anim_app1.borrow_mut().keydown_event(event);
+            }) as Box<dyn FnMut(_)>);
+
+            let keyup_callback = Closure::wrap(Box::new(move |event: KeyboardEvent| {
+                let e: Event = event.clone().dyn_into().unwrap();
+                e.stop_propagation();
+                e.prevent_default();
+
+                anim_app2.borrow_mut().keyup_event(event);
             }) as Box<dyn FnMut(_)>);
 
             self.canvas
-                .add_event_listener_with_callback("keydown", callback.as_ref().unchecked_ref())
-                .unwrap();
-            self.canvas
-                .add_event_listener_with_callback("keyup", callback.as_ref().unchecked_ref())
+                .add_event_listener_with_callback(
+                    "keydown",
+                    keydown_callback.as_ref().unchecked_ref(),
+                )
                 .unwrap();
 
-            callback.forget();
+            self.canvas
+                .add_event_listener_with_callback("keyup", keyup_callback.as_ref().unchecked_ref())
+                .unwrap();
+
+            keydown_callback.forget();
+            keyup_callback.forget();
         }
     }
 }

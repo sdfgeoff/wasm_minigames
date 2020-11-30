@@ -85,6 +85,9 @@ pub fn set_up_image(gl: &GL, img_element: &HtmlImageElement, texture: &WebGlText
 
     gl.pixel_storei(GL::UNPACK_FLIP_Y_WEBGL, 1);
 
+    gl.tex_parameteri(GL::TEXTURE_2D, GL::TEXTURE_MIN_FILTER, GL::LINEAR as i32);
+    gl.tex_parameteri(GL::TEXTURE_2D, GL::TEXTURE_MAG_FILTER, GL::LINEAR as i32);
+
     gl.tex_image_2d_with_u32_and_u32_and_html_image_element(
         GL::TEXTURE_2D,
         0,
@@ -94,14 +97,6 @@ pub fn set_up_image(gl: &GL, img_element: &HtmlImageElement, texture: &WebGlText
         &img_element,
     )
     .expect("Loading Image Failed");
-
-    gl.generate_mipmap(GL::TEXTURE_2D);
-    gl.tex_parameteri(
-        GL::TEXTURE_2D,
-        GL::TEXTURE_MIN_FILTER,
-        GL::LINEAR_MIPMAP_LINEAR as i32,
-    );
-    //gl.tex_parameteri(GL::TEXTURE_2D, GL::TEXTURE_MAG_FILTER, GL::LINEAR_MIPMAP_LINEAR as i32);
 }
 
 /// Binds a texture to a uniform and a specific texture unit. NOTE: This function
@@ -111,13 +106,13 @@ pub fn set_up_image(gl: &GL, img_element: &HtmlImageElement, texture: &WebGlText
 pub fn bind_2d_texture_to_uniform(
     gl: &GL,
     uniform: &Option<WebGlUniformLocation>,
-    texture: &Option<WebGlTexture>,
+    texture: &WebGlTexture,
     texture_unit: TextureUnit,
 ) {
     // Tell WebGL which texture unit we are configuring
     gl.active_texture(texture_unit.as_gl_const());
     // Tell WebGL what texture to load into the texture unit
-    gl.bind_texture(GL::TEXTURE_2D, texture.as_ref());
+    gl.bind_texture(GL::TEXTURE_2D, Some(&texture));
     // Tell WebGL which uniform refers to this texture unit
     gl.uniform1i(uniform.as_ref(), texture_unit.as_int());
 }

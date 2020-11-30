@@ -2,12 +2,12 @@ use wasm_bindgen::prelude::wasm_bindgen;
 use wasm_bindgen::{JsCast, JsValue};
 use web_sys::{window, HtmlCanvasElement, KeyEvent, MouseEvent, WebGl2RenderingContext};
 
-use super::shader_stl::ShaderStl;
-use super::shader_background::ShaderBackground;
-use super::stl::Stl;
 use super::background::Background;
-use super::textures::StaticTextures;
 use super::camera::Camera;
+use super::shader_background::ShaderBackground;
+use super::shader_stl::ShaderStl;
+use super::stl::Stl;
+use super::textures::StaticTextures;
 
 use glam::{Mat4, Vec3};
 
@@ -26,10 +26,10 @@ pub struct App {
     shader_stl: ShaderStl,
     shader_background: ShaderBackground,
     camera: Camera,
-    
+
     resolution: (u32, u32),
     click_location: Option<(i32, i32)>,
-    
+
     dirty: bool,
     last_render_time: f32,
 }
@@ -88,7 +88,7 @@ impl App {
 
         shader_stl.image_matcap = Some(textures.stl_matcap.clone());
         shader_background.image_matcap = Some(textures.stl_matcap.clone());
-        
+
         let camera = Camera::new();
 
         Self {
@@ -102,7 +102,7 @@ impl App {
             resolution: (100, 100),
             click_location: None,
             dirty: true,
-            last_render_time: 0.0
+            last_render_time: 0.0,
         }
     }
 
@@ -123,7 +123,7 @@ impl App {
             self.resolution = (client_width, client_height);
 
             self.dirty = true;
-            
+
             log(&format!("Resized to {}:{}", client_width, client_height));
         }
     }
@@ -132,76 +132,73 @@ impl App {
         self.check_resize();
         let now = window().unwrap().performance().unwrap().now();
         let time = (now / 1000.0) as f32;
-        
-        
+
         let time_since_render = time - self.last_render_time;
         if time_since_render > 0.2 {
             self.dirty = true;
         }
-        
+
         if self.dirty {
             self.render();
             self.dirty = false;
             self.last_render_time = time;
         }
     }
-        
-        
+
     fn render(&mut self) {
         self.gl.clear(
             WebGl2RenderingContext::COLOR_BUFFER_BIT | WebGl2RenderingContext::DEPTH_BUFFER_BIT,
         );
-        
+
         let (world_to_camera, camera_to_screen) = self.camera.to_matrices();
-        
+
         {
             // Render the background
-            self.shader_background.setup(&self.gl, world_to_camera, camera_to_screen);
+            self.shader_background
+                .setup(&self.gl, world_to_camera, camera_to_screen);
             self.background.render(&self.gl, &self.shader_background);
         }
-        
+
         {
             // Render the models
-            self.shader_stl.setup(&self.gl, world_to_camera, camera_to_screen);
-        
+            self.shader_stl
+                .setup(&self.gl, world_to_camera, camera_to_screen);
+
             self.stl.world_to_model = Mat4::from_translation(Vec3::new(0.0, -25.0, -25.0));
             self.stl.color = Vec3::new(0.3, 0.3, 0.3);
             self.stl.render(&self.gl, &self.shader_stl);
-            
+
             self.stl.color = Vec3::new(0.2, 0.2, 0.6);
             self.stl.world_to_model = Mat4::from_translation(Vec3::new(0.0, 25.0, -25.0));
             self.stl.render(&self.gl, &self.shader_stl);
-            
+
             self.stl.world_to_model = Mat4::from_translation(Vec3::new(0.0, -25.0, 25.0));
             self.stl.color = Vec3::new(0.8, 0.8, 0.8);
             self.stl.render(&self.gl, &self.shader_stl);
-            
+
             self.stl.world_to_model = Mat4::from_translation(Vec3::new(0.0, 25.0, 25.0));
             self.stl.color = Vec3::new(0.6, 0.2, 0.2);
             self.stl.render(&self.gl, &self.shader_stl);
         }
-        
     }
 
     pub fn mouse_move(&mut self, event: MouseEvent) {
         const DRAG_SENSITIVITY: f32 = 5.0;
         match self.click_location {
             Some(location) => {
-                
                 let new = (event.client_x(), event.client_y());
                 let delta = (location.0 - new.0, location.1 - new.1);
                 self.click_location = Some(new);
-                
+
                 let percentage_x = (delta.0 as f32) / (self.resolution.0 as f32) * DRAG_SENSITIVITY;
                 let percentage_y = (delta.1 as f32) / (self.resolution.0 as f32) * DRAG_SENSITIVITY;
-                
+
                 self.camera.azimuth += percentage_x;
                 self.camera.elevation -= percentage_y;
                 self.camera.elevation = f32::min(f32::max(self.camera.elevation, -1.4), 1.4);
                 self.dirty = true;
             }
-            None => {
-            }
+            None => {}
         }
     }
     pub fn mouse_down(&mut self, event: MouseEvent) {
@@ -212,7 +209,7 @@ impl App {
         self.click_location = None;
         self.dirty = true;
     }
-    
+
     pub fn key_event(&mut self, event: KeyEvent) {
         log(&format!("Key Event {:?}", event));
     }

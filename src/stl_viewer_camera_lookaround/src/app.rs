@@ -2,10 +2,10 @@ use wasm_bindgen::prelude::wasm_bindgen;
 use wasm_bindgen::{JsCast, JsValue};
 use web_sys::{window, HtmlCanvasElement, KeyEvent, MouseEvent, WebGl2RenderingContext};
 
+use super::camera::Camera;
 use super::shader_stl::ShaderStl;
 use super::stl::Stl;
 use super::textures::StaticTextures;
-use super::camera::Camera;
 
 use glam::{Mat4, Vec3};
 
@@ -22,7 +22,7 @@ pub struct App {
     stl: Stl,
     shader_stl: ShaderStl,
     camera: Camera,
-    
+
     resolution: (u32, u32),
     click_location: Option<(i32, i32)>,
 }
@@ -66,7 +66,7 @@ impl App {
         };
 
         shader_stl.image_matcap = Some(textures.stl_matcap.clone());
-        
+
         let camera = Camera::new();
 
         Self {
@@ -108,11 +108,11 @@ impl App {
 
         let now = window().unwrap().performance().unwrap().now();
         let time = (now / 1000.0) as f32;
-        
 
         let (world_to_camera, camera_to_screen) = self.camera.to_matrices();
-        self.shader_stl.setup(&self.gl, world_to_camera, camera_to_screen);
-        
+        self.shader_stl
+            .setup(&self.gl, world_to_camera, camera_to_screen);
+
         self.stl.world_to_model = Mat4::from_translation(Vec3::new(0.0, -25.0, 0.0));
         self.stl.render(&self.gl, &self.shader_stl);
         self.stl.world_to_model = Mat4::from_translation(Vec3::new(0.0, 25.0, 0.0));
@@ -123,21 +123,18 @@ impl App {
         const DRAG_SENSITIVITY: f32 = 5.0;
         match self.click_location {
             Some(location) => {
-                
                 let new = (event.client_x(), event.client_y());
                 let delta = (location.0 - new.0, location.1 - new.1);
                 self.click_location = Some(new);
-                
+
                 let percentage_x = (delta.0 as f32) / (self.resolution.0 as f32) * DRAG_SENSITIVITY;
                 let percentage_y = (delta.1 as f32) / (self.resolution.0 as f32) * DRAG_SENSITIVITY;
-                
+
                 self.camera.azimuth += percentage_x;
                 self.camera.elevation -= percentage_y;
                 self.camera.elevation = f32::min(f32::max(self.camera.elevation, -1.4), 1.4);
-                
             }
-            None => {
-            }
+            None => {}
         }
     }
     pub fn mouse_down(&mut self, event: MouseEvent) {
@@ -146,7 +143,7 @@ impl App {
     pub fn mouse_up(&mut self, _event: MouseEvent) {
         self.click_location = None;
     }
-    
+
     pub fn key_event(&mut self, event: KeyEvent) {
         log(&format!("Key Event {:?}", event));
     }
