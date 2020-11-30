@@ -19,6 +19,7 @@ extern "C" {
 enum GameState {
     Menu,
     Playing,
+    ScoreScreen,
 }
 
 pub struct App {
@@ -72,7 +73,12 @@ impl App {
             ship_entity_refs,
             trail_entity_refs,
             self.gameplay.get_text_entities(),
-        )
+        );
+
+        // If the game is finished, show the score screen
+        if self.gameplay.game_complete() {
+            self.game_state = GameState::ScoreScreen;
+        }
     }
 
     pub fn animation_frame(&mut self) {
@@ -88,9 +94,16 @@ impl App {
             GameState::Playing => {
                 self.play_game(dt);
             }
+            GameState::ScoreScreen => {
+                self.show_scores(dt);
+            }
         }
 
         self.key_map.update();
+    }
+
+    pub fn show_scores(&self, dt: f64) {
+        panic!()
     }
 
     pub fn show_logo(&mut self, dt: f64) {

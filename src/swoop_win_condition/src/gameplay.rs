@@ -278,4 +278,16 @@ impl GamePlay {
             }
         }
     }
+    
+    /// Returns True when the game is complete.
+    /// The game is considered complete when everyone has
+    /// done enough laps
+    pub fn game_complete(&self) -> bool {
+        for score in self.scores.iter() {
+            if score.laps.len() < NUM_LAPS_TO_WIN {
+                return false
+            }
+        }
+        return true
+    }
 }
