@@ -21,14 +21,10 @@ impl Background {
         let position_buffer =
             upload_f32_array(gl, vec![-1.0, 1.0, 1.0, 1.0, -1.0, -1.0, 1.0, -1.0])?;
 
-       
-        Ok(Self {
-            position_buffer,
-        })
+        Ok(Self { position_buffer })
     }
 
     pub fn render(&mut self, gl: &WebGl2RenderingContext, shader_background: &ShaderBackground) {
-
         gl.bind_buffer(
             WebGl2RenderingContext::ARRAY_BUFFER,
             Some(&self.position_buffer),

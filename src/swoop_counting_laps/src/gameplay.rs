@@ -1,14 +1,13 @@
-use super::map::Map;
-use super::ship::Ship;
-use super::trail::Trail;
 use super::camera::Camera;
 use super::keymap::KeyMap;
+use super::map::Map;
+use super::score::Score;
+use super::ship::Ship;
 use super::text_sprite::TextBox;
+use super::trail::Trail;
 
 use super::ai::calc_ai_control;
 use super::physics::calc_ship_physics;
-
-use std::cmp::Ordering;
 
 // Trail visuals
 const MAIN_TRAIL_WIDTH: f32 = 0.10;
@@ -21,8 +20,6 @@ const SHIP_SPACING: f32 = 0.12;
 const NUM_START_COLUMNS: usize = 4;
 
 const NUM_LAPS_TO_WIN: usize = 5;
-            
-
 
 const YELLOW_SHIP: (f32, f32, f32, f32) = (1.0, 0.7, 0.0, 1.0);
 const PINK_SHIP: (f32, f32, f32, f32) = (1.0, 0.0, 0.7, 1.0);
@@ -32,52 +29,6 @@ const CYAN_SHIP: (f32, f32, f32, f32) = (0.0, 0.7, 1.0, 1.0);
 //~ const RED_SHIP: (f32, f32, f32, f32) = (1.0, 0.0, 0.0, 1.0);
 //~ const GREEN_SHIP: (f32, f32, f32, f32) = (0.0, 1.0, 0.0, 1.0);
 //~ const BLUE_SHIP: (f32, f32, f32, f32) = (0.0, 0.0, 1.0, 1.0);
-
-
-use wasm_bindgen::prelude::wasm_bindgen;
-#[wasm_bindgen]
-extern "C" {
-    #[wasm_bindgen(js_namespace = console)]
-    fn log(s: &str);
-}
-
-struct Score {
-    laps: Vec<f64>,
-    previous_progress: f32
-}
-
-impl Score {
-    pub fn reset(&mut self, map: &Map, ship: &Ship) {
-        self.laps.clear();
-        
-        self.previous_progress = map.calc_progress_relative_to_startline((ship.position.x, ship.position.y));
-    }
-    
-    
-    /// Checks if the player crosses the start/finish line and updates
-    /// the score to match
-    pub fn update(&mut self, map: &Map, ship: &Ship, time: f64) {
-        let current_progress = map.calc_progress_relative_to_startline((ship.position.x, ship.position.y));
-
-        // Progress has jumped from previously being near 1.0 (nearly completed)
-        // to being near 0.0 (just started), so they probably did a lap
-        if self.previous_progress > 0.8 && current_progress < 0.2{
-            self.laps.push(time);
-            log("Someone crossed the start line");
-        }
-        
-        // Progress has jumped from previously being near 0.0 (just started)
-        // to being close to 1.0 (nearly completed) so the player went back
-        // across the line.
-        if self.previous_progress < 0.2 && current_progress > 0.8{
-            self.laps.pop();
-            log("Someone un-crossed the start line");
-        }
-        
-        self.previous_progress = current_progress
-    }
-}
-
 
 pub struct GamePlay {
     pub map: Map,
@@ -94,7 +45,6 @@ pub struct GamePlay {
 
 impl GamePlay {
     pub fn new() -> Self {
-
         let ship_entities = vec![
             Ship::new(CYAN_SHIP),
             Ship::new(YELLOW_SHIP),
@@ -108,12 +58,9 @@ impl GamePlay {
 
         let mut trails = vec![];
         let mut scores = vec![];
-        
+
         for ship in ship_entities.iter() {
-            scores.push(Score {
-                laps: vec![],
-                previous_progress: 0.0,
-            });
+            scores.push(Score::new());
 
             trails.push(Trail::new(
                 ship.color.clone(),
@@ -141,8 +88,9 @@ impl GamePlay {
 
         let camera = Camera::new();
 
-        let countdown_text = TextBox::new((3,1), 0.2, (0.5, 0.5));
-        let leaderboard_text = TextBox::new((9,(ship_entities.len() + 1) as i32), 0.05, (0.5, 0.5));
+        let countdown_text = TextBox::new((3, 1), 0.2, (0.5, 0.5));
+        let leaderboard_text =
+            TextBox::new((9, (ship_entities.len() + 1) as i32), 0.05, (0.5, 0.5));
 
         Self {
             map,
@@ -180,9 +128,7 @@ impl GamePlay {
             let skill = id as f32 / num_ships as f32;
             calc_ai_control(ship, skill, &self.map);
         }
-
     }
-
 
     pub fn update_trails(&mut self, dt: f64) {
         // Trails
@@ -211,7 +157,6 @@ impl GamePlay {
                 f32::max(f32::min(right_slip, 1.0), 0.0),
             );
         }
-
     }
 
     pub fn get_text_entities<'a>(&'a self) -> Vec<&'a TextBox> {
@@ -227,23 +172,22 @@ impl GamePlay {
         if self.game_duration < 0.0 {
             // Do the countdown!
             self.countdown_text.clear();
-            
+
             let remaining = -self.game_duration.floor();
             let diff = 1.0 - remaining - self.game_duration;
 
-            self.countdown_text.append_string(
-                &format!(" {} ", remaining as u8),
-                &[0.0, diff as f32, 0.0]
-            );
+            self.countdown_text
+                .append_string(&format!(" {} ", remaining as u8), &[0.0, diff as f32, 0.0]);
         } else {
             if self.game_duration < 1.0 {
                 self.countdown_text.clear();
-                self.countdown_text.append_string(&"Go!", &[0.0, 1.0 - self.game_duration as f32, 0.0]);
+                self.countdown_text
+                    .append_string(&"Go!", &[0.0, 1.0 - self.game_duration as f32, 0.0]);
             } else {
                 self.generate_leaderboard_text();
             }
             calc_ship_physics(&mut self.ship_entities, &self.map, dt as f32);
-            
+
             for (ship, score) in self.ship_entities.iter().zip(self.scores.iter_mut()) {
                 score.update(&self.map, ship, self.game_duration);
             }
@@ -265,16 +209,15 @@ impl GamePlay {
 
         {
             // Position the ships on the start line
-            
+
             let start_position = self.map.get_start_position();
             let startline_angle = self.map.get_track_direction(start_position.angle);
 
             let startline_tangent = (f32::cos(startline_angle), f32::sin(startline_angle));
             let startline_normal = (-f32::sin(startline_angle), f32::cos(startline_angle));
 
-            
             let ship_start_position = start_position.to_cartesian();
-            
+
             for (id, ship) in self.ship_entities.iter_mut().enumerate() {
                 let row = id / NUM_START_COLUMNS;
                 let column = id % NUM_START_COLUMNS;
@@ -295,7 +238,7 @@ impl GamePlay {
                 ship.velocity.x = 0.0;
                 ship.velocity.y = 0.0;
                 ship.velocity.rot = 0.0;
-                
+
                 self.scores[id].reset(&self.map, ship);
             }
         }
@@ -303,64 +246,35 @@ impl GamePlay {
     pub fn generate_leaderboard_text(&mut self) {
         self.leaderboard_text.clear();
 
-        let mut ship_and_score_refs: Vec<(&Ship, &Score)> = self.ship_entities.iter().zip(self.scores.iter()).collect();
-        ship_and_score_refs.sort_by(|a, b| {
-            let a_laps = a.1.laps.len();
-            let b_laps = b.1.laps.len();
-            let a_last_lap = a.1.laps.last();
-            let b_last_lap = b.1.laps.last();
-
-            if a_laps > b_laps {
-                Ordering::Less
-            } else if a_laps < b_laps {
-                Ordering::Greater
-            } else {
-                if let Some(a_last_lap) = a_last_lap {
-                    if let Some(b_last_lap) = b_last_lap {
-                        // Both scores show at least one lap, so compare times
-                        if a_last_lap > b_last_lap {
-                            // A has the longer time, so is doing worse
-                            Ordering::Greater
-                        } else {
-                            Ordering::Less
-                        }
-                    } else {
-                        // b has not done any laps
-                        Ordering::Less
-                    }
-                } else {
-                    if b_last_lap.is_some() {
-                        // b has done some laps, a has not
-                        Ordering::Greater
-                    } else {
-                        Ordering::Equal
-                    }
-                }
-            }
-        });
-
+        let mut ship_and_score_refs: Vec<(&Ship, &Score)> =
+            self.ship_entities.iter().zip(self.scores.iter()).collect();
+        ship_and_score_refs.sort_by(|a, b| a.1.cmp(b.1));
         let winner_score = ship_and_score_refs.first().expect("No Ships").1;
 
-        self.leaderboard_text.append_string(&format!("Lap {}/{}  ", winner_score.laps.len(), NUM_LAPS_TO_WIN), &[0.5, 0.5, 0.5]);
+        self.leaderboard_text.append_string(
+            &format!("Lap {}/{}  ", winner_score.laps.len(), NUM_LAPS_TO_WIN),
+            &[0.5, 0.5, 0.5],
+        );
         for (ship, score) in ship_and_score_refs {
             let color = [ship.color.0, ship.color.1, ship.color.2];
-            if score.laps.len() == winner_score.laps.len(){
+            if score.laps.len() == winner_score.laps.len() {
                 if let Some(winner_time) = winner_score.laps.last() {
                     // Same lap - display time
                     let time = score.laps.last().unwrap() - winner_time;
                     let seconds = time as u32;
                     let millis = (time.fract() * 100.0).floor() as u32;
-                    self.leaderboard_text.append_string(&format!("~ {:02}:{:02}  ", seconds, millis), &color);
+                    self.leaderboard_text
+                        .append_string(&format!("~ {:02}:{:02}  ", seconds, millis), &color);
                 } else {
                     // No-one has any time yet
-                    self.leaderboard_text.append_string(&format!("~ --:--  ",), &color);
+                    self.leaderboard_text
+                        .append_string(&format!("~ --:--  ",), &color);
                 }
-
             } else {
                 // This player is at least a lap behind
-                self.leaderboard_text.append_string(&format!("~ --:--  ",), &color);
+                self.leaderboard_text
+                    .append_string(&format!("~ --:--  ",), &color);
             }
-            
         }
     }
 }

@@ -10,14 +10,12 @@ pub struct Camera {
     pub far: f32,
 }
 
-
 use wasm_bindgen::prelude::wasm_bindgen;
 #[wasm_bindgen]
 extern "C" {
     #[wasm_bindgen(js_namespace = console)]
     fn log(s: &str);
 }
-
 
 impl Camera {
     pub fn new() -> Self {
@@ -31,7 +29,7 @@ impl Camera {
             aspect: 16.0 / 9.0,
         }
     }
-    
+
     /// Converts to world_to_camera and camera_to_screen matrices
     pub fn to_matrices(&self) -> (Mat4, Mat4) {
         let sa = f32::sin(self.azimuth);
@@ -41,21 +39,13 @@ impl Camera {
         let position = Vec3::new(
             self.distance * ca * ce,
             self.distance * sa * ce,
-            self.distance * se
+            self.distance * se,
         );
-        let world_to_camera = Mat4::look_at_rh(
-            position,
-            Vec3::new(0.0, 0.0, 0.0),
-            Vec3::new(0.0, 0.0, 1.0)
-        );
-        
-        let camera_to_screen = Mat4::perspective_rh_gl(
-            self.fov,
-            self.aspect,
-            self.near,
-            self.far,
-        );
-        
+        let world_to_camera =
+            Mat4::look_at_rh(position, Vec3::new(0.0, 0.0, 0.0), Vec3::new(0.0, 0.0, 1.0));
+
+        let camera_to_screen = Mat4::perspective_rh_gl(self.fov, self.aspect, self.near, self.far);
+
         (world_to_camera, camera_to_screen)
     }
 }

@@ -143,9 +143,112 @@ LAP 2/3
 
 We have all the scores in an array, so let's sort a vector of reference to them
 in order of lap and then timing:
+```rust
+pub fn generate_leaderboard_text(&mut self) {
+        self.leaderboard_text.clear();
+
+        let mut ship_and_score_refs: Vec<(&Ship, &Score)> = self.ship_entities.iter().zip(self.scores.iter()).collect();
+        ship_and_score_refs.sort_by(|a, b| { a.1.cmp(b.1)});
 ```
 
+Hmm, what's this `cmp` function? Technically it should be an
+implementation of the `Ord` trait, but to implement `Ord` you also
+need to implementation `Eq` and `PartialOrd` and `PartialEq`. So
+instead of `impl Ord for Score` I'm just putting the cmp function
+in the `imp Score` block.
+When sorting scores, first we need to sort by the lap counter:
+```rust
+pub fn cmp(&self, other: &Self) -> Ordering {
+        let a_laps = self.laps.len();
+        let b_laps = other.laps.len();
+        let a_last_lap = self.laps.last();
+        let b_last_lap = other.laps.last();
+
+        if a_laps > b_laps {
+            Ordering::Less
+        } else if a_laps < b_laps {
+            Ordering::Greater
+        } else {
+            ....????
+        }
 ```
+If the laps are the same, we need to sort by the least time:
+```rust
+    if let Some(a_last_lap) = a_last_lap {
+        if let Some(b_last_lap) = b_last_lap {
+            // Both scores show at least one lap, so compare times
+            if a_last_lap > b_last_lap {
+                // A has the longer time, so is doing worse
+                Ordering::Greater
+            } else {
+                Ordering::Less
+            }
+        } else {
+            // b has not done any laps
+            Ordering::Less
+        }
+    } else {
+        if b_last_lap.is_some() {
+            // b has done some laps, a has not
+            Ordering::Greater
+        } else {
+            Ordering::Equal
+        }
+    }
+```
+Some of these conditions should never be hit - if 
+`a_last_lap.is_some()`, then `b_last_lap` will also be 
+`is_some()` because we check that the number of laps is
+the same. I can't think of a way to express this to the
+compiler, so it'll just be a bit more verbose than it
+needs to be.
+
+Now that we can sort a list of scores we can find the winner and 
+format the scoreboard as described above. The resulting function
+is:
+```rust
+    pub fn generate_leaderboard_text(&mut self) {
+        self.leaderboard_text.clear();
+
+        let mut ship_and_score_refs: Vec<(&Ship, &Score)> =
+            self.ship_entities.iter().zip(self.scores.iter()).collect();
+        ship_and_score_refs.sort_by(|a, b| a.1.cmp(b.1));
+        let winner_score = ship_and_score_refs.first().expect("No Ships").1;
+
+        self.leaderboard_text.append_string(
+            &format!("Lap {}/{}  ", winner_score.laps.len(), NUM_LAPS_TO_WIN),
+            &[0.5, 0.5, 0.5],
+        );
+        for (ship, score) in ship_and_score_refs {
+            let color = [ship.color.0, ship.color.1, ship.color.2];
+            if score.laps.len() == winner_score.laps.len() {
+                if let Some(winner_time) = winner_score.laps.last() {
+                    // Same lap - display time
+                    let time = score.laps.last().unwrap() - winner_time;
+                    let seconds = time as u32;
+                    let millis = (time.fract() * 100.0).floor() as u32;
+                    self.leaderboard_text
+                        .append_string(&format!("~ {:02}:{:02}  ", seconds, millis), &color);
+                } else {
+                    // No-one has any time yet
+                    self.leaderboard_text
+                        .append_string(&format!("~ --:--  ",), &color);
+                }
+            } else {
+                // This player is at least a lap behind
+                self.leaderboard_text
+                    .append_string(&format!("~ --:--  ",), &color);
+            }
+        }
+    }
+```
+The `unwrap` should never be encountered for the same reason as
+mentioned above. We only get there when 
+`winner_score.laps.last().is_some()` and when the length of the two laps arrays are equal. If someone knows how to tell the compiler this,
+I'd love to know!
+
+Anyway, the only thing to do now is to play it and see how far ahead
+purple actually gets.....
 
 <canvas id="swoop_counting_laps"></canvas>
 

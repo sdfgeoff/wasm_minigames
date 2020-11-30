@@ -2,7 +2,6 @@ use js_sys::Math::random;
 
 use super::transform::{length, normalize, PolarCoordinate, Vec2};
 
-
 pub struct Map {
     pub sin_consts: [f32; 8],
     pub cos_consts: [f32; 8],
@@ -112,17 +111,17 @@ impl Map {
 
         let distance_from_startline = (
             position.0 - start_position_cartesian.0,
-            position.1 - start_position_cartesian.1
+            position.1 - start_position_cartesian.1,
         );
 
         let s = f32::sin(-start_line_direction);
         let c = f32::cos(-start_line_direction);
 
         let position_local = (
-            c*distance_from_startline.0 - s*distance_from_startline.1,
-            s*distance_from_startline.0 + c*distance_from_startline.1
+            c * distance_from_startline.0 - s * distance_from_startline.1,
+            s * distance_from_startline.0 + c * distance_from_startline.1,
         );
-        
+
         if f32::abs(position_local.0) > self.track_width {
             // Position is off to the side of the track
             0.5
@@ -136,7 +135,7 @@ impl Map {
             } else if progress < 0.5 {
                 // Position is a long way behind the line
                 0.5
-            } else 
+            } else
             // Position is near the line. We want the returned
             // nunmber to be between 0.0 and 1.0 and the discontinuty
             // to be at the start line. Currently `progress` goes

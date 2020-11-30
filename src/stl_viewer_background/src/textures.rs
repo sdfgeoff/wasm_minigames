@@ -9,9 +9,8 @@ pub struct StaticTextures {
 
 impl StaticTextures {
     pub fn new(gl: &WebGl2RenderingContext) -> Result<Self, TextureError> {
-        
         let stl_matcap = load_texture(&gl, include_bytes!("resources/matcap.png"))?;
-        
+
         Ok(Self {
             stl_matcap: stl_matcap,
         })

@@ -34,7 +34,7 @@ impl Stl {
             normal_buffer,
             faces_buffer,
             num_face_indices,
-            world_to_model: Mat4::from_translation(Vec3::new(1.0, 0.0, 0.0))
+            world_to_model: Mat4::from_translation(Vec3::new(1.0, 0.0, 0.0)),
         })
     }
 
@@ -44,7 +44,7 @@ impl Stl {
             false,
             &self.world_to_model.to_cols_array(),
         );
-        
+
         gl.enable_vertex_attrib_array(shader_stl.attrib_vertex_positions);
         gl.bind_buffer(
             WebGl2RenderingContext::ARRAY_BUFFER,
@@ -108,26 +108,25 @@ fn extact_buffers_from_stl(stl: &[u8], generate_normals: bool) -> (Vec<u16>, Vec
         const OFFSET: u32 = 84;
 
         let face_offset = OFFSET + STRIDE * face;
-        
-        
+
         let v1 = Vec3::new(
             get_f32(stl, face_offset + 4 * 3),
             get_f32(stl, face_offset + 4 * 4),
             get_f32(stl, face_offset + 4 * 5),
         );
-        
+
         let v2 = Vec3::new(
             get_f32(stl, face_offset + 4 * 6),
             get_f32(stl, face_offset + 4 * 7),
             get_f32(stl, face_offset + 4 * 8),
         );
-        
+
         let v3 = Vec3::new(
             get_f32(stl, face_offset + 4 * 9),
             get_f32(stl, face_offset + 4 * 10),
             get_f32(stl, face_offset + 4 * 11),
         );
-        
+
         let face_normal = {
             if generate_normals {
                 (v1 - v2).cross(v1 - v3).normalize()
@@ -139,12 +138,11 @@ fn extact_buffers_from_stl(stl: &[u8], generate_normals: bool) -> (Vec<u16>, Vec
                 )
             }
         };
-        
-        
+
         vertices.extend(v1.as_ref());
         vertices.extend(v2.as_ref());
         vertices.extend(v3.as_ref());
-        
+
         normals.extend(face_normal.as_ref());
         normals.extend(face_normal.as_ref());
         normals.extend(face_normal.as_ref());

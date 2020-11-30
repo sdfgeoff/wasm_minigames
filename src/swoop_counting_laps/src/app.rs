@@ -2,16 +2,12 @@ use wasm_bindgen::prelude::wasm_bindgen;
 
 use web_sys::{window, HtmlCanvasElement, KeyboardEvent, MouseEvent};
 
-
-
+use super::gameplay::GamePlay;
 use super::keymap::{KeyMap, KeyState};
 use super::main_menu::MainMenu;
-use super::gameplay::GamePlay;
 
 use super::renderer::Renderer;
 use super::transform::Transform2d;
-
-
 
 // Pull in the console.log function so we can debug things more easily
 #[wasm_bindgen]
@@ -27,7 +23,7 @@ enum GameState {
 
 pub struct App {
     renderer: Renderer,
-    
+
     key_map: KeyMap,
 
     main_menu: MainMenu,
@@ -41,8 +37,6 @@ pub struct App {
 impl App {
     pub fn new(canvas: HtmlCanvasElement, _options: String) -> Self {
         let renderer = Renderer::new(canvas).expect("Failed to create renderer");
-
-        
 
         let now = window().unwrap().performance().unwrap().now();
         let prev_time = now / 1000.0;
@@ -60,7 +54,6 @@ impl App {
     }
 
     fn start_game(&mut self) {
-        
         self.gameplay.reset();
 
         // TODO: this is a bit dodgy
@@ -70,7 +63,6 @@ impl App {
     }
 
     pub fn play_game(&mut self, dt: f64) {
-        
         self.gameplay.update(dt, &self.key_map);
         let ship_entity_refs = self.gameplay.ship_entities.iter().collect();
         let trail_entity_refs = self.gameplay.trails.iter().collect();

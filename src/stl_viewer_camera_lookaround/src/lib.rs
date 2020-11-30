@@ -7,13 +7,13 @@ use wasm_bindgen::JsCast;
 use web_sys::{window, Event, HtmlCanvasElement, KeyEvent, MouseEvent};
 
 mod app;
+mod camera;
 mod geometry;
 mod shader;
 mod shader_stl;
 mod stl;
 mod texture;
 mod textures;
-mod camera;
 
 // Pull in the console.log function so we can debug things more easily
 #[wasm_bindgen]
@@ -100,7 +100,7 @@ impl Core {
             let mouse_move_ref = mouse_move.as_ref().unchecked_ref();
             let mouse_up_ref = mouse_up.as_ref().unchecked_ref();
             let mouse_down_ref = mouse_down.as_ref().unchecked_ref();
-            
+
             self.canvas
                 .add_event_listener_with_callback("mousedown", mouse_down_ref)
                 .unwrap();

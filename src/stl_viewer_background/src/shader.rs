@@ -1,6 +1,5 @@
 use web_sys::{WebGl2RenderingContext, WebGlProgram, WebGlShader};
 
-
 /// An error to represent problems with a shader.
 #[derive(Debug)]
 pub enum ShaderError {

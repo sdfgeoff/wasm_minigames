@@ -1,13 +1,12 @@
-use super::map::Map;
-use super::ship::Ship;
-use super::trail::Trail;
 use super::camera::Camera;
 use super::keymap::KeyMap;
+use super::map::Map;
+use super::ship::Ship;
 use super::text_sprite::TextBox;
+use super::trail::Trail;
 
 use super::ai::calc_ai_control;
 use super::physics::calc_ship_physics;
-
 
 // Trail visuals
 const MAIN_TRAIL_WIDTH: f32 = 0.10;
@@ -18,8 +17,6 @@ const WINGTIP_TRAIL_BRIGHTNESS: f32 = 1.0;
 // Ship startline settings
 const SHIP_SPACING: f32 = 0.12;
 const NUM_START_COLUMNS: usize = 4;
-            
-
 
 const YELLOW_SHIP: (f32, f32, f32, f32) = (1.0, 0.7, 0.0, 1.0);
 const PINK_SHIP: (f32, f32, f32, f32) = (1.0, 0.0, 0.7, 1.0);
@@ -29,7 +26,6 @@ const CYAN_SHIP: (f32, f32, f32, f32) = (0.0, 0.7, 1.0, 1.0);
 //~ const RED_SHIP: (f32, f32, f32, f32) = (1.0, 0.0, 0.0, 1.0);
 //~ const GREEN_SHIP: (f32, f32, f32, f32) = (0.0, 1.0, 0.0, 1.0);
 //~ const BLUE_SHIP: (f32, f32, f32, f32) = (0.0, 0.0, 1.0, 1.0);
-
 
 pub struct GamePlay {
     pub map: Map,
@@ -44,7 +40,6 @@ pub struct GamePlay {
 
 impl GamePlay {
     pub fn new() -> Self {
-
         let ship_entities = vec![
             Ship::new(CYAN_SHIP),
             Ship::new(YELLOW_SHIP),
@@ -58,7 +53,6 @@ impl GamePlay {
 
         let mut trails = vec![];
         for ship in ship_entities.iter() {
-
             trails.push(Trail::new(
                 ship.color.clone(),
                 MAIN_TRAIL_WIDTH,
@@ -85,7 +79,7 @@ impl GamePlay {
 
         let camera = Camera::new();
 
-        let countdown_text = TextBox::new((3,1), 0.2, (0.5, 0.5));
+        let countdown_text = TextBox::new((3, 1), 0.2, (0.5, 0.5));
 
         Self {
             map,
@@ -121,9 +115,7 @@ impl GamePlay {
             let skill = id as f32 / num_ships as f32;
             calc_ai_control(ship, skill, &self.map);
         }
-
     }
-
 
     pub fn update_trails(&mut self, dt: f64) {
         // Trails
@@ -152,7 +144,6 @@ impl GamePlay {
                 f32::max(f32::min(right_slip, 1.0), 0.0),
             );
         }
-
     }
 
     pub fn get_text_entities<'a>(&'a self) -> Vec<&'a TextBox> {
@@ -168,18 +159,17 @@ impl GamePlay {
         if self.game_duration < 0.0 {
             // Do the countdown!
             self.countdown_text.clear();
-            
+
             let remaining = -self.game_duration.floor();
             let diff = 1.0 - remaining - self.game_duration;
 
-            self.countdown_text.append_string(
-                &format!(" {} ", remaining as u8),
-                &[0.0, diff as f32, 0.0]
-            );
+            self.countdown_text
+                .append_string(&format!(" {} ", remaining as u8), &[0.0, diff as f32, 0.0]);
         } else {
             if self.game_duration < 1.0 {
                 self.countdown_text.clear();
-                self.countdown_text.append_string(&"Go!", &[0.0, 1.0 - self.game_duration as f32, 0.0]);
+                self.countdown_text
+                    .append_string(&"Go!", &[0.0, 1.0 - self.game_duration as f32, 0.0]);
             }
             calc_ship_physics(&mut self.ship_entities, &self.map, dt as f32);
         }
@@ -200,14 +190,12 @@ impl GamePlay {
 
         {
             // Position the ships on the start line
-            
+
             let start_position = self.map.get_start_position();
             let startline_angle = self.map.get_track_direction(start_position.angle);
 
             let startline_tangent = (f32::cos(startline_angle), f32::sin(startline_angle));
             let startline_normal = (-f32::sin(startline_angle), f32::cos(startline_angle));
-
-            
 
             for (id, ship) in self.ship_entities.iter_mut().enumerate() {
                 let row = id / NUM_START_COLUMNS;
