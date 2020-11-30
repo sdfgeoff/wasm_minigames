@@ -25,10 +25,10 @@ const YELLOW_SHIP: (f32, f32, f32, f32) = (1.0, 0.7, 0.0, 1.0);
 const PINK_SHIP: (f32, f32, f32, f32) = (1.0, 0.0, 0.7, 1.0);
 const PURPLE_SHIP: (f32, f32, f32, f32) = (0.7, 0.0, 1.0, 1.0);
 const CYAN_SHIP: (f32, f32, f32, f32) = (0.0, 0.7, 1.0, 1.0);
-//~ const WHITE_SHIP: (f32, f32, f32, f32) = (0.7, 0.7, 0.7, 1.0);
-//~ const RED_SHIP: (f32, f32, f32, f32) = (1.0, 0.0, 0.0, 1.0);
-//~ const GREEN_SHIP: (f32, f32, f32, f32) = (0.0, 1.0, 0.0, 1.0);
-//~ const BLUE_SHIP: (f32, f32, f32, f32) = (0.0, 0.0, 1.0, 1.0);
+// const WHITE_SHIP: (f32, f32, f32, f32) = (0.7, 0.7, 0.7, 1.0);
+// const RED_SHIP: (f32, f32, f32, f32) = (1.0, 0.0, 0.0, 1.0);
+// const GREEN_SHIP: (f32, f32, f32, f32) = (0.0, 1.0, 0.0, 1.0);
+// const BLUE_SHIP: (f32, f32, f32, f32) = (0.0, 0.0, 1.0, 1.0);
 
 pub struct GamePlay {
     pub map: Map,
@@ -50,10 +50,10 @@ impl GamePlay {
             Ship::new(YELLOW_SHIP),
             Ship::new(PINK_SHIP),
             Ship::new(PURPLE_SHIP),
-            //~ Ship::new(GREEN_SHIP),
-            //~ Ship::new(BLUE_SHIP),
-            //~ Ship::new(RED_SHIP),
-            //~ Ship::new(WHITE_SHIP)
+            // Ship::new(GREEN_SHIP),
+            // Ship::new(BLUE_SHIP),
+            // Ship::new(RED_SHIP),
+            // Ship::new(WHITE_SHIP)
         ];
 
         let mut trails = vec![];
@@ -90,7 +90,7 @@ impl GamePlay {
 
         let countdown_text = TextBox::new((3, 1), 0.2, (0.5, 0.5));
         let leaderboard_text =
-            TextBox::new((9, (ship_entities.len() + 1) as i32), 0.05, (0.5, 0.5));
+            TextBox::new((7, (ship_entities.len() + 1) as i32), 0.05, (1.0, 0.5));
 
         Self {
             map,
@@ -125,7 +125,8 @@ impl GamePlay {
         // Ai Ships
         let num_ships = self.ship_entities.len() - 2;
         for (id, ship) in self.ship_entities[1..].iter_mut().enumerate() {
-            let skill = id as f32 / num_ships as f32;
+            let mut skill = id as f32 / num_ships as f32;
+            skill = skill * 0.5 + 0.2;
             calc_ai_control(ship, skill, &self.map);
         }
     }
@@ -252,7 +253,7 @@ impl GamePlay {
         let winner_score = ship_and_score_refs.first().expect("No Ships").1;
 
         self.leaderboard_text.append_string(
-            &format!("Lap {}/{}  ", winner_score.laps.len(), NUM_LAPS_TO_WIN),
+            &format!("Lap {}/{}", winner_score.laps.len(), NUM_LAPS_TO_WIN),
             &[0.5, 0.5, 0.5],
         );
         for (ship, score) in ship_and_score_refs {
@@ -264,16 +265,16 @@ impl GamePlay {
                     let seconds = time as u32;
                     let millis = (time.fract() * 100.0).floor() as u32;
                     self.leaderboard_text
-                        .append_string(&format!("~ {:02}:{:02}  ", seconds, millis), &color);
+                        .append_string(&format!("~ {:02}:{:02}", seconds, millis), &color);
                 } else {
                     // No-one has any time yet
                     self.leaderboard_text
-                        .append_string(&format!("~ --:--  ",), &color);
+                        .append_string(&format!("~ --:--",), &color);
                 }
             } else {
                 // This player is at least a lap behind
                 self.leaderboard_text
-                    .append_string(&format!("~ --:--  ",), &color);
+                    .append_string(&format!("~ --:--",), &color);
             }
         }
     }
