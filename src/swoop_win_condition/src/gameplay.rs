@@ -19,7 +19,7 @@ const WINGTIP_TRAIL_BRIGHTNESS: f32 = 1.0;
 const SHIP_SPACING: f32 = 0.12;
 const NUM_START_COLUMNS: usize = 4;
 
-const NUM_LAPS_TO_WIN: usize = 5;
+const NUM_LAPS_TO_WIN: usize = 6;
 
 const COUNTDOWN_TIME: f64 = 4.0;
 
@@ -35,7 +35,7 @@ const CYAN_SHIP: (f32, f32, f32, f32) = (0.0, 0.7, 1.0, 1.0);
 pub struct GamePlay {
     pub map: Map,
     pub ship_entities: Vec<Ship>,
-    scores: Vec<Score>,
+    pub scores: Vec<Score>,
     pub trails: Vec<Trail>,
     pub camera: Camera,
 
@@ -246,6 +246,9 @@ impl GamePlay {
                 self.scores[id].reset(&self.map, ship);
             }
         }
+        for trail in self.trails.iter_mut() {
+            trail.reset();
+        }
     }
     pub fn generate_leaderboard_text(&mut self) {
         self.leaderboard_text.clear();
@@ -256,7 +259,7 @@ impl GamePlay {
         let winner_score = ship_and_score_refs.first().expect("No Ships").1;
 
         self.leaderboard_text.append_string(
-            &format!("Lap {}/{}", winner_score.laps.len(), NUM_LAPS_TO_WIN),
+            &format!("Lap {}/{}", winner_score.laps.len() - 1, NUM_LAPS_TO_WIN - 1),
             &[0.5, 0.5, 0.5],
         );
         for (ship, score) in ship_and_score_refs {

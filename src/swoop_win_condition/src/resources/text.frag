@@ -13,7 +13,7 @@ const ivec2 TILES = ivec2(10, 7);
 // Size of a character in the tile sheet
 const vec2 CHARACTER_SIZE = vec2(1.0/10.0, 1.0/7.0);
 
-uniform vec4 text_data[64];
+uniform vec4 text_data[128];
 uniform ivec2 text_box_dimensions;
 
 

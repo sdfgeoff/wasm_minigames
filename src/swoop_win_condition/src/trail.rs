@@ -25,7 +25,7 @@ pub struct Trail {
 impl Trail {
     pub fn new(color: (f32, f32, f32, f32), width: f32, brightness: f32) -> Self {
         Self {
-            path: VecDeque::new(),
+            path: VecDeque::with_capacity(NUM_SEGMENTS),
             color,
             max_length: NUM_SEGMENTS,
             prev_position: (0.0, 0.0),
@@ -124,5 +124,9 @@ impl Trail {
         }
 
         point_buffer
+    }
+
+    pub fn reset(&mut self) {
+        self.path.clear();
     }
 }

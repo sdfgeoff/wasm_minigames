@@ -51,7 +51,7 @@ impl App {
             gameplay: GamePlay::new(),
             score_screen: ScoreScreen::new(),
             prev_time,
-            game_state: GameState::ScoreScreen,
+            game_state: GameState::Menu,
         };
         game.reset();
         game
@@ -81,6 +81,10 @@ impl App {
         // If the game is finished, show the score screen
         if self.gameplay.game_complete() {
             self.game_state = GameState::ScoreScreen;
+            self.score_screen.populate_scores(
+                &self.gameplay.ship_entities,
+                &self.gameplay.scores
+            )
         }
     }
 

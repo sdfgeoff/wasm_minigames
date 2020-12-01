@@ -45,6 +45,45 @@ impl Score {
         self.previous_progress = current_progress
     }
 
+    /// Returns a vector of the times for each lap
+    pub fn get_lap_timings(&self) -> Vec<f64> {
+        let mut lap_times = vec![];
+        let mut lap_start_time = 0.0;
+        for lap_end_time in &self.laps {
+            lap_times.push(lap_end_time - lap_start_time);
+            lap_start_time = *lap_end_time;
+        }
+        // First "lap" is the time it takes to get across
+        // the start line
+        lap_times.drain(0..1);
+        lap_times
+    }
+
+    /// Returns the average lap time
+    pub fn get_average_lap(&self) -> Option<f64> {
+        let lap_timings = self.get_lap_timings();
+
+        if lap_timings.len() > 0 {
+            let mut total_time = 0.0;
+            for lap_time in &lap_timings {
+                total_time += lap_time
+            }
+            Some(total_time / (lap_timings.len() as f64))
+        } else {
+            None
+        }
+        
+    }
+
+    pub fn get_best_lap(&self) -> Option<f64> {
+        let mut lap_timings = self.get_lap_timings();
+        
+        // Lap timings should never be NAN
+        lap_timings.sort_by(|a, b| a.partial_cmp(b).unwrap());
+        lap_timings.first().cloned()
+    }
+
+    // Compare two scores to see which is better
     pub fn cmp(&self, other: &Self) -> Ordering {
         let a_laps = self.laps.len();
         let b_laps = other.laps.len();

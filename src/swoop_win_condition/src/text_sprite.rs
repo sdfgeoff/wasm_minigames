@@ -95,6 +95,9 @@ impl TextSprite {
 
     pub fn render(&mut self, gl: &WebGl2RenderingContext, text_box: &TextBox, screen_aspect: f32) {
         let text_data = text_box.uniform_data();
+        if text_data.len() == 0 {
+            return;
+        }
         gl.uniform4fv_with_f32_array(self.uniform_text_data.as_ref(), &text_data);
         gl.uniform2i(
             self.uniform_box_dimensions.as_ref(),
