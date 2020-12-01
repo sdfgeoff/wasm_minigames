@@ -21,6 +21,8 @@ const NUM_START_COLUMNS: usize = 4;
 
 const NUM_LAPS_TO_WIN: usize = 5;
 
+const COUNTDOWN_TIME: f64 = 4.0;
+
 const YELLOW_SHIP: (f32, f32, f32, f32) = (1.0, 0.7, 0.0, 1.0);
 const PINK_SHIP: (f32, f32, f32, f32) = (1.0, 0.0, 0.7, 1.0);
 const PURPLE_SHIP: (f32, f32, f32, f32) = (0.7, 0.0, 1.0, 1.0);
@@ -98,7 +100,7 @@ impl GamePlay {
             trails,
             scores,
             camera,
-            game_duration: -4.0,
+            game_duration: -COUNTDOWN_TIME,
             countdown_text,
             leaderboard_text,
         }
@@ -207,6 +209,7 @@ impl GamePlay {
     pub fn reset(&mut self) {
         self.camera.reset();
         self.map.randomize();
+        self.game_duration = -COUNTDOWN_TIME;
 
         {
             // Position the ships on the start line

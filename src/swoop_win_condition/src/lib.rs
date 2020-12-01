@@ -18,6 +18,7 @@ mod map_sprite;
 mod physics;
 mod renderer;
 mod score;
+mod score_screen;
 mod shader;
 mod ship;
 mod ship_sprite;

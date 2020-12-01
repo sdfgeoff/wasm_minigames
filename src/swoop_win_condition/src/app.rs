@@ -5,6 +5,7 @@ use web_sys::{window, HtmlCanvasElement, KeyboardEvent, MouseEvent};
 use super::gameplay::GamePlay;
 use super::keymap::{KeyMap, KeyState};
 use super::main_menu::MainMenu;
+use super::score_screen::ScoreScreen;
 
 use super::renderer::Renderer;
 use super::transform::Transform2d;
@@ -29,6 +30,7 @@ pub struct App {
 
     main_menu: MainMenu,
     gameplay: GamePlay,
+    score_screen: ScoreScreen,
 
     prev_time: f64,
 
@@ -47,14 +49,15 @@ impl App {
             main_menu: MainMenu::new(),
             key_map: KeyMap::new(),
             gameplay: GamePlay::new(),
+            score_screen: ScoreScreen::new(),
             prev_time,
-            game_state: GameState::Menu,
+            game_state: GameState::ScoreScreen,
         };
-        game.start_game();
+        game.reset();
         game
     }
 
-    fn start_game(&mut self) {
+    fn reset(&mut self) {
         self.gameplay.reset();
 
         // TODO: this is a bit dodgy
@@ -102,12 +105,27 @@ impl App {
         self.key_map.update();
     }
 
-    pub fn show_scores(&self, dt: f64) {
-        panic!()
+    pub fn show_scores(&mut self, dt: f64) {
+        self.gameplay.update(dt * 0.1, &self.key_map);
+        let ship_entity_refs = self.gameplay.ship_entities.iter().collect();
+        let trail_entity_refs = self.gameplay.trails.iter().collect();
+
+        self.renderer.render(
+            &self.gameplay.camera.get_camera_matrix(),
+            ship_entity_refs,
+            trail_entity_refs,
+            self.score_screen.get_text_entities(),
+        );
+
+        // If the game is finished, show the score screen
+        if self.key_map.start_game == KeyState::JustReleased {
+            self.game_state = GameState::Menu;
+            self.reset();
+        }
     }
 
     pub fn show_logo(&mut self, dt: f64) {
-        if self.key_map.start_game.active() {
+        if self.key_map.start_game == KeyState::JustReleased {
             self.game_state = GameState::Playing;
             return;
         }

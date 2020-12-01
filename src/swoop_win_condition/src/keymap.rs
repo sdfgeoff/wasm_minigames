@@ -1,4 +1,4 @@
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 /// A state machine to represent the state of a key on the keyboard
 /// preserving edge-states.
 /// Most of the time will transition `JustPressed -> Down -> JustReleased -> Up`
