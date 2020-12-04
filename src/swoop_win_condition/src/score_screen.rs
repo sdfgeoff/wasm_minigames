@@ -42,15 +42,11 @@ impl ScoreScreen {
             ships.iter().zip(scores.iter()).collect();
         ship_and_score_refs.sort_by(|a, b| a.1.cmp(b.1));
 
-        //let winner_score = ship_and_score_refs.first().expect("No Ships").1;
-
         self.scores.append_string("   Avg   Best", &[0.5, 0.5, 0.5]);
 
         for (ship, score) in ship_and_score_refs {
             let color = [ship.color.0, ship.color.1, ship.color.2];
             
-            
-            //let lost_by = score.laps.last().unwrap() - winner_time;
             let best_lap = score.get_best_lap();
             let average_lap = score.get_average_lap();
             
@@ -58,9 +54,7 @@ impl ScoreScreen {
             self.scores.append_string(&format_time(average_lap), &color);
             self.scores.append_string(" ", &color);
             self.scores.append_string(&format_time(best_lap), &color);
-
         }
-
     }
 
 }
