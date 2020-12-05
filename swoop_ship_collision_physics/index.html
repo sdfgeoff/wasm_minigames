@@ -1,0 +1,456 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Ship Collision Physics - wasm_games_in_rust</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="../favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="../favicon.png">
+        
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+        <link rel="stylesheet" href="../custom.css">
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../what_its_all_about.html"><strong aria-hidden="true">1.</strong> What It's All About</a></li><li class="chapter-item expanded "><a href="../the_basics.html"><strong aria-hidden="true">2.</strong> The Basics</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../building_and_loading_wasm/index.html"><strong aria-hidden="true">2.1.</strong> Building and loading WASM</a></li><li class="chapter-item expanded "><a href="../cancel_load_animation/index.html"><strong aria-hidden="true">2.2.</strong> Cancel the load animation</a></li><li class="chapter-item expanded "><a href="../binding_events/index.html"><strong aria-hidden="true">2.3.</strong> Binding Events</a></li><li class="chapter-item expanded "><a href="../a_first_shader/index.html"><strong aria-hidden="true">2.4.</strong> A First Shader</a></li><li class="chapter-item expanded "><a href="../fixing_resolution/index.html"><strong aria-hidden="true">2.5.</strong> Fixing the Resolution</a></li><li class="chapter-item expanded "><a href="../passing_in_uniforms/index.html"><strong aria-hidden="true">2.6.</strong> Passing in Uniforms</a></li><li class="chapter-item expanded "><a href="../binding_textures/index.html"><strong aria-hidden="true">2.7.</strong> Binding Textures</a></li></ol></li><li class="chapter-item expanded "><a href="../a_first_game_swoop.html"><strong aria-hidden="true">3.</strong> A First Game: Swoop</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../swoop_drawing_the_player/index.html"><strong aria-hidden="true">3.1.</strong> Drawing The Player Ship</a></li><li class="chapter-item expanded "><a href="../swoop_drawing_the_map/index.html"><strong aria-hidden="true">3.2.</strong> Drawing The Map</a></li><li class="chapter-item expanded "><a href="../swoop_ship_motion_physics/index.html"><strong aria-hidden="true">3.3.</strong> Ship Motion Physics</a></li><li class="chapter-item expanded "><a href="../swoop_ship_keyboard_input/index.html"><strong aria-hidden="true">3.4.</strong> Keyboard Input</a></li><li class="chapter-item expanded "><a href="../swoop_ship_collision_physics/index.html" class="active"><strong aria-hidden="true">3.5.</strong> Ship Collision Physics</a></li><li class="chapter-item expanded "><a href="../swoop_ship_spawn_points/index.html"><strong aria-hidden="true">3.6.</strong> Ship Spawn Points</a></li><li class="chapter-item expanded "><a href="../swoop_map_generation/index.html"><strong aria-hidden="true">3.7.</strong> Map Generation</a></li><li class="chapter-item expanded "><a href="../swoop_camera_positioning/index.html"><strong aria-hidden="true">3.8.</strong> Camera Positioning</a></li><li class="chapter-item expanded "><a href="../swoop_enemy_racers/index.html"><strong aria-hidden="true">3.9.</strong> Enemy Racers</a></li><li class="chapter-item expanded "><a href="../swoop_engine_trails/index.html"><strong aria-hidden="true">3.10.</strong> Engine Trails</a></li><li class="chapter-item expanded "><a href="../swoop_wingtip_trails/index.html"><strong aria-hidden="true">3.11.</strong> Wingtip Trails and Optimizations</a></li><li class="chapter-item expanded "><a href="../swoop_start_sequence/index.html"><strong aria-hidden="true">3.12.</strong> Start Sequence and Fonts</a></li><li class="chapter-item expanded "><a href="../swoop_counting_laps/index.html"><strong aria-hidden="true">3.13.</strong> Counting Laps</a></li><li class="chapter-item expanded "><a href="../swoop_win_condition/index.html"><strong aria-hidden="true">3.14.</strong> Win Condition</a></li></ol></li><li class="chapter-item expanded "><a href="../stl_viewer.html"><strong aria-hidden="true">4.</strong> STL Viewer</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../stl_viewer_load_stl/index.html"><strong aria-hidden="true">4.1.</strong> Load and Render STL Files</a></li><li class="chapter-item expanded "><a href="../stl_viewer_camera_lookaround/index.html"><strong aria-hidden="true">4.2.</strong> Camera Lookaround</a></li><li class="chapter-item expanded "><a href="../stl_viewer_background/index.html"><strong aria-hidden="true">4.3.</strong> Background and Appearance</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">wasm_games_in_rust</h1>
+
+                    <div class="right-buttons">
+                        
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#collision-physics" id="collision-physics">Collision Physics</a></h1>
+<h2><a class="header" href="#collision-with-other-ships" id="collision-with-other-ships">Collision with other ships</a></h2>
+<p>Physics is a slightly harder topic in Rust than it would be in other
+languages because Rust cares about mutability. So when you go through
+an array of objects and generate a set containing pairs of objects, Rust's
+borrow checker starts yelling at you.
+When you then try an iterate through the pairs and try have mutable
+access to them, it yells even more.</p>
+<p>Now, when writing the system, the programmer knows that he will never
+try to mutate the same object at the same time, but how can we tell Rust
+that?</p>
+<p>I couldn't think of a good way, so I fell back on run-time reference 
+and mutability checks - aka 
+<a href="https://doc.rust-lang.org/beta/std/rc/struct.Rc.html"><code>Rc</code></a> and 
+<a href="https://doc.rust-lang.org/std/cell/struct.RefCell.html"><code>RefCell</code></a>.</p>
+<p><code>Rc</code> allows us to have multiple references to the same object, and <code>RefCell</code>
+allows us to obtain mutability at runtime - but it will panic if something
+else is already borrowing it. That's fine because that now makes it the
+programmers job to ensure we don't try to call <code>borrow_mut()</code> twice.</p>
+<p>So, we need to end up with a vector of pairs of <code>Rc&lt;RefCell&lt;&amp;mut Ship&gt;&gt;&gt;</code>
+Why use <code>&amp;mut Ship</code>? So that our ships stay safely in their existing
+vector, and we just fiddle around with references to them. The easiest 
+way to get this vector of pairs is to use the <code>itertools::permutations</code> 
+which will generate all unique permutations of the vector.</p>
+<p>The resulting code:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use itertools::Itertools;
+
+let ship_refs = self.ship_entities.iter_mut().map(|x| Rc::new(RefCell::new(x)));
+let all_pairs: ship_refs.permutations(2);
+<span class="boring">}
+</span></code></pre></pre>
+<p>Now we can use <code>filter_map</code> to convert the &quot;probable&quot; collision pairs
+into details of each collisions:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct CollisionEvent&lt;'a&gt; {
+    obj1: Rc&lt;RefCell&lt;&amp;'a mut Ship&gt;&gt;,
+    obj2: Rc&lt;RefCell&lt;&amp;'a mut Ship&gt;&gt;,
+    normal: (f32, f32),
+    overlap: f32,
+}
+
+&lt;&lt; snip &gt;&gt;
+
+let collisions = all_pairs.filter_map(|ships: Vec&lt;Rc&lt;RefCell&lt;&amp;mut Ship&gt;&gt;&gt;| {
+    let ship1 = ships[0].clone();
+    let ship2 = ships[1].clone();
+
+    let normal = vect_between(&amp;ship1.borrow().position, &amp;ship2.borrow().position);
+    let len = length(normal);
+    if len &lt; SHIP_RADIUS {
+        Some(CollisionEvent {
+            obj1: ship1,
+            obj2: ship2,
+            normal: normalize(normal),
+            overlap: len - SHIP_RADIUS,
+        })
+    } else {
+        None
+    }
+});
+<span class="boring">}
+</span></code></pre></pre>
+<p>And finally we can move the ships when they're colliding:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>collisions.for_each(|pair| {
+    let mut ship1 = pair.obj1.borrow_mut();
+    let mut ship2 = pair.obj2.borrow_mut();
+    
+    ship1.position.x -= pair.normal.0 * pair.overlap * 0.5;
+    ship1.position.y -= pair.normal.1 * pair.overlap * 0.5;
+    ship2.position.x += pair.normal.0 * pair.overlap * 0.5;
+    ship2.position.y += pair.normal.1 * pair.overlap * 0.5;
+});
+<span class="boring">}
+</span></code></pre></pre>
+<p>For convenience, some of these functions can be broken out of their
+inline representation, but you have to specify lifetimes:</p>
+<pre><code>fn check_collision&lt;'a&gt;(ship1: Rc&lt;RefCell&lt;&amp;'a mut Ship&gt;&gt;, ship2: Rc&lt;RefCell&lt;&amp;'a mut Ship&gt;&gt;) -&gt; Option&lt;CollisionEvent&lt;'a&gt;&gt;
+</code></pre>
+<h2><a class="header" href="#collision-with-the-map" id="collision-with-the-map">Collision with the map</a></h2>
+<p>When we rendered the map, we used a mathematical function to represent
+the map. The advantage of this is that it means we can evaluate the map
+on the CPU to determine collisions with the map.</p>
+<p>In GLSL this function is:</p>
+<pre><code class="language-glsl">vec4 sin_consts_1 = vec4(0.2, 0.0, 0.0, 0.0);
+vec4 sin_consts_2 = vec4(0.0, 0.0, 0.0, 0.0);
+vec4 cos_consts_1 = vec4(0.0, -0.2, 0.0, 0.1);
+vec4 cos_consts_2 = vec4(0.0, 0.0, 0.05, 0.0);
+
+
+float map_function(vec2 position) {
+    float course = length(position - vec2(0.0, 0.0));
+    
+    float angle = atan(position.x, position.y);
+    vec4 angles_1 = vec4(angle, angle*2.0, angle*3.0, angle*4.0);
+    vec4 angles_2 = vec4(angle*5.0, angle*6.0, angle*7.0, angle*8.0);
+    
+    float track_radius = track_base_radius;
+
+    track_radius += dot(sin(angles_1), sin_consts_1);
+    track_radius += dot(sin(angles_2), sin_consts_2);
+    track_radius += dot(cos(angles_1), cos_consts_1);
+    track_radius += dot(cos(angles_2), cos_consts_2);
+
+    float track_sdf = course - track_radius;
+    track_sdf = abs(track_sdf) - track_width;
+    return track_sdf;
+}
+</code></pre>
+<p>To make it easier to match (and pass values between), I converted this
+to:</p>
+<pre><code class="language-glsl">const float sin_consts[8] = float[8](0.2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+const float cos_consts[8] = float[8](0.0, -0.2, 0.0, 0.1, 0.0, 0.0, 0.05, 0.0);
+
+
+float map_function(vec2 position) {
+    float course = length(position - vec2(0.0, 0.0));
+    float angle = atan(position.x, position.y);
+    float track_radius = track_base_radius;
+    
+    for (int i=0; i&lt;8; i++) {
+        float omega = float(i+1);
+        track_radius += cos(angle * omega) * cos_consts[i];
+        track_radius += sin(angle * omega) * sin_consts[i];
+    }
+
+    float track_sdf = course - track_radius;
+    track_sdf = abs(track_sdf) - track_width;
+    return track_sdf;
+}
+</code></pre>
+<p>It's a bit less efficient (doesn't take advantage of the GPU being able
+to do operations on multiple vector elements at the same time), but GPU
+performance isn't likely to be an issue in this game, and it means that 
+the rust code looks like:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>    pub fn distance_field(&amp;self, position: Vec2) -&gt; f32 {
+        let course = length(position);
+        let angle = position.0.atan2(position.1);
+        
+        let mut track_radius = self.track_base_radius;
+        for i in 0..8 {
+            let omega = (i + 1) as f32;
+            track_radius += f32::sin(angle * omega) * self.sin_consts[i];
+            track_radius += f32::cos(angle * omega) * self.cos_consts[i];
+        }
+
+        let mut track_sdf = course - track_radius;
+        track_sdf = f32::abs(track_sdf) - self.track_width;
+        return track_sdf;
+    }
+<span class="boring">}
+</span></code></pre></pre>
+<p>Easy to visually compare for correctness</p>
+<p>Detecting if the ship is on/off the map is only half the problem. The
+other part is getting the collision normal. One option would be to do
+an analytical solution of the fourier series (which wouldn't be too
+hard because it's a fourier series), or we can apply finite-difference.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>    // Uses finite difference to approximate the normal. This isn't quite
+    // the actual normal because the distance field isn't quite the distance
+    // field.
+    pub fn calc_normal(&amp;self, position: Vec2) -&gt; Vec2 {
+        const DELTA: f32 = 0.01;
+        let here = self.distance_field(position);
+        let above = self.distance_field((position.0, position.1 + DELTA));
+        let right = self.distance_field((position.0 + DELTA, position.1));
+        
+        let dx = right - here;
+        let dy = above - here;
+        
+        return normalize((dx, dy));
+    }
+<span class="boring">}
+</span></code></pre></pre>
+<p>Yeah, I picked finite difference.</p>
+<p>From here it's the very similar as for the ship collisions: move the
+ship so that it's no longer colliding. I'll also add in a term to slow
+the ship motion when colliding with a wall - just to encourage players
+not to wall slide.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>    // Collisions with map
+    for ship in all_ships.iter_mut() {
+        let map_sdf = map.distance_field((ship.position.x, ship.position.y));
+        if map_sdf &gt; -SHIP_RADIUS {
+            let normal = map.calc_normal((ship.position.x, ship.position.y));
+            let overlap = map_sdf + SHIP_RADIUS;
+            
+            // Place ship back on the map
+            ship.position.x -= normal.0 * overlap;
+            ship.position.y -= normal.1 * overlap;
+            
+            // Slow the ship down
+            ship.velocity.x -= ship.velocity.x * dt * GROUND_FRICTION;
+            ship.velocity.y -= ship.velocity.y * dt * GROUND_FRICTION;
+        }
+    }
+<span class="boring">}
+</span></code></pre></pre>
+<p>And there we have it, simple physics completed:</p>
+<p><canvas id="swoop_ship_collision_physics"></canvas></p>
+<p>You'll notice you can get some jitter when pushing other ships into 
+walls and corners. This is because we aren't doing any of the clever 
+stuff normal physics engines do to allow object stacking. We'll see if 
+that's a problem when we scale the map up.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="../swoop_ship_keyboard_input/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="../swoop_ship_spawn_points/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="../swoop_ship_keyboard_input/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="../swoop_ship_spawn_points/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+        <script type="text/javascript" src="../custom.js"></script>
+        
+
+        
+
+    </body>
+</html>

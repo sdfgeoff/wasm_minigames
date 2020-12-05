@@ -1,0 +1,13 @@
+{
+  "name": "building_and_loading_wasm",
+  "collaborators": [
+    "Geoffrey Irons <sdfgeoff@gmail.com>"
+  ],
+  "version": "0.1.0",
+  "files": [
+    "building_and_loading_wasm_bg.wasm",
+    "building_and_loading_wasm.js"
+  ],
+  "module": "building_and_loading_wasm.js",
+  "sideEffects": false
+}

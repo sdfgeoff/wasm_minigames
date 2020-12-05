@@ -1,0 +1,13 @@
+{
+  "name": "swoop_engine_trails",
+  "collaborators": [
+    "Geoffrey Irons <sdfgeoff@gmail.com>"
+  ],
+  "version": "0.1.0",
+  "files": [
+    "swoop_engine_trails_bg.wasm",
+    "swoop_engine_trails.js"
+  ],
+  "module": "swoop_engine_trails.js",
+  "sideEffects": false
+}

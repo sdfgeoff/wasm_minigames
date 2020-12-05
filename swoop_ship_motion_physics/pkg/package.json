@@ -1,0 +1,13 @@
+{
+  "name": "swoop_ship_motion_physics",
+  "collaborators": [
+    "Geoffrey Irons <sdfgeoff@gmail.com>"
+  ],
+  "version": "0.1.0",
+  "files": [
+    "swoop_ship_motion_physics_bg.wasm",
+    "swoop_ship_motion_physics.js"
+  ],
+  "module": "swoop_ship_motion_physics.js",
+  "sideEffects": false
+}

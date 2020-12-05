@@ -1,0 +1,13 @@
+{
+  "name": "swoop_wingtip_trails",
+  "collaborators": [
+    "Geoffrey Irons <sdfgeoff@gmail.com>"
+  ],
+  "version": "0.1.0",
+  "files": [
+    "swoop_wingtip_trails_bg.wasm",
+    "swoop_wingtip_trails.js"
+  ],
+  "module": "swoop_wingtip_trails.js",
+  "sideEffects": false
+}

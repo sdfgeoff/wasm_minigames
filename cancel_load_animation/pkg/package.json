@@ -1,0 +1,13 @@
+{
+  "name": "cancel_load_animation",
+  "collaborators": [
+    "Geoffrey Irons <sdfgeoff@gmail.com>"
+  ],
+  "version": "0.1.0",
+  "files": [
+    "cancel_load_animation_bg.wasm",
+    "cancel_load_animation.js"
+  ],
+  "module": "cancel_load_animation.js",
+  "sideEffects": false
+}

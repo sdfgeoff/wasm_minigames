@@ -1,0 +1,13 @@
+{
+  "name": "swoop_start_sequence",
+  "collaborators": [
+    "Geoffrey Irons <sdfgeoff@gmail.com>"
+  ],
+  "version": "0.1.0",
+  "files": [
+    "swoop_start_sequence_bg.wasm",
+    "swoop_start_sequence.js"
+  ],
+  "module": "swoop_start_sequence.js",
+  "sideEffects": false
+}

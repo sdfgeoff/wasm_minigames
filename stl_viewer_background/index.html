@@ -1,0 +1,369 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Background and Appearance - wasm_games_in_rust</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="../favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="../favicon.png">
+        
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+        <link rel="stylesheet" href="../custom.css">
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../what_its_all_about.html"><strong aria-hidden="true">1.</strong> What It's All About</a></li><li class="chapter-item expanded "><a href="../the_basics.html"><strong aria-hidden="true">2.</strong> The Basics</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../building_and_loading_wasm/index.html"><strong aria-hidden="true">2.1.</strong> Building and loading WASM</a></li><li class="chapter-item expanded "><a href="../cancel_load_animation/index.html"><strong aria-hidden="true">2.2.</strong> Cancel the load animation</a></li><li class="chapter-item expanded "><a href="../binding_events/index.html"><strong aria-hidden="true">2.3.</strong> Binding Events</a></li><li class="chapter-item expanded "><a href="../a_first_shader/index.html"><strong aria-hidden="true">2.4.</strong> A First Shader</a></li><li class="chapter-item expanded "><a href="../fixing_resolution/index.html"><strong aria-hidden="true">2.5.</strong> Fixing the Resolution</a></li><li class="chapter-item expanded "><a href="../passing_in_uniforms/index.html"><strong aria-hidden="true">2.6.</strong> Passing in Uniforms</a></li><li class="chapter-item expanded "><a href="../binding_textures/index.html"><strong aria-hidden="true">2.7.</strong> Binding Textures</a></li></ol></li><li class="chapter-item expanded "><a href="../a_first_game_swoop.html"><strong aria-hidden="true">3.</strong> A First Game: Swoop</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../swoop_drawing_the_player/index.html"><strong aria-hidden="true">3.1.</strong> Drawing The Player Ship</a></li><li class="chapter-item expanded "><a href="../swoop_drawing_the_map/index.html"><strong aria-hidden="true">3.2.</strong> Drawing The Map</a></li><li class="chapter-item expanded "><a href="../swoop_ship_motion_physics/index.html"><strong aria-hidden="true">3.3.</strong> Ship Motion Physics</a></li><li class="chapter-item expanded "><a href="../swoop_ship_keyboard_input/index.html"><strong aria-hidden="true">3.4.</strong> Keyboard Input</a></li><li class="chapter-item expanded "><a href="../swoop_ship_collision_physics/index.html"><strong aria-hidden="true">3.5.</strong> Ship Collision Physics</a></li><li class="chapter-item expanded "><a href="../swoop_ship_spawn_points/index.html"><strong aria-hidden="true">3.6.</strong> Ship Spawn Points</a></li><li class="chapter-item expanded "><a href="../swoop_map_generation/index.html"><strong aria-hidden="true">3.7.</strong> Map Generation</a></li><li class="chapter-item expanded "><a href="../swoop_camera_positioning/index.html"><strong aria-hidden="true">3.8.</strong> Camera Positioning</a></li><li class="chapter-item expanded "><a href="../swoop_enemy_racers/index.html"><strong aria-hidden="true">3.9.</strong> Enemy Racers</a></li><li class="chapter-item expanded "><a href="../swoop_engine_trails/index.html"><strong aria-hidden="true">3.10.</strong> Engine Trails</a></li><li class="chapter-item expanded "><a href="../swoop_wingtip_trails/index.html"><strong aria-hidden="true">3.11.</strong> Wingtip Trails and Optimizations</a></li><li class="chapter-item expanded "><a href="../swoop_start_sequence/index.html"><strong aria-hidden="true">3.12.</strong> Start Sequence and Fonts</a></li><li class="chapter-item expanded "><a href="../swoop_counting_laps/index.html"><strong aria-hidden="true">3.13.</strong> Counting Laps</a></li><li class="chapter-item expanded "><a href="../swoop_win_condition/index.html"><strong aria-hidden="true">3.14.</strong> Win Condition</a></li></ol></li><li class="chapter-item expanded "><a href="../stl_viewer.html"><strong aria-hidden="true">4.</strong> STL Viewer</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../stl_viewer_load_stl/index.html"><strong aria-hidden="true">4.1.</strong> Load and Render STL Files</a></li><li class="chapter-item expanded "><a href="../stl_viewer_camera_lookaround/index.html"><strong aria-hidden="true">4.2.</strong> Camera Lookaround</a></li><li class="chapter-item expanded "><a href="../stl_viewer_background/index.html" class="active"><strong aria-hidden="true">4.3.</strong> Background and Appearance</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">wasm_games_in_rust</h1>
+
+                    <div class="right-buttons">
+                        
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#background-and-appearance" id="background-and-appearance">Background and Appearance</a></h1>
+<p>The background is black - pretty boring. And although the matcap looks OK,
+it would be nice to have something a bit fancier. </p>
+<h1><a class="header" href="#full-screen-quad" id="full-screen-quad">Full Screen Quad</a></h1>
+<p>What is a background? Well, it's always behind everything in the scene, 
+and it should have some sort of shading so that the user can see which 
+way they are facing. Because it has to cover the entiere screen we can 
+either use a box surrounding the scene (ie cubemap) or we can use a 
+single full screen quad.</p>
+<p>Fortunately we already know how to full screen quads as we've been 
+doing them since the beginning. The only difference is that in the 
+vertex shader we need to compute the world space coordinates of the 
+vertices so that it can be textured, and we need to force the Z 
+distance to be behind everything.</p>
+<pre><code class="language-glsl">#version 300 es
+precision mediump float;
+
+in vec2 vert_pos; // In Screen Space
+out vec3 world_pos;
+
+uniform mat4 world_to_camera;
+uniform mat4 camera_to_screen;
+
+void main() {
+    
+    mat4 camera_to_world = inverse(world_to_camera);
+    mat4 screen_to_camera = inverse(camera_to_screen);
+    mat4 screen_to_world = camera_to_world * screen_to_camera;
+    
+    vec4 world_pos_tmp = screen_to_world * vec4(vert_pos, 1.0, 1.0);
+    world_pos = world_pos_tmp.xyz;
+
+    gl_Position.xy = vert_pos.xy;
+    gl_Position.z = 0.99999;
+    gl_Position.w = 1.0;
+}
+</code></pre>
+<h1><a class="header" href="#texturing-the-full-screen-quad" id="texturing-the-full-screen-quad">Texturing the full screen quad</a></h1>
+<p>Now we have the world position of each corner, and we need to find some
+way to represent the world. Blender can render out equirectangular maps,
+so we may as well use one of those. Just to be fancy, we can use encode
+the brightness of the image in the alpha channel to allow encoding
+brightness's higher than <code>1</code>. </p>
+<p>That all works out to:</p>
+<pre><code class="language-glsl">#version 300 es
+precision mediump float;
+
+in vec3 world_pos;
+out vec4 FragColor;
+
+uniform sampler2D image_matcap;
+
+
+vec3 sample_background(vec3 pos, float mip) {
+    vec2 coords = vec2(
+        atan(pos.y, pos.x) / 3.14159,
+        sin(pos.z)
+    );
+    coords = coords * 0.5 + 0.5;
+    
+    vec4 raw = textureLod(image_matcap, coords, mip);
+    float luminance = pow(((1.0 / raw.a) - 1.0), 1.0 / 2.2);
+    
+    return raw.rgb * luminance;
+}
+
+
+void main() {
+    vec3 matcap = sample_background(world_pos, 2.0);
+    FragColor.rgb = matcap * 0.5;
+    FragColor.a = 1.0;
+}
+</code></pre>
+<h1><a class="header" href="#cooler-model-lighting" id="cooler-model-lighting">Cooler Model Lighting</a></h1>
+<p>It would be cool if we could use the same image to light the geometry.
+How can we do this? Well, we need to approximate the diffuse lighting
+and perhaps some specular as well. Diffuse lighting can be approximated
+by sampling in the direction of the surface normal (perhaps from a smaller
+mip to emulate a surface roughness). Specular highlights are caused by
+reflections, so we can use the GLSL reflect function to find what direction
+to sample in.</p>
+<p>From there, we can fiddle with the strength and blending of these lighting
+values with the surface color to achieve our result.</p>
+<p>Using the same <code>sample_background</code> function as per before:</p>
+<pre><code class="language-glsl">void main() {
+    vec3 diffuse = sample_background(world_nor, 3.0);
+    
+    vec3 reflect = reflect(vec3(0.0, 0.0, -1.0), screen_nor);
+    vec4 reflect_world = (camera_to_world * vec4(reflect, 0.0));
+    vec3 reflection = sample_background(reflect_world.xyz, 4.0);
+    
+    float fresnel = 1.0 - dot(screen_nor, vec3(0.0, 0.0, 1.0));
+    
+    vec3 out_col = color;
+    out_col = out_col * diffuse;
+    out_col += reflection * fresnel * 0.5;
+    out_col *= 1.0 - fresnel * 0.5;
+    
+    FragColor.rgb = out_col;
+    FragColor.a = 1.0;
+}
+</code></pre>
+<p>And our final canvas is:</p>
+<p><canvas id="stl_viewer_background"></canvas></p>
+<p>Because I was developing this on my laptop away from a power socket,
+I also changed the rendering to only render periodically, but to force
+updates when the camera is moving:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>    pub fn animation_frame(&amp;mut self) {
+        self.check_resize();
+        let now = window().unwrap().performance().unwrap().now();
+        let time = (now / 1000.0) as f32;
+        
+        
+        let time_since_render = time - self.last_render_time;
+        if time_since_render &gt; 0.2 {
+            self.dirty = true;
+        }
+        
+        if self.dirty {
+            self.render();
+            self.dirty = false;
+            self.last_render_time = time;
+        }
+    }
+    
+    ...
+    
+    // For example:
+    pub fn mouse_down(&amp;mut self, event: MouseEvent) {
+        self.click_location = Some((event.client_x(), event.client_y()));
+        self.dirty = true;
+    }
+    ...
+
+<span class="boring">}
+</span></code></pre></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="../stl_viewer_camera_lookaround/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="../stl_viewer_camera_lookaround/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+        <script type="text/javascript" src="../custom.js"></script>
+        
+
+        
+
+    </body>
+</html>

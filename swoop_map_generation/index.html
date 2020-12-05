@@ -1,0 +1,317 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Map Generation - wasm_games_in_rust</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="../favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="../favicon.png">
+        
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+        <link rel="stylesheet" href="../custom.css">
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../what_its_all_about.html"><strong aria-hidden="true">1.</strong> What It's All About</a></li><li class="chapter-item expanded "><a href="../the_basics.html"><strong aria-hidden="true">2.</strong> The Basics</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../building_and_loading_wasm/index.html"><strong aria-hidden="true">2.1.</strong> Building and loading WASM</a></li><li class="chapter-item expanded "><a href="../cancel_load_animation/index.html"><strong aria-hidden="true">2.2.</strong> Cancel the load animation</a></li><li class="chapter-item expanded "><a href="../binding_events/index.html"><strong aria-hidden="true">2.3.</strong> Binding Events</a></li><li class="chapter-item expanded "><a href="../a_first_shader/index.html"><strong aria-hidden="true">2.4.</strong> A First Shader</a></li><li class="chapter-item expanded "><a href="../fixing_resolution/index.html"><strong aria-hidden="true">2.5.</strong> Fixing the Resolution</a></li><li class="chapter-item expanded "><a href="../passing_in_uniforms/index.html"><strong aria-hidden="true">2.6.</strong> Passing in Uniforms</a></li><li class="chapter-item expanded "><a href="../binding_textures/index.html"><strong aria-hidden="true">2.7.</strong> Binding Textures</a></li></ol></li><li class="chapter-item expanded "><a href="../a_first_game_swoop.html"><strong aria-hidden="true">3.</strong> A First Game: Swoop</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../swoop_drawing_the_player/index.html"><strong aria-hidden="true">3.1.</strong> Drawing The Player Ship</a></li><li class="chapter-item expanded "><a href="../swoop_drawing_the_map/index.html"><strong aria-hidden="true">3.2.</strong> Drawing The Map</a></li><li class="chapter-item expanded "><a href="../swoop_ship_motion_physics/index.html"><strong aria-hidden="true">3.3.</strong> Ship Motion Physics</a></li><li class="chapter-item expanded "><a href="../swoop_ship_keyboard_input/index.html"><strong aria-hidden="true">3.4.</strong> Keyboard Input</a></li><li class="chapter-item expanded "><a href="../swoop_ship_collision_physics/index.html"><strong aria-hidden="true">3.5.</strong> Ship Collision Physics</a></li><li class="chapter-item expanded "><a href="../swoop_ship_spawn_points/index.html"><strong aria-hidden="true">3.6.</strong> Ship Spawn Points</a></li><li class="chapter-item expanded "><a href="../swoop_map_generation/index.html" class="active"><strong aria-hidden="true">3.7.</strong> Map Generation</a></li><li class="chapter-item expanded "><a href="../swoop_camera_positioning/index.html"><strong aria-hidden="true">3.8.</strong> Camera Positioning</a></li><li class="chapter-item expanded "><a href="../swoop_enemy_racers/index.html"><strong aria-hidden="true">3.9.</strong> Enemy Racers</a></li><li class="chapter-item expanded "><a href="../swoop_engine_trails/index.html"><strong aria-hidden="true">3.10.</strong> Engine Trails</a></li><li class="chapter-item expanded "><a href="../swoop_wingtip_trails/index.html"><strong aria-hidden="true">3.11.</strong> Wingtip Trails and Optimizations</a></li><li class="chapter-item expanded "><a href="../swoop_start_sequence/index.html"><strong aria-hidden="true">3.12.</strong> Start Sequence and Fonts</a></li><li class="chapter-item expanded "><a href="../swoop_counting_laps/index.html"><strong aria-hidden="true">3.13.</strong> Counting Laps</a></li><li class="chapter-item expanded "><a href="../swoop_win_condition/index.html"><strong aria-hidden="true">3.14.</strong> Win Condition</a></li></ol></li><li class="chapter-item expanded "><a href="../stl_viewer.html"><strong aria-hidden="true">4.</strong> STL Viewer</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../stl_viewer_load_stl/index.html"><strong aria-hidden="true">4.1.</strong> Load and Render STL Files</a></li><li class="chapter-item expanded "><a href="../stl_viewer_camera_lookaround/index.html"><strong aria-hidden="true">4.2.</strong> Camera Lookaround</a></li><li class="chapter-item expanded "><a href="../stl_viewer_background/index.html"><strong aria-hidden="true">4.3.</strong> Background and Appearance</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">wasm_games_in_rust</h1>
+
+                    <div class="right-buttons">
+                        
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#map-generation" id="map-generation">Map Generation</a></h1>
+<p>The map is defined by a Fourier series. To generate a new fourier
+series, we have to come up with a set of constants for it. We can generate
+random numbers with use javascripts <code>Math.random()</code>, and can bind it
+into our program with:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>wasm_bindgen::prelude::wasm_bindgen;
+
+#[wasm_bindgen]
+extern &quot;C&quot; {
+    #[wasm_bindgen(js_namespace = console)]
+    fn log(s: &amp;str);
+    #[wasm_bindgen(js_namespace = Math)]
+    fn random();
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>A naive implementation of a random map is:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>    /// Change the sin and cosine constants to change the map course
+    pub fn randomize(&amp;mut self) {
+        for i in 0 .. 8 {
+            self.sin_consts[i] = (random() - 0.5) * 2.0;
+            self.cos_consts[i] = (random() - 0.5) * 2.0;
+        }
+    }
+<span class="boring">}
+</span></code></pre></pre>
+<p>Which creates maps like:
+<img src="maps-naive.png" alt="A selection of maps" /></p>
+<p>As you can see, the maps here have LOTS of corners. Racing the one on
+the bottom left wouldn't be much fun. This occurs because the amplitude
+of the high frequencies can be the same as the amplitude of the low
+frequencies.</p>
+<p>How about applying a scaling factor to the higher frequencies:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>    pub fn randomize(&amp;mut self) {
+        const WAVINESS: f32 = 2.0;
+        for i in 0 .. 8 {
+            self.sin_consts[i] = (random() - 0.5) * 2.0 / ((i + 1) as f32) * WAVINESS;
+            self.cos_consts[i] = (random() - 0.5) * 2.0 / ((i + 1) as f32) * WAVINESS;
+        }
+    }
+<span class="boring">}
+</span></code></pre></pre>
+<p><img src="maps-weighted.png" alt="A selection of maps" /></p>
+<p>Yeah, much better. There are nice big features, but there is still a lot
+of high-frequency &quot;wobbles&quot;. Maybe instead of having a <code>1/i</code> falloff we
+can have a <code>1/(i^n)</code> falloff:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>    /// Change the sin and cosine constants to change the map course
+    pub fn randomize(&amp;mut self) {
+        const WAVINESS: f32 = 3.0;
+        for i in 0 .. 8 {
+            let rand1 = (random() - 0.5) * 2.0;
+            let rand2 = (random() - 0.5) * 2.0;
+            let amplitude = WAVINESS / f32::powf((i + 1) as f32, 1.3);
+            
+            self.sin_consts[i] = rand1 * amplitude;
+            self.cos_consts[i] = rand2 * amplitude;
+        }
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>I found a power of 1.3 turned out quite nice, producing maps with 
+straight lines, sweeping curves and the occasional corner:
+<img src="maps-power.png" alt="A selection of maps" /></p>
+<p>This is the sort of thing you can fiddle with all day, so we'll leave it
+here and move on.</p>
+<p><canvas id="swoop_map_generation"></canvas></p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="../swoop_ship_spawn_points/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="../swoop_camera_positioning/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="../swoop_ship_spawn_points/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="../swoop_camera_positioning/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+        <script type="text/javascript" src="../custom.js"></script>
+        
+
+        
+
+    </body>
+</html>

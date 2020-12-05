@@ -1,0 +1,562 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Drawing The Map - wasm_games_in_rust</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="../favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="../favicon.png">
+        
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+        <link rel="stylesheet" href="../custom.css">
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../what_its_all_about.html"><strong aria-hidden="true">1.</strong> What It's All About</a></li><li class="chapter-item expanded "><a href="../the_basics.html"><strong aria-hidden="true">2.</strong> The Basics</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../building_and_loading_wasm/index.html"><strong aria-hidden="true">2.1.</strong> Building and loading WASM</a></li><li class="chapter-item expanded "><a href="../cancel_load_animation/index.html"><strong aria-hidden="true">2.2.</strong> Cancel the load animation</a></li><li class="chapter-item expanded "><a href="../binding_events/index.html"><strong aria-hidden="true">2.3.</strong> Binding Events</a></li><li class="chapter-item expanded "><a href="../a_first_shader/index.html"><strong aria-hidden="true">2.4.</strong> A First Shader</a></li><li class="chapter-item expanded "><a href="../fixing_resolution/index.html"><strong aria-hidden="true">2.5.</strong> Fixing the Resolution</a></li><li class="chapter-item expanded "><a href="../passing_in_uniforms/index.html"><strong aria-hidden="true">2.6.</strong> Passing in Uniforms</a></li><li class="chapter-item expanded "><a href="../binding_textures/index.html"><strong aria-hidden="true">2.7.</strong> Binding Textures</a></li></ol></li><li class="chapter-item expanded "><a href="../a_first_game_swoop.html"><strong aria-hidden="true">3.</strong> A First Game: Swoop</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../swoop_drawing_the_player/index.html"><strong aria-hidden="true">3.1.</strong> Drawing The Player Ship</a></li><li class="chapter-item expanded "><a href="../swoop_drawing_the_map/index.html" class="active"><strong aria-hidden="true">3.2.</strong> Drawing The Map</a></li><li class="chapter-item expanded "><a href="../swoop_ship_motion_physics/index.html"><strong aria-hidden="true">3.3.</strong> Ship Motion Physics</a></li><li class="chapter-item expanded "><a href="../swoop_ship_keyboard_input/index.html"><strong aria-hidden="true">3.4.</strong> Keyboard Input</a></li><li class="chapter-item expanded "><a href="../swoop_ship_collision_physics/index.html"><strong aria-hidden="true">3.5.</strong> Ship Collision Physics</a></li><li class="chapter-item expanded "><a href="../swoop_ship_spawn_points/index.html"><strong aria-hidden="true">3.6.</strong> Ship Spawn Points</a></li><li class="chapter-item expanded "><a href="../swoop_map_generation/index.html"><strong aria-hidden="true">3.7.</strong> Map Generation</a></li><li class="chapter-item expanded "><a href="../swoop_camera_positioning/index.html"><strong aria-hidden="true">3.8.</strong> Camera Positioning</a></li><li class="chapter-item expanded "><a href="../swoop_enemy_racers/index.html"><strong aria-hidden="true">3.9.</strong> Enemy Racers</a></li><li class="chapter-item expanded "><a href="../swoop_engine_trails/index.html"><strong aria-hidden="true">3.10.</strong> Engine Trails</a></li><li class="chapter-item expanded "><a href="../swoop_wingtip_trails/index.html"><strong aria-hidden="true">3.11.</strong> Wingtip Trails and Optimizations</a></li><li class="chapter-item expanded "><a href="../swoop_start_sequence/index.html"><strong aria-hidden="true">3.12.</strong> Start Sequence and Fonts</a></li><li class="chapter-item expanded "><a href="../swoop_counting_laps/index.html"><strong aria-hidden="true">3.13.</strong> Counting Laps</a></li><li class="chapter-item expanded "><a href="../swoop_win_condition/index.html"><strong aria-hidden="true">3.14.</strong> Win Condition</a></li></ol></li><li class="chapter-item expanded "><a href="../stl_viewer.html"><strong aria-hidden="true">4.</strong> STL Viewer</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../stl_viewer_load_stl/index.html"><strong aria-hidden="true">4.1.</strong> Load and Render STL Files</a></li><li class="chapter-item expanded "><a href="../stl_viewer_camera_lookaround/index.html"><strong aria-hidden="true">4.2.</strong> Camera Lookaround</a></li><li class="chapter-item expanded "><a href="../stl_viewer_background/index.html"><strong aria-hidden="true">4.3.</strong> Background and Appearance</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">wasm_games_in_rust</h1>
+
+                    <div class="right-buttons">
+                        
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#drawing-the-map" id="drawing-the-map">Drawing The Map</a></h1>
+<p>The map is the background for the everything, so we have two options:</p>
+<ol>
+<li>Use a plane the size of the map and use the same transform stack as 
+for the player ship.</li>
+<li>Use a plane the size of the screen and shift the UV coordinates to
+match the transform stack.</li>
+</ol>
+<p>If we were doing an infinite map (ie some sort of exploration game) we 
+would have to go with #2, but because we are doing a racing game where
+the map is well bounded, solution #1 works just fine and saves a bunch
+of effort.</p>
+<p>So let's just copy our player sprite code and make it draw a bigger plane
+with a different shader. We'll shunt the functions that handle uploading
+the shader into a module <code>shader.rs</code>, but we because this is a small
+game I won't bother trying to generalize the sprite code. Pretty much
+the only code in the <code>ship_sprites.rs</code> and <code>map_sprite.rs</code> is to do
+with handling uniforms - which is likely to be pretty shader specific.</p>
+<pre><code>use wasm_bindgen::{JsCast, JsValue};
+use web_sys::{WebGl2RenderingContext, WebGlBuffer, WebGlProgram, WebGlShader};
+
+/// An error to represent problems with a shader.
+#[derive(Debug)]
+pub enum ShaderError {
+    /// Call to gl.create_shader returned null
+    ShaderAllocError,
+
+    /// Call to create_program returned null
+    ShaderProgramAllocError,
+
+    ShaderCompileError {
+        shader_type: u32,
+        compiler_output: String,
+    },
+    /// Failed to receive error information about why the shader failed to compile
+    /// Generally this is indicative of trying to get the error when one hasn't occured
+    ShaderGetInfoError,
+
+    /// I think this means that the Vertex and Fragment shaders incompatible
+    ShaderLinkError(),
+
+    /// Failed to create buffer to upload data into
+    BufferCreationFailed,
+
+    /// Generic javascript error
+    JsError(JsValue),
+}
+
+impl From&lt;JsValue&gt; for ShaderError {
+    fn from(err: JsValue) -&gt; ShaderError {
+        ShaderError::JsError(err)
+    }
+}
+
+pub fn upload_array_f32(
+    gl: &amp;WebGl2RenderingContext,
+    vertices: Vec&lt;f32&gt;,
+) -&gt; Result&lt;WebGlBuffer, ShaderError&gt; {
+    let position_buffer = gl
+        .create_buffer()
+        .ok_or(ShaderError::BufferCreationFailed)?;
+
+    gl.bind_buffer(WebGl2RenderingContext::ARRAY_BUFFER, Some(&amp;position_buffer));
+
+    let memory_buffer = wasm_bindgen::memory()
+        .dyn_into::&lt;js_sys::WebAssembly::Memory&gt;()?
+        .buffer();
+
+    let vertices_location = vertices.as_ptr() as u32 / 4;
+
+    let vert_array = js_sys::Float32Array::new(&amp;memory_buffer)
+        .subarray(vertices_location, vertices_location + vertices.len() as u32);
+
+    gl.buffer_data_with_array_buffer_view(
+        WebGl2RenderingContext::ARRAY_BUFFER,
+        &amp;vert_array,
+        WebGl2RenderingContext::STATIC_DRAW,
+    );
+
+    Ok(position_buffer)
+}
+
+pub fn load_shader(
+    gl: &amp;WebGl2RenderingContext,
+    shader_type: u32,
+    shader_text: &amp;str,
+) -&gt; Result&lt;WebGlShader, ShaderError&gt; {
+    let shader = gl
+        .create_shader(shader_type)
+        .ok_or(ShaderError::ShaderAllocError)?;
+    gl.shader_source(&amp;shader, shader_text);
+    gl.compile_shader(&amp;shader);
+    if !gl
+        .get_shader_parameter(&amp;shader, WebGl2RenderingContext::COMPILE_STATUS)
+        .is_truthy()
+    {
+        let compiler_output = &amp;gl
+            .get_shader_info_log(&amp;shader)
+            .ok_or(ShaderError::ShaderGetInfoError)?;
+        gl.delete_shader(Some(&amp;shader));
+        return Err(ShaderError::ShaderCompileError {
+            shader_type,
+            compiler_output: compiler_output.to_string(),
+        });
+    }
+    Ok(shader)
+}
+
+pub fn init_shader_program(
+    gl: &amp;WebGl2RenderingContext,
+    vert_source: &amp;str,
+    frag_source: &amp;str,
+) -&gt; Result&lt;WebGlProgram, ShaderError&gt; {
+    let vert_shader = load_shader(gl, WebGl2RenderingContext::VERTEX_SHADER, vert_source)?;
+    let frag_shader = load_shader(gl, WebGl2RenderingContext::FRAGMENT_SHADER, frag_source)?;
+
+    let shader_program = gl
+        .create_program()
+        .ok_or(ShaderError::ShaderProgramAllocError)?;
+    gl.attach_shader(&amp;shader_program, &amp;vert_shader);
+    gl.attach_shader(&amp;shader_program, &amp;frag_shader);
+
+    gl.link_program(&amp;shader_program);
+
+    if !(gl.get_program_parameter(&amp;shader_program, WebGl2RenderingContext::LINK_STATUS)).is_truthy()
+    {
+        gl.delete_program(Some(&amp;shader_program));
+        gl.delete_shader(Some(&amp;vert_shader));
+        gl.delete_shader(Some(&amp;frag_shader));
+        return Err(ShaderError::ShaderLinkError());
+    }
+
+    Ok(shader_program)
+}
+</code></pre>
+<p>So anyway, here's drawing the coordinates for the map:</p>
+<p><canvas id="swoop_drawing_the_map-0" options="coords"></canvas></p>
+<hr />
+<p>You may think we would use a texture for the map, just as we did for
+the player ship, however the map has slightly different requirements.
+As well as being used to show the player where to go, we need to be
+able to query the map and find out if a certain area is on the track
+or not. While sampling an image is possible, it will be easier to
+define the map with a mathematical function. This function can then
+be evaluated on the CPU or GPU and will give the same results.</p>
+<p>So what function should we use to draw the map? If the map function
+returns an approximate distance to the racetrack, then we can use 
+finite difference (or possibly an analytic solution) to resolve 
+collision normals. So we want a function of the form:</p>
+<pre><code class="language-glsl">float map_distance_field = map_function(vec2 position)
+</code></pre>
+<p>The racetrack should loop back on itself, so it's basic form should
+be a circle. We can then distort the circle to make the course more
+interesting to race around using a fourier series.</p>
+<p>So how do we get the signed distance field for a circle? Well, the
+distance from a single point is a good start:</p>
+<pre><code class="language-glsl">float course = length(position - vec2(0.0, 0.0));
+</code></pre>
+<p>We're going to define our distance field as negative values being a drivable
+area and positive values being walls. (aka distance to the track).
+So lets expand our circle by the track radius:</p>
+<pre><code class="language-glsl">float track_sdf = course - track_radius;
+</code></pre>
+<p>To make things clearer while debugging, let's threshold it so we can
+see where the track edges are:</p>
+<pre><code class="language-glsl">FragColor = vec4(vec3(track_sdf &gt; 0.0), 1.0);
+</code></pre>
+<p>This gives us:</p>
+<p><canvas id="swoop_drawing_the_map-1" options="circle_1"></canvas></p>
+<p>You can see there's a black circle in the middle of the screen. This
+would mean that the player can fly anywhere in that circle. We want the
+player in a track, not an arena.</p>
+<p>To turn it into a ring, we can use the abs function to make it 
+symmetric around the current edge, and then offset it to reintroduce 
+some negative (track) area:</p>
+<pre><code class="language-glsl">track_sdf = abs(track_sdf) - track_width;
+</code></pre>
+<p><canvas id="swoop_drawing_the_map-2" options="circle_2"></canvas></p>
+<p>(Note that the blue ship is invisible because the ships use additive
+blending)</p>
+<p>Don't understand what is happening here? You're probably not alone.
+Signed distance fields (SDF's) are a bit counter-intuitive at first.
+I can't think of a good way to explain it, but it should become
+evident how it works fairly quickly if you open up shadertoy and have 
+a play yourself.</p>
+<p>Flying around a circular track isn't very interesting, so we can use 
+a fourier series to distort it based on the angle from the center:</p>
+<pre><code>#version 300 es
+
+precision mediump float;
+in vec2 uv;
+out vec4 FragColor;
+
+const float track_base_radius = 0.5;
+const float track_width = 0.1;
+
+vec4 sin_consts_1 = vec4(0.2, 0.0, 0.0, 0.0);
+vec4 sin_consts_2 = vec4(0.0, 0.0, 0.0, 0.0);
+vec4 cos_consts_1 = vec4(0.0, -0.2, 0.0, 0.1);
+vec4 cos_consts_2 = vec4(0.0, 0.0, 0.05, 0.0);
+
+
+float map_function(vec2 position) {
+    float course = length(position - vec2(0.0, 0.0));
+    
+    float angle = atan(position.x, position.y);
+    vec4 angles_1 = vec4(angle, angle*2.0, angle*3.0, angle*4.0);
+    vec4 angles_2 = vec4(angle*5.0, angle*6.0, angle*7.0, angle*8.0);
+    
+    float track_radius = track_base_radius;
+
+    track_radius += dot(sin(angles_1), sin_consts_1);
+    track_radius += dot(sin(angles_2), sin_consts_2);
+    track_radius += dot(cos(angles_1), cos_consts_1);
+    track_radius += dot(cos(angles_2), cos_consts_2);
+
+    float track_sdf = course - track_radius;
+    track_sdf = abs(track_sdf) - track_width;
+    return track_sdf;
+}
+
+void main() {
+    float track = map_function(uv);
+    FragColor = vec4(vec3(track &gt; 0.0), 1.0);
+}
+
+</code></pre>
+<p>And the resulting track:</p>
+<p><canvas id="swoop_drawing_the_map-3" options="fourier_1"></canvas></p>
+<p>It shouldn't be hard to port the map function into rust when it comes
+time to write the collision detection.</p>
+<p>Now to make it look pretty by adding a grid in the background and
+drawing some lines around the edge:</p>
+<p><canvas id="swoop_drawing_the_map-4" options="visualized"></canvas></p>
+<p>Looks like a pretty small map? That's OK, we can tweak it using the
+<code>track_width</code> and <code>track_base_radius</code> parameters later.</p>
+<p>The final map rendering shader is:</p>
+<pre><code>#version 300 es
+
+precision mediump float;
+in vec2 uv;
+out vec4 FragColor;
+
+const float track_base_radius = 0.5;
+const float track_width = 0.1;
+
+const float track_background_grid_spacing = 5.0;
+const float track_background_line_fade = 0.04;
+const float track_background_line_width = 1.0;
+const float track_edge_line_width = 0.5;
+
+
+vec4 sin_consts_1 = vec4(0.2, 0.0, 0.0, 0.0);
+vec4 sin_consts_2 = vec4(0.0, 0.0, 0.0, 0.0);
+vec4 cos_consts_1 = vec4(0.0, -0.2, 0.0, 0.1);
+vec4 cos_consts_2 = vec4(0.0, 0.0, 0.05, 0.0);
+
+
+float map_function(vec2 position) {
+    float course = length(position - vec2(0.0, 0.0));
+    
+    float angle = atan(position.x, position.y);
+    vec4 angles_1 = vec4(angle, angle*2.0, angle*3.0, angle*4.0);
+    vec4 angles_2 = vec4(angle*5.0, angle*6.0, angle*7.0, angle*8.0);
+    
+    float track_radius = track_base_radius;
+
+    track_radius += dot(sin(angles_1), sin_consts_1);
+    track_radius += dot(sin(angles_2), sin_consts_2);
+    track_radius += dot(cos(angles_1), cos_consts_1);
+    track_radius += dot(cos(angles_2), cos_consts_2);
+
+    float track_sdf = course - track_radius;
+    track_sdf = abs(track_sdf) - track_width;
+    return track_sdf;
+}
+
+
+
+vec4 neon(float sdf, vec4 color, float glow_width) {
+	float ramp = clamp(1.0 - sdf / glow_width, 0.0, 1.0);
+	vec4 outp = vec4(0.0);
+	ramp = ramp * ramp;
+	outp += pow(color, vec4(4.0)) * ramp;
+	ramp = ramp * ramp;
+	outp += color * ramp;
+	ramp = ramp * ramp;
+	outp += vec4(1.0) * ramp;
+	return outp;
+}
+
+
+float background_grid(vec2 world_coordinates) {
+    vec2 sections = mod(world_coordinates * track_background_grid_spacing, 1.0);
+    sections = abs(0.5 - sections);
+    vec2 lines = sections + track_background_line_fade;
+    lines /= track_background_line_width;
+    return min(lines.x, lines.y);
+}
+
+float map_edges(float track) {
+    return abs(track) / track_edge_line_width;
+}
+
+
+void main() {
+    float track = map_function(uv);
+    
+    float edge_sdf = map_edges(track);
+    float background_grid = background_grid(uv);
+    
+    float map_visualized = edge_sdf;
+    if (track &gt; 0.0) {
+        map_visualized = min(edge_sdf, background_grid);
+    }
+    
+    
+    FragColor = neon(
+        map_visualized,
+        vec4(0.9, 0.9, 0.9, 1.0), 0.1
+    );
+}
+
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="../swoop_drawing_the_player/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="../swoop_ship_motion_physics/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="../swoop_drawing_the_player/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="../swoop_ship_motion_physics/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+        <script type="text/javascript" src="../custom.js"></script>
+        
+
+        
+
+    </body>
+</html>

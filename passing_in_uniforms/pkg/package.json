@@ -1,0 +1,13 @@
+{
+  "name": "passing_in_uniforms",
+  "collaborators": [
+    "Geoffrey Irons <sdfgeoff@gmail.com>"
+  ],
+  "version": "0.1.0",
+  "files": [
+    "passing_in_uniforms_bg.wasm",
+    "passing_in_uniforms.js"
+  ],
+  "module": "passing_in_uniforms.js",
+  "sideEffects": false
+}

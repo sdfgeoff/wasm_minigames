@@ -1,0 +1,13 @@
+{
+  "name": "swoop_counting_laps",
+  "collaborators": [
+    "Geoffrey Irons <sdfgeoff@gmail.com>"
+  ],
+  "version": "0.1.0",
+  "files": [
+    "swoop_counting_laps_bg.wasm",
+    "swoop_counting_laps.js"
+  ],
+  "module": "swoop_counting_laps.js",
+  "sideEffects": false
+}

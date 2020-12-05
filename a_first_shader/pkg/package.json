@@ -1,0 +1,13 @@
+{
+  "name": "a_first_shader",
+  "collaborators": [
+    "Geoffrey Irons <sdfgeoff@gmail.com>"
+  ],
+  "version": "0.1.0",
+  "files": [
+    "a_first_shader_bg.wasm",
+    "a_first_shader.js"
+  ],
+  "module": "a_first_shader.js",
+  "sideEffects": false
+}

@@ -1,0 +1,13 @@
+{
+  "name": "stl_viewer_load_stl",
+  "collaborators": [
+    "Geoffrey Irons <sdfgeoff@gmail.com>"
+  ],
+  "version": "0.1.0",
+  "files": [
+    "stl_viewer_load_stl_bg.wasm",
+    "stl_viewer_load_stl.js"
+  ],
+  "module": "stl_viewer_load_stl.js",
+  "sideEffects": false
+}

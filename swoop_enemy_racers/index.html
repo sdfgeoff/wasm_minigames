@@ -1,0 +1,515 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Enemy Racers - wasm_games_in_rust</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="../favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="../favicon.png">
+        
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+        <link rel="stylesheet" href="../custom.css">
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../what_its_all_about.html"><strong aria-hidden="true">1.</strong> What It's All About</a></li><li class="chapter-item expanded "><a href="../the_basics.html"><strong aria-hidden="true">2.</strong> The Basics</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../building_and_loading_wasm/index.html"><strong aria-hidden="true">2.1.</strong> Building and loading WASM</a></li><li class="chapter-item expanded "><a href="../cancel_load_animation/index.html"><strong aria-hidden="true">2.2.</strong> Cancel the load animation</a></li><li class="chapter-item expanded "><a href="../binding_events/index.html"><strong aria-hidden="true">2.3.</strong> Binding Events</a></li><li class="chapter-item expanded "><a href="../a_first_shader/index.html"><strong aria-hidden="true">2.4.</strong> A First Shader</a></li><li class="chapter-item expanded "><a href="../fixing_resolution/index.html"><strong aria-hidden="true">2.5.</strong> Fixing the Resolution</a></li><li class="chapter-item expanded "><a href="../passing_in_uniforms/index.html"><strong aria-hidden="true">2.6.</strong> Passing in Uniforms</a></li><li class="chapter-item expanded "><a href="../binding_textures/index.html"><strong aria-hidden="true">2.7.</strong> Binding Textures</a></li></ol></li><li class="chapter-item expanded "><a href="../a_first_game_swoop.html"><strong aria-hidden="true">3.</strong> A First Game: Swoop</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../swoop_drawing_the_player/index.html"><strong aria-hidden="true">3.1.</strong> Drawing The Player Ship</a></li><li class="chapter-item expanded "><a href="../swoop_drawing_the_map/index.html"><strong aria-hidden="true">3.2.</strong> Drawing The Map</a></li><li class="chapter-item expanded "><a href="../swoop_ship_motion_physics/index.html"><strong aria-hidden="true">3.3.</strong> Ship Motion Physics</a></li><li class="chapter-item expanded "><a href="../swoop_ship_keyboard_input/index.html"><strong aria-hidden="true">3.4.</strong> Keyboard Input</a></li><li class="chapter-item expanded "><a href="../swoop_ship_collision_physics/index.html"><strong aria-hidden="true">3.5.</strong> Ship Collision Physics</a></li><li class="chapter-item expanded "><a href="../swoop_ship_spawn_points/index.html"><strong aria-hidden="true">3.6.</strong> Ship Spawn Points</a></li><li class="chapter-item expanded "><a href="../swoop_map_generation/index.html"><strong aria-hidden="true">3.7.</strong> Map Generation</a></li><li class="chapter-item expanded "><a href="../swoop_camera_positioning/index.html"><strong aria-hidden="true">3.8.</strong> Camera Positioning</a></li><li class="chapter-item expanded "><a href="../swoop_enemy_racers/index.html" class="active"><strong aria-hidden="true">3.9.</strong> Enemy Racers</a></li><li class="chapter-item expanded "><a href="../swoop_engine_trails/index.html"><strong aria-hidden="true">3.10.</strong> Engine Trails</a></li><li class="chapter-item expanded "><a href="../swoop_wingtip_trails/index.html"><strong aria-hidden="true">3.11.</strong> Wingtip Trails and Optimizations</a></li><li class="chapter-item expanded "><a href="../swoop_start_sequence/index.html"><strong aria-hidden="true">3.12.</strong> Start Sequence and Fonts</a></li><li class="chapter-item expanded "><a href="../swoop_counting_laps/index.html"><strong aria-hidden="true">3.13.</strong> Counting Laps</a></li><li class="chapter-item expanded "><a href="../swoop_win_condition/index.html"><strong aria-hidden="true">3.14.</strong> Win Condition</a></li></ol></li><li class="chapter-item expanded "><a href="../stl_viewer.html"><strong aria-hidden="true">4.</strong> STL Viewer</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../stl_viewer_load_stl/index.html"><strong aria-hidden="true">4.1.</strong> Load and Render STL Files</a></li><li class="chapter-item expanded "><a href="../stl_viewer_camera_lookaround/index.html"><strong aria-hidden="true">4.2.</strong> Camera Lookaround</a></li><li class="chapter-item expanded "><a href="../stl_viewer_background/index.html"><strong aria-hidden="true">4.3.</strong> Background and Appearance</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">wasm_games_in_rust</h1>
+
+                    <div class="right-buttons">
+                        
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#enemy-racers" id="enemy-racers">Enemy Racers</a></h1>
+<p>FLying by yourself around a map is pretty boring, it's time to make the
+other players fly!</p>
+<p>Lets just wire it in quickly with a function:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use super::ship::Ship;
+
+pub fn calc_ai_control(ship: &amp;mut Ship, skill: f32) {
+    ship.linear_thrust = 1.0;
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>And putting it in the core gameloop:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>for ship in self.ship_entities[1..].iter_mut() {
+    calc_ai_control(ship, 1.0, &amp;self.map);
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Yes, this does mean there's no state in an AI player - but lets face it,
+when you're driving around a map, you don't really consider what you just
+did.
+Another limitation is that we don't know where the other ships are. Due
+to the simplicity of this game, I don't think this will be a problem.</p>
+<p>We have a function on our map that we wrote when finding the start positions,
+it's called <code>get_track_direction</code> and returns the direction the track is
+facing for a given polar coordinate around the track. Similarly, using
+the function <code>get_track_radius</code> which also takes in a polar angle, we
+can figure out where the full polar coordinates of where the ship would
+be if it were on the centerline of the track.</p>
+<p>About here I noticed a bug that's been present for quite a while.
+I thought the glsl function for atan was <code>atan(x, y)</code> and the rust atan 
+function was <code>x.atan(y)</code>. But actually it's <code>atan(y, x)</code> and 
+<code>y.atan(x)</code>. Because I've used it consistently wrong, pretty much the 
+only effect is that my track polar coordinates are out by 90 degrees. 
+Whoops.</p>
+<p>I haven't gone through and fixed the previous pages because 
+functionally there's no difference, but here's the diff:</p>
+<pre><code class="language-diff">diff src/swoop_camera_positioning/src/map.rs src/swoop_enemy_racers/src/map.rs
+34c34
+&lt;         let angle = position.0.atan2(position.1);
+---
+&gt;         let angle = position.1.atan2(position.0);
+59c59
+&lt;         const ANGLE: f32 = 0.0;
+---
+&gt;         const ANGLE: f32 = std::f32::consts::PI / 2.0;
+72c72
+&lt;         let delta_radius = radius_here - radius_a_bit_further;
+---
+&gt;         let delta_radius = radius_a_bit_further - radius_here;
+84c84
+&lt;             -angle - extra_angle
+---
+&gt;             angle - extra_angle - std::f32::consts::PI / 2.0
+86c86
+&lt;             -angle + extra_angle + std::f32::consts::PI
+---
+&gt;             angle + extra_angle + std::f32::consts::PI / 2.0
+
+
+diff src/swoop_camera_positioning/src/resources/map.frag src/swoop_enemy_racers/src/resources/map.frag
+24c24
+&lt;     float angle = atan(position.x, position.y);
+---
+&gt;     float angle = atan(position.y, position.x);
+
+</code></pre>
+<p>Right, that out of the way, we can animate our AI's flying around the 
+map by writing directly to their position/rotations:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>    let polar_position = PolarCoordinate::from_cartesian((ship.position.x, ship.position.y));
+
+    let track_angle_here = map.get_track_direction(polar_position.angle);
+    let track_radius_here = map.track_radius(polar_position.angle);
+
+    let track_polar_here = PolarCoordinate {
+        angle: polar_position.angle,
+        radius: track_radius_here
+    };
+    let track_centerline_here = track_polar_here.to_cartesian();
+
+    ship.position.x = track_centerline_here.0;
+    ship.position.y = track_centerline_here.1;
+    ship.position.rot = track_angle_here;
+    ship.linear_thrust = 0.1;
+<span class="boring">}
+</span></code></pre></pre>
+<p>However, directly writing the position to the centerline of the track
+is a bit of a cheat. We should control the AI with the same controls the
+player has: the <code>linear_thrust</code> and <code>angular_thrust</code> variables.</p>
+<p>So we have to find a way to convert &quot;ideal&quot; position into a set of 
+control inputs. We can divide this problem into two &quot;rules&quot; for the AI:</p>
+<ol>
+<li>Face in the direction of the track</li>
+<li>Try to stay in the center of the track</li>
+</ol>
+<p>We can compute the difference from facing along the track, and apply
+it as a steering input:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>    let angular_error = wrap_angle(track_angle_here - ship.position.rot);
+    ship.angular_thrust = f32::max(f32::min(angular_error, 1.0), -1.0);
+<span class="boring">}
+</span></code></pre></pre>
+<p>This fulfills rule 1, but the AI tends to wallslide. So lets compute 
+a radius error and apply that:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>    let polar_position = PolarCoordinate::from_cartesian((ship.position.x, ship.position.y));
+
+    let track_angle_here = map.get_track_direction(polar_position.angle);
+    let track_radius_here = map.track_radius(polar_position.angle);
+    
+    let mut steering = 0.0;
+    let mut thrust = 0.0;
+    
+    let radius_error = track_radius_here - polar_position.radius;
+    let radius_steering_input = f32::max(f32::min(radius_error, PI / 2.0), -PI / 2.0);
+    
+    let mut target_angle = 0.0;
+    target_angle += track_angle_here; // Face direction of track
+    target_angle += radius_steering_input;  // Fly towards track center
+    
+    let angular_error = wrap_angle(target_angle - ship.position.rot);
+    steering += angular_error;
+   
+    thrust += 1.0;
+
+    ship.angular_thrust = f32::max(f32::min(steering, 1.0), -1.0);
+    ship.linear_thrust = f32::max(f32::min(thrust, 1.0), -1.0);
+<span class="boring">}
+</span></code></pre></pre>
+<p>Note that the addition of the radius_error is done by offsetting the 
+angle we want the ship to fly in rather than direclty influencing the 
+steering input. (It's worth noting that the angular error is a kind-of 
+feed-forward for the radius error)</p>
+<p>The ships now fly around, but still hit the walls lots. This is
+because the ships can't see ahead of them. They are flying looking at
+how far they are from the walls NOW rather than looking ahead and giving
+the ship time to turn. We can fix this by instead of using the ship's current
+position to drive the control system, we can use a simple prediction of
+the ships position to drive it:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>    let future_position = (
+        ship.position.x + ship.velocity.x * LOOKAHEAD_TIME,
+        ship.position.y + ship.velocity.y * LOOKAHEAD_TIME,
+    );
+    
+    let polar_position = PolarCoordinate::from_cartesian(future_position);
+
+    let track_angle_here = map.get_track_direction(polar_position.angle);
+    let track_radius_here = map.track_radius(polar_position.angle);
+    
+    let mut steering = 0.0;
+    let mut thrust = 0.0;
+    
+    let radius_error = track_radius_here - polar_position.radius;
+    let radius_steering_input = f32::max(f32::min(radius_error, PI / 2.0), -PI / 2.0);
+    
+    let mut target_angle = 0.0;
+    target_angle += track_angle_here; // Face direction of track
+    target_angle += radius_steering_input;  // Fly towards track center
+    
+    let angular_error = wrap_angle(target_angle - ship.position.rot);
+    steering += angular_error;
+   
+    thrust += 1.0;
+
+    ship.angular_thrust = f32::max(f32::min(steering, 1.0), -1.0);
+    ship.linear_thrust = f32::max(f32::min(thrust, 1.0), -1.0);
+<span class="boring">}
+</span></code></pre></pre>
+<p>With a lookahead time of 0.5 seconds, the ship navigates the map on a
+pretty nice racing line - turning in close on corners etc. However, 
+now the ship can only see where it is 0.5 seconds ahead, and doesn't
+know where it is now, so when the course is really twisty/turny, it can
+still hit the wall.
+So let's compute the steering input for both now and for the future:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub fn calc_ai_control(ship: &amp;mut Ship, _skill: f32, map: &amp;Map) {
+    let mut steering = 0.0;
+    let mut thrust = 0.0;
+    
+    steering += calc_steering_input(&amp;ship, &amp;map, 1.0) * 0.15;
+    steering += calc_steering_input(&amp;ship, &amp;map, 0.5) * 0.45;
+    steering += calc_steering_input(&amp;ship, &amp;map, 0.2) * 0.4;
+   
+    thrust += 1.0;
+
+    ship.angular_thrust = f32::max(f32::min(steering, 1.0), -1.0);
+    ship.linear_thrust = f32::max(f32::min(thrust, 1.0), -1.0);
+}
+
+
+fn calc_steering_input(ship: &amp;Ship, map: &amp;Map, lookahead_time: f32) -&gt; f32 {
+    let polar_position = PolarCoordinate::from_cartesian(
+        predict_position(ship, lookahead_time)
+    );
+
+    let track_angle_here = map.get_track_direction(polar_position.angle);
+    let track_radius_here = map.track_radius(polar_position.angle);
+    
+    let mut steering = 0.0;
+    
+    let radius_error = track_radius_here - polar_position.radius;
+    let radius_steering_input = f32::max(f32::min(radius_error, PI / 2.0), -PI / 2.0);
+    
+    let mut target_angle = 0.0;
+    target_angle += track_angle_here; // Face direction of track
+    target_angle += radius_steering_input;  // Fly towards track center
+    
+    let angular_error = wrap_angle(target_angle - ship.position.rot);
+    steering += angular_error;
+   
+    steering
+}
+
+fn predict_position(ship: &amp;Ship, time: f32) -&gt; Vec2 {
+    (
+        ship.position.x + ship.velocity.x * time,
+        ship.position.y + ship.velocity.y * time,
+    )
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>We now have an AI that can fly inhumanly well. It nails every corner,
+and as a result it's no fun to race against (and all the AI's are the 
+same). Time to add some imperfections. Let's use the skill parameter to
+vary the ships and reduce their lookahead.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let num_ships = self.ship_entities.len() - 2;
+for (id, ship) in self.ship_entities[1..].iter_mut().enumerate() {
+    let skill = id as f32 / num_ships as f32;
+    calc_ai_control(ship, skill, &amp;self.map);
+}
+
+&lt;&lt; snip &gt;&gt;
+
+pub fn calc_ai_control(ship: &amp;mut Ship, skill: f32, map: &amp;Map) {
+    let mut steering = 0.0;
+    let mut thrust = 0.0;
+    
+    let lookahead_mul = skill;
+    
+    steering += calc_steering_input(&amp;ship, &amp;map, 1.0 * lookahead_mul) * 0.15;
+    steering += calc_steering_input(&amp;ship, &amp;map, 0.5 * lookahead_mul) * 0.45;
+    steering += calc_steering_input(&amp;ship, &amp;map, 0.2 * lookahead_mul) * 0.4;
+   
+    thrust += 1.0;
+
+    ship.angular_thrust = f32::max(f32::min(steering, 1.0), -1.0);
+    ship.linear_thrust = f32::max(f32::min(thrust, 1.0), -1.0);
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>And there we have it:</p>
+<p><canvas id="swoop_enemy_racers"></canvas></p>
+<p>I can always beat yellow (no lookahead), often beat yellow (0.5s max 
+lookahead) and am not ever close to purple (1s lookahead). I suppose 
+this makes sense because the players camera only gives about 0.3-0.5 
+seconds of lookahead, so while the AI flies using the same ship 
+limitations as a human, it can see more of the map...</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="../swoop_camera_positioning/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="../swoop_engine_trails/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="../swoop_camera_positioning/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="../swoop_engine_trails/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+        <script type="text/javascript" src="../custom.js"></script>
+        
+
+        
+
+    </body>
+</html>

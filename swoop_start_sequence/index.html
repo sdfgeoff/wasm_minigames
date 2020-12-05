@@ -1,0 +1,775 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Start Sequence and Fonts - wasm_games_in_rust</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="../favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="../favicon.png">
+        
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+        <link rel="stylesheet" href="../custom.css">
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../what_its_all_about.html"><strong aria-hidden="true">1.</strong> What It's All About</a></li><li class="chapter-item expanded "><a href="../the_basics.html"><strong aria-hidden="true">2.</strong> The Basics</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../building_and_loading_wasm/index.html"><strong aria-hidden="true">2.1.</strong> Building and loading WASM</a></li><li class="chapter-item expanded "><a href="../cancel_load_animation/index.html"><strong aria-hidden="true">2.2.</strong> Cancel the load animation</a></li><li class="chapter-item expanded "><a href="../binding_events/index.html"><strong aria-hidden="true">2.3.</strong> Binding Events</a></li><li class="chapter-item expanded "><a href="../a_first_shader/index.html"><strong aria-hidden="true">2.4.</strong> A First Shader</a></li><li class="chapter-item expanded "><a href="../fixing_resolution/index.html"><strong aria-hidden="true">2.5.</strong> Fixing the Resolution</a></li><li class="chapter-item expanded "><a href="../passing_in_uniforms/index.html"><strong aria-hidden="true">2.6.</strong> Passing in Uniforms</a></li><li class="chapter-item expanded "><a href="../binding_textures/index.html"><strong aria-hidden="true">2.7.</strong> Binding Textures</a></li></ol></li><li class="chapter-item expanded "><a href="../a_first_game_swoop.html"><strong aria-hidden="true">3.</strong> A First Game: Swoop</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../swoop_drawing_the_player/index.html"><strong aria-hidden="true">3.1.</strong> Drawing The Player Ship</a></li><li class="chapter-item expanded "><a href="../swoop_drawing_the_map/index.html"><strong aria-hidden="true">3.2.</strong> Drawing The Map</a></li><li class="chapter-item expanded "><a href="../swoop_ship_motion_physics/index.html"><strong aria-hidden="true">3.3.</strong> Ship Motion Physics</a></li><li class="chapter-item expanded "><a href="../swoop_ship_keyboard_input/index.html"><strong aria-hidden="true">3.4.</strong> Keyboard Input</a></li><li class="chapter-item expanded "><a href="../swoop_ship_collision_physics/index.html"><strong aria-hidden="true">3.5.</strong> Ship Collision Physics</a></li><li class="chapter-item expanded "><a href="../swoop_ship_spawn_points/index.html"><strong aria-hidden="true">3.6.</strong> Ship Spawn Points</a></li><li class="chapter-item expanded "><a href="../swoop_map_generation/index.html"><strong aria-hidden="true">3.7.</strong> Map Generation</a></li><li class="chapter-item expanded "><a href="../swoop_camera_positioning/index.html"><strong aria-hidden="true">3.8.</strong> Camera Positioning</a></li><li class="chapter-item expanded "><a href="../swoop_enemy_racers/index.html"><strong aria-hidden="true">3.9.</strong> Enemy Racers</a></li><li class="chapter-item expanded "><a href="../swoop_engine_trails/index.html"><strong aria-hidden="true">3.10.</strong> Engine Trails</a></li><li class="chapter-item expanded "><a href="../swoop_wingtip_trails/index.html"><strong aria-hidden="true">3.11.</strong> Wingtip Trails and Optimizations</a></li><li class="chapter-item expanded "><a href="../swoop_start_sequence/index.html" class="active"><strong aria-hidden="true">3.12.</strong> Start Sequence and Fonts</a></li><li class="chapter-item expanded "><a href="../swoop_counting_laps/index.html"><strong aria-hidden="true">3.13.</strong> Counting Laps</a></li><li class="chapter-item expanded "><a href="../swoop_win_condition/index.html"><strong aria-hidden="true">3.14.</strong> Win Condition</a></li></ol></li><li class="chapter-item expanded "><a href="../stl_viewer.html"><strong aria-hidden="true">4.</strong> STL Viewer</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../stl_viewer_load_stl/index.html"><strong aria-hidden="true">4.1.</strong> Load and Render STL Files</a></li><li class="chapter-item expanded "><a href="../stl_viewer_camera_lookaround/index.html"><strong aria-hidden="true">4.2.</strong> Camera Lookaround</a></li><li class="chapter-item expanded "><a href="../stl_viewer_background/index.html"><strong aria-hidden="true">4.3.</strong> Background and Appearance</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">wasm_games_in_rust</h1>
+
+                    <div class="right-buttons">
+                        
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#start-sequence" id="start-sequence">Start Sequence</a></h1>
+<p>Currently the game just starts. There's no time for the player to prepare.
+We need a title sequence with a &quot;press enter to start&quot;. To do this
+I want to render a logo as well as ... text.</p>
+<p>Let's start with the logo, because that's the easiest.</p>
+<h2><a class="header" href="#rendering-a-logo" id="rendering-a-logo">Rendering a logo</a></h2>
+<p>My idea for a logo is to have the word &quot;swoop&quot; drawn by two of the 
+ships and their trails. One ship will write the &quot;S&quot; and the other will 
+write &quot;woop&quot;.
+For this I need a to generate some trails with the correct points for
+the shapes I want. I could do this by hand and trial-and-error, but
+it's much easier to author the trail in, say, blender, and then
+export the positions/tangents it into a rust file.</p>
+<p>The rust file contains a struct:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct Logo {
+    pub trails: Vec&lt;Trail&gt;,
+    pub ships: Vec&lt;Ship&gt;
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>And then a python script goes through and generates an initilizer
+containing things like:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>        let mut out = Self {
+            trails: vec![],
+            ships: vec![]
+        };
+        
+        
+        let mut trail = Trail::new(
+            (0.699999988079071, 0.0, 1.0, 1.0),
+            1.0,
+            1.0,
+        );
+        trail.path.push_front(PathPoint {
+            position: (-2.191507339477539, -0.6047587394714355),
+            tangent: (-3.393470287322998, -0.7639043927192688),
+            intensity: 1.0,
+            width: 0.019999999552965164,
+            brightness: 100.0,
+        });
+        trail.path.push_front(PathPoint {
+            position: (-0.9643271565437317, 0.12513494491577148),
+            tangent: (0.225080206990242, -0.3531510829925537),
+            intensity: 1.0,
+            width: 0.019999999552965164,
+            brightness: 100.0,
+        });
+        trail.path.push_front(PathPoint {
+            position: (-0.6066954731941223, 0.765639066696167),
+            tangent: (-0.9081510305404663, -0.5753495693206787),
+            intensity: 1.0,
+            width: 0.019999999552965164,
+            brightness: 100.0,
+        });
+        out.trails.push(trail);
+        
+// And so on
+<span class="boring">}
+</span></code></pre></pre>
+<p>The code that does this is pretty ugly (as is a lot of exporter code), 
+and is inside the <code>resources/logo.blend</code> file.</p>
+<p>To render our logo, we can  move our existing game logic to a &quot;play_game&quot;
+function, and create a new function called &quot;show_logo&quot;:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>    pub fn show_logo(&amp;mut self) {
+        self.check_resize();
+        self.gl.clear(
+            WebGl2RenderingContext::COLOR_BUFFER_BIT | WebGl2RenderingContext::DEPTH_BUFFER_BIT,
+        );
+        let camera_to_clipspace = [
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            (self.canvas_resolution.1 as f32 / self.canvas_resolution.0 as f32),
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+        ];
+        self.trail_sprite.camera_to_clipspace = camera_to_clipspace;
+        
+        let world_to_camera = Transform2d::new(0.0, -0.7, 0.0, 3.0).to_mat3_array();
+        let world_to_trails = Transform2d::new(0.0, 0.0, 0.0, 1.0).to_mat3_array();
+        
+        self.trail_sprite.world_to_camera = world_to_camera;
+        self.trail_sprite.world_to_sprite = world_to_trails;
+        
+        self.trail_sprite.setup(&amp;self.gl);
+        for trail in &amp;self.logo.trails {
+            self.trail_sprite.render(&amp;self.gl, &amp;trail);
+        }
+        
+        self.ship_sprite.camera_to_clipspace = camera_to_clipspace;
+        self.ship_sprite.world_to_camera = world_to_camera;
+        for ship in &amp;self.logo.ships {
+            self.ship_sprite.setup(&amp;self.gl);
+            self.ship_sprite.render(&amp;self.gl, &amp;ship);
+        }
+        
+    }
+<span class="boring">}
+</span></code></pre></pre>
+<p>We can now swap this in place of the previous <code>animation_frame</code> function
+to preview our title screen:</p>
+<p><img src="logo.png" alt="Title Screen" /></p>
+<p>The cool thing about doing the logo this way rather than with a sprite is
+that if we change how trails are rendered, or what a ship looks like,
+the logo will update. Also, it means we don't have to pack a high-res 
+sprite containing the logo into the binary.</p>
+<p>Now, I think the player should be able to see the map in the background,
+so let's extend our <code>show_logo</code> function to include the map sprite:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let map_sprite_transform = Transform2d::new(0.0, -1.0, 0.0, 0.1);
+// Render the map
+self.map_sprite.world_to_camera = world_to_camera;
+self.map_sprite.camera_to_clipspace = camera_to_clipspace;
+self.map_sprite.world_to_sprite = map_sprite_transform.to_mat3_array();
+self.map_sprite.render(&amp;self.gl);
+<span class="boring">}
+</span></code></pre></pre>
+<p>Maybe in the future we can allow the user to cycle through maps? We'll
+shelve that for now.</p>
+<h2><a class="header" href="#game-start-state-machine" id="game-start-state-machine">Game start state machine</a></h2>
+<p>So now we have a function for showing the logo and a function for
+playing the game. We should create an enum and some logic to allow
+us to switch between them:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>enum GameState {
+    Menu,
+    Playing,
+}
+
+&lt;&lt; snip &gt;&gt;
+
+if self.key_map.start_game.active() {
+    self.game_state = GameState::Playing;
+    return;
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>I also had to add the start_game key to the keymap as per one of the
+previous articles.</p>
+<p>Now we need to tell the user to press the Enter key...</p>
+<h2><a class="header" href="#rendering-characters" id="rendering-characters">Rendering Characters</a></h2>
+<p>Drawing text is a pain - wrapping words, kerning, scaling and a host of
+other quirks. Lets make it as simple as possible: a sprite sheet of 
+signed distance fields for the letters, a monospace font, and while we're
+at it, why not use a single quad to draw a whole block of text rather
+than a quad per character.</p>
+<p>What do I mean by that? Well, if you have a monospace font, you can,
+figure out what character a pixel is part of just by looking at it's
+coordinages. Maybe a diagram will help:</p>
+<p><img src="character_decompose.png" alt="How to find a character from the quad" /></p>
+<p>This is how text rendering is done in shadertoy.
+So, for this we need a spritesheet containing all the characters. With
+the help of python and the python image library we can generate this
+quite easily. But to enable a smaller texture, we really want a distance
+field texture. With a bit more python finagling, We end up with the font
+sheet:</p>
+<p><img src="src/resources/font.png" alt="Font Sheet" /></p>
+<p>This image is only 128px, and so is ~10kb, but if we treat it like a
+signed distance field and threshold it, we can make it really big. Here 
+it is 100 times enlarged:</p>
+<p><img src="letter_b.png" alt="A really big letter B" /></p>
+<p>Not so bad - and there shouldn't need to be any text that large! And you
+do realize that on the character sheet each character is only 16 
+pixels tall?</p>
+<p>So now we need to get it into the engine. We've done this before with
+the ship sprite, so I won't go into depth here. The fun part is the
+fragment shader.
+First we need to be able to select a part of the image to sample:</p>
+<pre><code class="language-glsl">vec4 get_sprite(vec2 uv, vec2 offset, vec2 size) {
+        return texture(font_texture, uv * size + offset);
+}
+</code></pre>
+<p>Our sprite sheet has all the characters the same size, so we can
+index from the bottom up: <code>A = 10</code>, <code>B = 11</code>, <code>K = 20</code> etc.
+So let's convert from these single integer indexes into an offset:</p>
+<pre><code class="language-glsl">vec4 get_character(vec2 uv, int character) {
+        vec2 offset = vec2(ivec2(
+                character % TILES.x,
+                character / TILES.x
+        )) * CHARACTER_SIZE;
+        return get_sprite(uv, offset, CHARACTER_SIZE);
+}
+</code></pre>
+<p>Now we can draw a single large character across our entire quad. How
+about dividing it into segments:</p>
+<pre><code class="language-glsl">        vec2 coord = uv * 0.5 + 0.5;
+
+        coord.x *= float(text_box_size.x);
+        coord.y *= float(text_box_size.y);
+        int letter_id = int(coord.x) + (text_box_size.y - int(coord.y) - 1) * text_box_size.x;
+        coord.x -= floor(coord.x);
+        coord.y -= floor(coord.y);
+</code></pre>
+<p>The variable <code>letter_id</code> tells us which segment we are in. 
+If we were to run <code>get_character(coord, letter_id)</code> we would get the
+quad filled with the characters from the font sheet in order. We want
+to spell out a sentence, so let's create an array containing the
+characters we want:</p>
+<pre><code class="language-glsl">vec4 characters[16] = vec4[16](
+        vec4(0.0, 0.7, 1.0, 25.0),
+        vec4(0.0, 1.0, 0.0, 47.0),
+        vec4(0.7, 0.0, 1.0, 36.0),
+        vec4(1.0, 0.0, 0.0, 60.0),
+        vec4(1.0, 0.0, 0.0, 40.0),
+        vec4(1.0, 0.0, 0.0, 53.0),
+        vec4(1.0, 0.0, 0.0, 69.0),
+        vec4(1.0, 0.0, 0.0, 69.0),
+        vec4(1.0, 0.0, 0.0, 69.0),
+        vec4(1.0, 0.0, 0.0, 69.0),
+        vec4(1.0, 0.0, 0.0, 69.0),
+        vec4(1.0, 0.0, 0.0, 69.0),
+        vec4(1.0, 0.0, 0.0, 69.0),
+        vec4(1.0, 0.0, 0.0, 69.0),
+        vec4(1.0, 0.0, 0.0, 69.0),
+        vec4(1.0, 0.0, 0.0, 69.0)
+);
+
+ivec2 text_box_size = ivec2(8, 2);
+</code></pre>
+<p>I've used a vec4 so the first three can represent color. So we can now
+use the <code>neon</code> function from the ship/map/everything to make glowing
+letters.</p>
+<pre><code class="language-glsl">        float char_sdf = get_character(coord, int(char_data.a)).r;
+        FragColor = neon(
+                1.0 - smoothstep(0.0, 0.5, char_sdf),
+                vec4(char_data.rgb, 1.0),
+                1.0
+        );
+</code></pre>
+<p>So does it work?</p>
+<p><img src="first_letters.png" alt="The world &quot;Player&quot; spelled out" /></p>
+<p>Woohoo, technicolor writing in a single quad!</p>
+<p>Now you've probably noticed that I put the ship sprite in the red 
+channel of the character sheet. This means that with a small tweak we
+can render the player ship as a character in our text. This may be
+useful for displaying a leader-board.</p>
+<p>The tweak to be able to access it is in <code>get_character</code>:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>float get_character(vec2 uv, int character) {
+        vec2 offset = vec2(ivec2(
+                character % TILES.x,
+                character / TILES.x
+        )) * CHARACTER_SIZE;
+        
+        vec2 size = CHARACTER_SIZE;
+        vec4 channel = vec4(0.0, 1.0, 0.0, 0.0);
+        
+        if (character == -1) {
+                size = vec2(1.0);
+                offset = vec2(0.0);
+                channel = vec4(1.0, 0.0, 0.0, 0.0);
+        }
+        vec4 color = get_sprite(uv, offset, size);
+        return dot(color, channel);
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>And now we can render a player ship inline as a character - and
+it's high res (128px compared to 16px).</p>
+<p><img src="players.png" alt="A bunch of ships" /></p>
+<p>THe only thing left is a bit of vertex shader tweaking to position
+and resize the text box.</p>
+<pre><code class="language-glsl">/// How many characters wide and high the text box is
+uniform ivec2 text_box_dimensions;
+
+/// how tall (in screen space) a single character should be
+uniform float character_height;
+
+/// Where the center of the text box should be located (in screen space)
+uniform vec2 anchor;
+
+/// Aspect ratio of the screen
+uniform float screen_aspect;
+
+&lt;&lt; snip &gt;&gt;
+
+	float character_width = character_height * 5.0 / 9.0;
+	vec2 text_box_size = vec2(
+		character_width * float(text_box_dimensions.x),
+		character_height * float(text_box_dimensions.y)
+	);
+
+	uv = aVertexPosition.xy;
+	vec2 pos = uv * text_box_size + anchor;
+	pos.x *= screen_aspect;
+	gl_Position = vec4(pos, 0.0, 1.0);
+</code></pre>
+<p>Nothing too complex there, just scaling and positioning
+based on a bunch of uniforms</p>
+<h2><a class="header" href="#a-rust-interface" id="a-rust-interface">A Rust Interface</a></h2>
+<p>Currently the text is hardcoded into the shader as a bunch of numbers.
+We want to be able to use a nicer API for displaying things.
+Perhaps something like:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>TextBox::new();
+TextBox.extend(&quot;some characters&quot;, BLUE);
+
+text_sprite.(TextBox);
+<span class="boring">}
+</span></code></pre></pre>
+<p>So let's create a struct that contains all the important properties
+for a text object:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>/// The thing that can be drawn with a text sprite.
+pub struct TextBox {
+    data: Vec&lt;f32&gt;,
+
+    // The text box wraps character wise and permits width*height characters to be displayed
+    box_dimensions: (i32, i32),
+
+    /// Height of a single character As percentage of screen size
+    character_height: f32, 
+    
+    /// Where on the screen to draw the text. Positions the center of the text box with the screen ranging from -1.0 to 1.0 on both axis.
+    anchor: (f32, f32)
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>We need to convert from the character &quot;A&quot; to it's numeric representation.
+My initial implementation was going to be a match statement, then a hashmap.
+After a bit of thinking, I came up with a simple solution:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl TextBox {
+    const VALID_CHARS: &amp;'static str = &quot;0123456789ABCDFEGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz:-&lt;&gt;*[] &quot;;
+    
+&lt;&lt; snip &gt;&gt;
+
+    /// The Text sprite has characters encoded in a non-standard order.
+    /// This does the conversion
+    fn encode_char(c: char) -&gt; f32 {
+        match Self::VALID_CHARS.find(c) {
+            Some(id) =&gt; id as f32,
+            None =&gt; -1.0,
+        }
+    }
+<span class="boring">}
+</span></code></pre></pre>
+<p>Yup, a simple lookup in a vec. It's not <code>O(1)</code>, but with only 70 characters
+it shouldn't be a problem. Any unknown characters result in <code>-1</code> which, if you
+remember, is the ship sprite.</p>
+<p>A simple function to do whole strings at a time:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>    pub fn append_string(&amp;mut self, string: &amp;str, color: &amp;[f32; 3]){
+        for c in string.chars() {
+            self.data.extend(color);
+            self.data.push(Self::encode_char(c));
+        }
+    }
+<span class="boring">}
+</span></code></pre></pre>
+<p>After that it's just a case of plumbing the data into the vertex shader.</p>
+<h2><a class="header" href="#a-bit-of-refactoring" id="a-bit-of-refactoring">A bit of refactoring</a></h2>
+<p>The App struct is becoming quite large, holding a reference to all the sprites,
+all the entities, and all the rendering code. This is also a problem because we
+can't have a function:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl App {
+    fn game_update(&amp;mut self) {
+        self.render(&amp;self.ships)
+    }
+
+    fn render(&amp;mut self, &amp;Vec&lt;Ship&gt;){
+        ...
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>If you're not a rustacean, you probably are wondering why you can't do this.
+Well, the render function is getting passed a mutable reference to self and
+a reference to self.ships. The mutable reference to self contains a reference
+to ships, so we have a mutable and immutable reference to the same memory.</p>
+<p>Because we now have to render both the main menu and the game while it's
+playing, a bit of refactoring makes sense. I chose to split out all the
+rendering code into a Renderer struct. This contains all the sprites and
+contains a render function that (essentially) takes the world state:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct Renderer {
+    pub gl: WebGl2RenderingContext,
+    canvas: HtmlCanvasElement,
+    ship_sprite: ShipSprite,
+    pub map_sprite: MapSprite,
+    trail_sprite: TrailSprite,
+    text_sprite: TextSprite,
+
+    canvas_resolution: (u32, u32),
+}
+
+impl Renderer {
+
+&lt;&lt;&lt; snip &gt;&gt;&gt;
+
+pub fn render(
+        &amp;mut self,
+        camera_transform: &amp;Transform2d,
+        ships: Vec&lt;&amp;Ship&gt;,
+        trails: Vec&lt;&amp;Trail&gt;,
+        text_boxes: Vec&lt;&amp;TextBox&gt;,
+    ) {
+            &lt;&lt; omitted &gt;&gt;
+    }
+
+
+<span class="boring">}
+</span></code></pre></pre>
+<p>Why is map_sprite and gl public? Yeah, they shouldn't be. In the previous code
+the map uniforms were only set when the map was updated - which makes sense
+because the map doesn't change very often. I kept this. It is not the best
+architecturally, but there is only one map at a time and this will always(?)
+be the case. I can tell I'm going to regret this later :)</p>
+<p>Why does the render function take a Vector of references rather than a 
+reference to a vector of objects? Thats because the things aren't always
+stored in linear form. Consider the trails which were <code>Vec&lt;(Trail, Trail, Trail)&gt;</code> (I did change this though...) or that for the UI, storing a single
+array of TextBox's may not make much sense. So a vector of references allows
+flexibility in how/where the objects themselves are stored.</p>
+<h2><a class="header" href="#countdown" id="countdown">Countdown</a></h2>
+<p>So, after that whole lot we can push &quot;Enter&quot; and the game starts immediately.
+As a final part of the start sequence it would be great to have a &quot;3&quot;, &quot;2&quot;,
+&quot;1&quot;, &quot;Go!&quot; countdown.</p>
+<p>We could do this as a separate game state in the GameState enum, but I think it
+would be better to do it as part of the GamePlaying state.</p>
+<p>Speaking of which, let's refactor the game playing state to a new file while 
+we're at it.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct GamePlay {
+    pub map: Map,
+    pub ship_entities: Vec&lt;Ship&gt;,
+    pub trails: Vec&lt;Trail&gt;,
+    pub camera: Camera,
+
+    pub game_duration: f64,
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>And I moved all the logic (keyboard control, AI, physics) into this struct's
+<code>update</code> function. I've also added a <code>game_duration</code> field:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl GamePlay{
+    pub fn new() -&gt; Self {
+
+        &lt;&lt; snip &gt;&gt;
+
+        Self {
+            map,
+            ship_entities,
+            trails,
+            camera,
+            game_duration: -3.0
+        }
+    }
+
+    pub fn update(&amp;mut self, dt: f64, key_map: &amp;KeyMap) {
+        self.game_duration += dt;
+        if self.game_duration &lt; 0.0 {
+            // Do the countdown!
+
+        } else {
+            calc_ship_physics(&amp;mut self.ship_entities, &amp;self.map, dt as f32);
+        }
+
+        self.steer_ships(key_map);
+        self.update_trails(dt);
+
+        self.camera.target_position.0 = self.ship_entities[0].position.x;
+        self.camera.target_position.1 = self.ship_entities[0].position.y;
+        self.camera.target_velocity.0 = self.ship_entities[0].velocity.x;
+        self.camera.target_velocity.1 = self.ship_entities[0].velocity.y;
+        self.camera.update(dt as f32);
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Oh hey, now the ships don't move for the first three seconds because the
+physics isn't updated. </p>
+<p>We can now create a text box for the countdown and update it as needed</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span>
+<span class="boring">fn main() {
+</span>    pub fn update(&amp;mut self, dt: f64, key_map: &amp;KeyMap) {
+        self.game_duration += dt;
+        if self.game_duration &lt; 0.0 {
+            // Do the countdown!
+            self.countdown_text.clear();
+            
+            let remaining = -self.game_duration.floor();
+            let diff = 1.0 - remaining - self.game_duration;
+
+            self.countdown_text.append_string(
+                &amp;format!(&quot; {} &quot;, remaining as u8),
+                &amp;[0.0, diff as f32, 0.0]
+            );
+        } else {
+            if self.game_duration &lt; 1.0 {
+                self.countdown_text.clear();
+                self.countdown_text.append_string(&amp;&quot;Go!&quot;, &amp;[0.0, 1.0 - self.game_duration as f32, 0.0]);
+            }
+            calc_ship_physics(&amp;mut self.ship_entities, &amp;self.map, dt as f32);
+        }
+<span class="boring">}
+</span></code></pre></pre>
+<p>That was a long one but here we have it: A menu and a countdown at the
+start of the game. </p>
+<p><canvas id="swoop_start_sequence"></canvas></p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="../swoop_wingtip_trails/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="../swoop_counting_laps/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="../swoop_wingtip_trails/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="../swoop_counting_laps/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+        <script type="text/javascript" src="../custom.js"></script>
+        
+
+        
+
+    </body>
+</html>

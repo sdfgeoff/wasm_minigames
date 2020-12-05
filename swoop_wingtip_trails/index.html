@@ -1,0 +1,670 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Wingtip Trails and Optimizations - wasm_games_in_rust</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="../favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="../favicon.png">
+        
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+        <link rel="stylesheet" href="../custom.css">
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../what_its_all_about.html"><strong aria-hidden="true">1.</strong> What It's All About</a></li><li class="chapter-item expanded "><a href="../the_basics.html"><strong aria-hidden="true">2.</strong> The Basics</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../building_and_loading_wasm/index.html"><strong aria-hidden="true">2.1.</strong> Building and loading WASM</a></li><li class="chapter-item expanded "><a href="../cancel_load_animation/index.html"><strong aria-hidden="true">2.2.</strong> Cancel the load animation</a></li><li class="chapter-item expanded "><a href="../binding_events/index.html"><strong aria-hidden="true">2.3.</strong> Binding Events</a></li><li class="chapter-item expanded "><a href="../a_first_shader/index.html"><strong aria-hidden="true">2.4.</strong> A First Shader</a></li><li class="chapter-item expanded "><a href="../fixing_resolution/index.html"><strong aria-hidden="true">2.5.</strong> Fixing the Resolution</a></li><li class="chapter-item expanded "><a href="../passing_in_uniforms/index.html"><strong aria-hidden="true">2.6.</strong> Passing in Uniforms</a></li><li class="chapter-item expanded "><a href="../binding_textures/index.html"><strong aria-hidden="true">2.7.</strong> Binding Textures</a></li></ol></li><li class="chapter-item expanded "><a href="../a_first_game_swoop.html"><strong aria-hidden="true">3.</strong> A First Game: Swoop</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../swoop_drawing_the_player/index.html"><strong aria-hidden="true">3.1.</strong> Drawing The Player Ship</a></li><li class="chapter-item expanded "><a href="../swoop_drawing_the_map/index.html"><strong aria-hidden="true">3.2.</strong> Drawing The Map</a></li><li class="chapter-item expanded "><a href="../swoop_ship_motion_physics/index.html"><strong aria-hidden="true">3.3.</strong> Ship Motion Physics</a></li><li class="chapter-item expanded "><a href="../swoop_ship_keyboard_input/index.html"><strong aria-hidden="true">3.4.</strong> Keyboard Input</a></li><li class="chapter-item expanded "><a href="../swoop_ship_collision_physics/index.html"><strong aria-hidden="true">3.5.</strong> Ship Collision Physics</a></li><li class="chapter-item expanded "><a href="../swoop_ship_spawn_points/index.html"><strong aria-hidden="true">3.6.</strong> Ship Spawn Points</a></li><li class="chapter-item expanded "><a href="../swoop_map_generation/index.html"><strong aria-hidden="true">3.7.</strong> Map Generation</a></li><li class="chapter-item expanded "><a href="../swoop_camera_positioning/index.html"><strong aria-hidden="true">3.8.</strong> Camera Positioning</a></li><li class="chapter-item expanded "><a href="../swoop_enemy_racers/index.html"><strong aria-hidden="true">3.9.</strong> Enemy Racers</a></li><li class="chapter-item expanded "><a href="../swoop_engine_trails/index.html"><strong aria-hidden="true">3.10.</strong> Engine Trails</a></li><li class="chapter-item expanded "><a href="../swoop_wingtip_trails/index.html" class="active"><strong aria-hidden="true">3.11.</strong> Wingtip Trails and Optimizations</a></li><li class="chapter-item expanded "><a href="../swoop_start_sequence/index.html"><strong aria-hidden="true">3.12.</strong> Start Sequence and Fonts</a></li><li class="chapter-item expanded "><a href="../swoop_counting_laps/index.html"><strong aria-hidden="true">3.13.</strong> Counting Laps</a></li><li class="chapter-item expanded "><a href="../swoop_win_condition/index.html"><strong aria-hidden="true">3.14.</strong> Win Condition</a></li></ol></li><li class="chapter-item expanded "><a href="../stl_viewer.html"><strong aria-hidden="true">4.</strong> STL Viewer</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../stl_viewer_load_stl/index.html"><strong aria-hidden="true">4.1.</strong> Load and Render STL Files</a></li><li class="chapter-item expanded "><a href="../stl_viewer_camera_lookaround/index.html"><strong aria-hidden="true">4.2.</strong> Camera Lookaround</a></li><li class="chapter-item expanded "><a href="../stl_viewer_background/index.html"><strong aria-hidden="true">4.3.</strong> Background and Appearance</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">wasm_games_in_rust</h1>
+
+                    <div class="right-buttons">
+                        
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#wingtip-trails-and-optimizations" id="wingtip-trails-and-optimizations">Wingtip Trails and Optimizations</a></h1>
+<p>I think there should be additional trails emitted when the ship &quot;slips 
+sideways&quot;. This lets the user see that it's important to fly as straight
+as possible, and it may also look pretty cool.</p>
+<p>We already have a trail, so we just need some more. We can compute where
+to put them with:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl Ship {
+
+&lt;&lt; snip &gt;&gt;
+
+    pub fn get_wingtip_positions(&amp;self) -&gt; (Vec2, Vec2) {
+        let offset_right = self.position.transform_vec((0.43, -0.2));
+        let offset_left = self.position.transform_vec((-0.43, -0.2));
+        (
+            (
+                self.position.x + offset_left.0,
+                self.position.y + offset_left.1,
+            ),
+            (
+                self.position.x + offset_right.0,
+                self.position.y + offset_right.1,
+            ),
+        )
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>And we can change our vector of trails to a vector containing a tuple
+of trails, and update each in turn</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct App {
+    trails: Vec&lt;(Trail, Trail, Trail)&gt;,
+    ...
+}
+
+
+&lt;&lt; snip &gt;&gt;
+// Create a set of trails for each ship
+let mut trails = vec![];
+for ship in ship_entities.iter() {
+    const MAIN_TRAIL_WIDTH: f32 = 0.10;
+    const WINGTIP_TRAIL_WIDTH: f32 = 0.02;
+    const MAIN_TRAIL_BRIGHTNESS: f32 = 0.3;
+    const WINGTIP_TRAIL_BRIGHTNESS: f32 = 1.0;
+
+    trails.push((
+        Trail::new(ship.color.clone(), MAIN_TRAIL_WIDTH, MAIN_TRAIL_BRIGHTNESS),
+        Trail::new(
+            ship.color.clone(),
+            WINGTIP_TRAIL_WIDTH,
+            WINGTIP_TRAIL_BRIGHTNESS,
+        ),
+        Trail::new(
+            ship.color.clone(),
+            WINGTIP_TRAIL_WIDTH,
+            WINGTIP_TRAIL_BRIGHTNESS,
+        ),
+    ));
+}
+
+
+&lt;&lt; snip &gt;&gt;
+// Update the trails
+{
+    // Trails
+    for (ship, trail) in self.ship_entities.iter().zip(self.trails.iter_mut()) {
+        trail.0.update(
+            dt as f32,
+            ship.get_engine_position(),
+            f32::abs(ship.linear_thrust),
+        );
+
+        let wingtip_positions = ship.get_wingtip_positions();
+
+        let raw_slip = ship.calc_slip() / 2.5;
+        let base_slip = f32::abs(raw_slip);
+        let left_slip = base_slip + raw_slip / 8.0;
+        let right_slip = base_slip - raw_slip / 8.0;
+
+        trail.1.update(
+            dt as f32,
+            wingtip_positions.0,
+            f32::max(f32::min(left_slip, 1.0), 0.0),
+        );
+        trail.2.update(
+            dt as f32,
+            wingtip_positions.1,
+            f32::max(f32::min(right_slip, 1.0), 0.0),
+        );
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Here the <code>raw_slip</code> is how much the ships motion is perpendicular to the
+way it is facing, and the left and right wingtip trails have slightly
+different intensities based on which way the ship is sliding.
+The raw slip is calculated with&quot;</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>    pub fn calc_slip(&amp;self) -&gt; f32 {
+        let global_travel = (self.velocity.x, self.velocity.y);
+        let local_travel = self.position.to_local_direction(global_travel);
+
+        local_travel.0
+    }
+<span class="boring">}
+</span></code></pre></pre>
+<p>Really, that's pretty much all there is to adding the wingtip trails.</p>
+<h2><a class="header" href="#optimization" id="optimization">Optimization</a></h2>
+<p>This is quite a simple game: a handful of sprites and a pretty non-existant
+physics engine. And yet it runs slowly on firefox on my laptop! Similarly
+my cellphone struggles and my tablet doesn't show anything at all. So 
+let's see what can be done.</p>
+<p>The first aim is to minimize calls from WASM to JS. This can be done particularly
+in the rendering, where it will also reduce the number of openGL calls.</p>
+<h3><a class="header" href="#setup-functions-for-shaders" id="setup-functions-for-shaders">Setup functions for shaders</a></h3>
+<p>Currently for each ship we tell the GPU:</p>
+<ol>
+<li>Use the ship shader, mix it into the scene with additive blending</li>
+<li>Use the ship texture</li>
+<li>Use the ship sprite vertex buffer</li>
+<li>Configure the camera setup</li>
+<li>Configure the ship color, engine etc.</li>
+<li>Render the actual ship</li>
+</ol>
+<p>Steps 1-4 are redundant for every ship other than the first one because
+the shader settings and the camera position are the same for each ship.</p>
+<p>As a result we can break our ship render function into a &quot;setup&quot; function
+and a &quot;render ship&quot; function.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>    pub fn setup(&amp;mut self, gl: &amp;WebGl2RenderingContext) {
+        gl.use_program(Some(&amp;self.program));
+        gl.blend_func(WebGl2RenderingContext::ONE, WebGl2RenderingContext::ONE);
+
+        gl.uniform_matrix3fv_with_f32_array(
+            self.uniform_world_to_camera.as_ref(),
+            true,
+            &amp;self.world_to_camera,
+        );
+        gl.uniform_matrix3fv_with_f32_array(
+            self.uniform_camera_to_clipspace.as_ref(),
+            true,
+            &amp;self.camera_to_clipspace,
+        );
+
+        bind_2d_texture_to_uniform(
+            &amp;gl,
+            &amp;self.uniform_ship_texture,
+            &amp;self.ship_texture,
+            TextureUnit::Unit0,
+        );
+
+        gl.bind_buffer(
+            WebGl2RenderingContext::ARRAY_BUFFER,
+            Some(&amp;self.position_buffer),
+        );
+
+        gl.vertex_attrib_pointer_with_i32(
+            self.attrib_vertex_positions,
+            2, // num components
+            WebGl2RenderingContext::FLOAT,
+            false, // normalize
+            0,     // stride
+            0,     // offset
+        );
+        gl.enable_vertex_attrib_array(self.attrib_vertex_positions);
+    }
+
+    pub fn render(&amp;mut self, gl: &amp;WebGl2RenderingContext, ship: &amp;Ship) {
+        gl.uniform_matrix3fv_with_f32_array(
+            self.uniform_world_to_sprite.as_ref(),
+            true,
+            &amp;ship.position.to_mat3_array(),
+        );
+
+        gl.uniform4f(
+            self.uniform_ship_color.as_ref(),
+            ship.color.0,
+            ship.color.1,
+            ship.color.2,
+            ship.color.3,
+        );
+        gl.uniform1f(self.uniform_ship_engine.as_ref(), ship.linear_thrust);
+
+        gl.draw_arrays(
+            WebGl2RenderingContext::TRIANGLE_STRIP,
+            0, //offset,
+            4, // vertex count
+        );
+    }
+<span class="boring">}
+</span></code></pre></pre>
+<p>Now we can render our ships with:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>self.ship_sprite.world_to_camera = world_to_camera;
+self.ship_sprite.camera_to_clipspace = camera_to_clipspace;
+self.ship_sprite.setup(&amp;self.gl);
+for ship in &amp;self.ship_entities {
+    self.ship_sprite.render(&amp;self.gl, ship);
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Nice and simple, and we've removed 8 WASM -&gt; JS -&gt; GPU calls for each 
+ship. We can do this for the other sprites as well.</p>
+<p>So what did this optimization do? Well, without trails there were 66 
+webgl calls per frame. With a single trail per ship as implemented on 
+the previous page there were 122 webgl calls per frame. With three 
+trails per ship this would mean there would be 234 calls if we kept the 
+previous implementations. But now there are only 104 calls per frame! Sure,
+there are still more vertices and more data flying around, but there is
+less overhead.</p>
+<p>(The version with 3 trails per ship has 17 draw calls, all the other 
+calls are setting the shader program, setting uniforms etc. Another 
+point of interest is that there are a total of 2444 vertices rendered)</p>
+<h3><a class="header" href="#combining-data-in-trail-shader" id="combining-data-in-trail-shader">Combining data in trail shader</a></h3>
+<p>The trail currently uses two buffers: one for point information and one
+for data information. It then indexes into both of these for each 
+vertex. This requires two WASM -&gt; JS -&gt; GPU calls, and requires the GPU 
+to hold both buffers in cache. We can combine these into one buffer and
+then use:</p>
+<pre><code class="language-glsl">// Find the data that represents this curve segment
+int index_here = int(segment) * 2;
+vec4 p1 = point_buffer[index_here];
+vec4 p2 = point_buffer[index_here+2];
+vec4 d1 = point_buffer[index_here+1];
+vec4 d2 = point_buffer[index_here+3];
+</code></pre>
+<p>To extract point positional information and data information. Again 
+this reduces the JS/WASM calls, but it should also improves the GPU's 
+caching as all the data for a particular point is near itself in 
+memory.</p>
+<h3><a class="header" href="#increase-map-shader-efficiency" id="increase-map-shader-efficiency">Increase map shader efficiency</a></h3>
+<p>Back in the original map shader we used two vec4's to hold the sin/cos 
+constants. This was changed to a float array when we implemented physics
+as it allowed easier comparison for differences between the GPU and CPU 
+implementation.
+Now that we know it's working we can put it back.</p>
+<pre><code class="language-glsl">// From this:
+uniform float sin_consts[8];
+uniform float cos_consts[8];
+
+float track_radius = track_base_radius;
+
+for (int i=0; i&lt;8; i++) {
+    float omega = float(i+1);
+    track_radius += cos(angle * omega) * cos_consts[i];
+    track_radius += sin(angle * omega) * sin_consts[i];
+}
+
+// To this:
+uniform vec4 sin_consts[2];
+uniform vec4 cos_consts[2];
+
+vec4 angles_1 = vec4(angle, angle*2.0, angle*3.0, angle*4.0);
+vec4 angles_2 = vec4(angle*5.0, angle*6.0, angle*7.0, angle*8.0);
+
+vec4 sin_consts_1 = sin_consts[0];
+vec4 sin_consts_2 = sin_consts[1];
+vec4 cos_consts_1 = cos_consts[0];
+vec4 cos_consts_2 = cos_consts[1];
+
+float track_radius = track_base_radius;
+track_radius += dot(sin(angles_1), sin_consts_1);
+track_radius += dot(sin(angles_2), sin_consts_2);
+track_radius += dot(cos(angles_1), cos_consts_1);
+track_radius += dot(cos(angles_2), cos_consts_2);
+</code></pre>
+<p>The most important difference is that the version with the <code>uniform  float sin_consts[8]</code> requires 8 samples into the array whereas the <code>uniform vec4 sin_consts[2];</code>
+only requires two. It may not seem like a big difference as the same amount of
+data is extracted, but my understanding of how uniforms work is that a GPU is
+optimized for operating on vec4's, so a uniform float is actually just the first
+element of a vec4 and the rest are discarded.</p>
+<p>The other performance improvement is that we are now doing two 
+<code>sin(vec4)</code> instead of eight <code>sin(float)</code>. My understanding of 
+GPU architecture suggests that, similar to above, it will compute 
+<code>sin(vec4)</code> in the same number of cycles as <code>sin(float)</code>, so two 
+<code>sin(vec4)</code>s will run in 1/4 of the time as eight <code>sin(float)</code>s.</p>
+<p>Trig is normally pretty heavy computations, as are array samples on a 
+GPU, so here we've reduced both of them.</p>
+<h3><a class="header" href="#rust-performance-optimizations" id="rust-performance-optimizations">Rust performance optimizations?</a></h3>
+<p>If it's slow, is it the rust/WASM that's slow? If we look at the firefox
+profile we see:
+<img src="firefox_waterfall.png" alt="Waterfall showing maximum animation frame time is 2.8ms" /></p>
+<p>So even on one frame where the animation frame callback is strangely long, the
+maximum length is 2.72ms. For 60FPS the timing target is 16ms, so that's under
+20% of the maximum possible time.</p>
+<p>Looking at the flamechart we can see that the time is listed as &quot;graphics&quot;.
+I'm not quite sure what this means. 
+<img src="firefox_flamechart.png" alt="flamechart showing time as &quot;graphics&quot;" /></p>
+<p>At this point I discovered that I'm not able to get anything to maintain 
+60FPS in firefox at fullscreen (1920x1080). Firefox has some open bugs 
+on this and <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1010527"><em>all</em> webgl runs slowly on firefox on 
+linux</a>. As a 
+result there's nothing I can do to solve this problem (it's to do with 
+how firefox transfers the pixels from the canvas to the screen)</p>
+<h3><a class="header" href="#how-about-the-cellphone-and-tablet" id="how-about-the-cellphone-and-tablet">How about the cellphone and tablet</a></h3>
+<p>Fortunately you can profile remotely on Chrome, so we can find out at 
+least some information about what's going wrong on the cellphone. Let's
+start with the tablet.</p>
+<h4><a class="header" href="#fixing-the-tablet" id="fixing-the-tablet">Fixing the Tablet</a></h4>
+<p>The tablet shows a black screen on all of the games in the swoop project,
+even the very first &quot;drawing the player ship&quot; one, and yet it can 
+render the &quot;binding textures&quot; example just fine. There is very minimal
+difference between these two. One of the differences is all the matrix
+transformations: <code>world_to_camera</code>, <code>world_to_sprite</code> etc. After
+some debugging I found that it forcing the camera and clipspace matrices
+to be identity matrices fixed the issue.
+Previously these had the value:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let camera_to_clipspace = [
+    self.canvas_resolution.0 as f32,
+    0.0,
+    0.0,
+    0.0,
+    self.canvas_resolution.1 as f32,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+];
+<span class="boring">}
+</span></code></pre></pre>
+<p>Some fiddling with feeding different values into these matrices resulted
+in the discovery that at a certain value, they just stopped working.
+On a whim, I tried changing <code>precision mediump float</code> to <code>precision  highp float</code>, and it suddenly started working.</p>
+<p>Clearly some more investigation into precision was needed. The OpenGL ES
+specifications provide the minimum requirements for <code>mediump</code> as
+a floating point range of <code>-2^14</code> to <code>2^14</code> (±16384), and a relative 
+precision of <code>2^-10</code>. We aren't anywhere near 16k resolution, and I 
+wouldn't think we were needing <code>1920.0e-10</code> precision, but maybe the 
+inverse operation causes the matrices to become degenerate?</p>
+<p>There are two solutions:</p>
+<ol>
+<li>Use highp precision</li>
+<li>Instead of feeding the canvas resolution through the camera/clipspace
+matrices, use zoom and aspect ratio. </li>
+</ol>
+<p>Because #2 was simple to implement I gave it a go, but another problem 
+showed up: all the motion now &quot;snapped&quot; between positions as the 
+precision of the matrices allowed. So there's only the one
+solution: use <code>highp</code>. However I will keep the changes from #2 as they 
+mean that the camera object no longer needs to know the canvas 
+resolution, which is a bit nicer architecturally.</p>
+<p>The changes are</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// CAMERA.RS
+pub fn get_camera_matrix(&amp;self) -&gt; [f32; 9] {
+    Transform2d::new(
+        self.position.0,
+        self.position.1,
+        0.0,
+        self.zoom,
+    )
+    .to_mat3_array()
+}
+
+// APP.RS
+let world_to_camera = self
+    .camera
+    .get_camera_matrix();
+let camera_to_clipspace = [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    (self.canvas_resolution.1 as f32 / self.canvas_resolution.0 as f32),
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+];
+<span class="boring">}
+</span></code></pre></pre>
+<p>and the change of many <code>mediump</code> to <code>highp</code>.</p>
+<p>One other thing I noticed (it was hard to miss) was that the map looked
+like:</p>
+<p><img src="./blocky_map.jpg" alt="Map all pixelated" /></p>
+<p>Urgh! Looks like another precision problem. Sure enough, changing the
+map's fragment shader from mediump to highp fixed the problem.</p>
+<p>My guess is that my desktop always runs with 16 or 32 bit floats (the 
+requirements specify the minimum precision), and my tablet runs with 
+lower-precision floats, which is why this problem was only observed on
+the tablet. I don't know what floating point
+representation my tablet uses - the track radius is an average of 8 
+units across and the tablet seems to have a resolution of only 0.1 
+units at that point - so it looks like it's probably using 9-bit 
+floats - far short of the 14 bits it should be using with the <code>mediump</code> 
+specifier (or my understanding of float precision is wrong).</p>
+<p>Performance on the tablet is fine. The chrome profiler reports most of 
+the time as &quot;idle&quot;, but while profiling it still drops a few frames. 
+When not connected via android debugger, it visually appears to run at 
+60FPS all the time, making me suspect it's related to chrome capturing
+screenshots while profiling. Disabling screenshotting in the profiler
+results in a nice clean 60FPS all the time.</p>
+<h4><a class="header" href="#on-the-phone" id="on-the-phone">On the phone</a></h4>
+<p>Opening up the chrome profiler on the phone revealed that the WASM took
+3.25ms to run, and the GPU spent 7ms rendering. Together this is 10.25ms
+still under the 16ms timinig budget. However, for some reason the phone
+was only firing animationFrame callbacks every 20-25ms resulting in a 
+stuttering performance. </p>
+<p>I tried other webGL demos and the result was the same. My guess is that
+Chrome is trying to save battery by restricting the frame rate - even
+though it's plugged in for these tests. Oh well, nothing I can do here.</p>
+<h3><a class="header" href="#the-strange-case-of-the-js-heap" id="the-strange-case-of-the-js-heap">The strange case of the JS Heap.</a></h3>
+<p>The JS heap is growing and then getting garbage collected. Arrgh! I'm 
+not using much JS at all, so why is this happening?</p>
+<p>My guess is that every time I set a uniform with an array, it creates a JS
+array from rust, and abandons it over to JS. This is likely because
+I'm using <code>uniform4fv_with_f32_array()</code>. Perhaps this could be improved
+if I used <code>uniform4fv_with_f32_sequence</code> and passed in/edited the same 
+JSValue each time?
+For this game with just a handful of sprites the heap grows slowly 
+enough I don't consider it a problem, but this is worth investigating 
+in the future.</p>
+<h3><a class="header" href="#the-end-result" id="the-end-result">The End result</a></h3>
+<p><canvas id="swoop_wingtip_trails"></canvas></p>
+<p>There shouldn't be much difference except it has engine trails and 
+should run a touch better.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="../swoop_engine_trails/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="../swoop_start_sequence/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="../swoop_engine_trails/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="../swoop_start_sequence/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+        <script type="text/javascript" src="../custom.js"></script>
+        
+
+        
+
+    </body>
+</html>

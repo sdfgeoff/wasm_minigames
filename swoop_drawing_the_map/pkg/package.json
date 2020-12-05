@@ -1,0 +1,13 @@
+{
+  "name": "swoop_drawing_the_map",
+  "collaborators": [
+    "Geoffrey Irons <sdfgeoff@gmail.com>"
+  ],
+  "version": "0.1.0",
+  "files": [
+    "swoop_drawing_the_map_bg.wasm",
+    "swoop_drawing_the_map.js"
+  ],
+  "module": "swoop_drawing_the_map.js",
+  "sideEffects": false
+}

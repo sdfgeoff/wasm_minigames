@@ -1,0 +1,13 @@
+{
+  "name": "swoop_ship_spawn_points",
+  "collaborators": [
+    "Geoffrey Irons <sdfgeoff@gmail.com>"
+  ],
+  "version": "0.1.0",
+  "files": [
+    "swoop_ship_spawn_points_bg.wasm",
+    "swoop_ship_spawn_points.js"
+  ],
+  "module": "swoop_ship_spawn_points.js",
+  "sideEffects": false
+}

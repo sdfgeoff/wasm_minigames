@@ -1,0 +1,13 @@
+{
+  "name": "fixing_resolution",
+  "collaborators": [
+    "Geoffrey Irons <sdfgeoff@gmail.com>"
+  ],
+  "version": "0.1.0",
+  "files": [
+    "fixing_resolution_bg.wasm",
+    "fixing_resolution.js"
+  ],
+  "module": "fixing_resolution.js",
+  "sideEffects": false
+}

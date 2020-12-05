@@ -1,0 +1,13 @@
+{
+  "name": "binding_textures",
+  "collaborators": [
+    "Geoffrey Irons <sdfgeoff@gmail.com>"
+  ],
+  "version": "0.1.0",
+  "files": [
+    "binding_textures_bg.wasm",
+    "binding_textures.js"
+  ],
+  "module": "binding_textures.js",
+  "sideEffects": false
+}

@@ -1,0 +1,503 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Load and Render STL Files - wasm_games_in_rust</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="../favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="../favicon.png">
+        
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+        <link rel="stylesheet" href="../custom.css">
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../what_its_all_about.html"><strong aria-hidden="true">1.</strong> What It's All About</a></li><li class="chapter-item expanded "><a href="../the_basics.html"><strong aria-hidden="true">2.</strong> The Basics</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../building_and_loading_wasm/index.html"><strong aria-hidden="true">2.1.</strong> Building and loading WASM</a></li><li class="chapter-item expanded "><a href="../cancel_load_animation/index.html"><strong aria-hidden="true">2.2.</strong> Cancel the load animation</a></li><li class="chapter-item expanded "><a href="../binding_events/index.html"><strong aria-hidden="true">2.3.</strong> Binding Events</a></li><li class="chapter-item expanded "><a href="../a_first_shader/index.html"><strong aria-hidden="true">2.4.</strong> A First Shader</a></li><li class="chapter-item expanded "><a href="../fixing_resolution/index.html"><strong aria-hidden="true">2.5.</strong> Fixing the Resolution</a></li><li class="chapter-item expanded "><a href="../passing_in_uniforms/index.html"><strong aria-hidden="true">2.6.</strong> Passing in Uniforms</a></li><li class="chapter-item expanded "><a href="../binding_textures/index.html"><strong aria-hidden="true">2.7.</strong> Binding Textures</a></li></ol></li><li class="chapter-item expanded "><a href="../a_first_game_swoop.html"><strong aria-hidden="true">3.</strong> A First Game: Swoop</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../swoop_drawing_the_player/index.html"><strong aria-hidden="true">3.1.</strong> Drawing The Player Ship</a></li><li class="chapter-item expanded "><a href="../swoop_drawing_the_map/index.html"><strong aria-hidden="true">3.2.</strong> Drawing The Map</a></li><li class="chapter-item expanded "><a href="../swoop_ship_motion_physics/index.html"><strong aria-hidden="true">3.3.</strong> Ship Motion Physics</a></li><li class="chapter-item expanded "><a href="../swoop_ship_keyboard_input/index.html"><strong aria-hidden="true">3.4.</strong> Keyboard Input</a></li><li class="chapter-item expanded "><a href="../swoop_ship_collision_physics/index.html"><strong aria-hidden="true">3.5.</strong> Ship Collision Physics</a></li><li class="chapter-item expanded "><a href="../swoop_ship_spawn_points/index.html"><strong aria-hidden="true">3.6.</strong> Ship Spawn Points</a></li><li class="chapter-item expanded "><a href="../swoop_map_generation/index.html"><strong aria-hidden="true">3.7.</strong> Map Generation</a></li><li class="chapter-item expanded "><a href="../swoop_camera_positioning/index.html"><strong aria-hidden="true">3.8.</strong> Camera Positioning</a></li><li class="chapter-item expanded "><a href="../swoop_enemy_racers/index.html"><strong aria-hidden="true">3.9.</strong> Enemy Racers</a></li><li class="chapter-item expanded "><a href="../swoop_engine_trails/index.html"><strong aria-hidden="true">3.10.</strong> Engine Trails</a></li><li class="chapter-item expanded "><a href="../swoop_wingtip_trails/index.html"><strong aria-hidden="true">3.11.</strong> Wingtip Trails and Optimizations</a></li><li class="chapter-item expanded "><a href="../swoop_start_sequence/index.html"><strong aria-hidden="true">3.12.</strong> Start Sequence and Fonts</a></li><li class="chapter-item expanded "><a href="../swoop_counting_laps/index.html"><strong aria-hidden="true">3.13.</strong> Counting Laps</a></li><li class="chapter-item expanded "><a href="../swoop_win_condition/index.html"><strong aria-hidden="true">3.14.</strong> Win Condition</a></li></ol></li><li class="chapter-item expanded "><a href="../stl_viewer.html"><strong aria-hidden="true">4.</strong> STL Viewer</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../stl_viewer_load_stl/index.html" class="active"><strong aria-hidden="true">4.1.</strong> Load and Render STL Files</a></li><li class="chapter-item expanded "><a href="../stl_viewer_camera_lookaround/index.html"><strong aria-hidden="true">4.2.</strong> Camera Lookaround</a></li><li class="chapter-item expanded "><a href="../stl_viewer_background/index.html"><strong aria-hidden="true">4.3.</strong> Background and Appearance</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">wasm_games_in_rust</h1>
+
+                    <div class="right-buttons">
+                        
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#stl-viewer" id="stl-viewer">STL Viewer</a></h1>
+<p>So far we've dealt with 2D, but often we want things in 3D. The simplest
+3D application I could think of is a STL viewer. So, how do we go from
+2D to 3D? Well, we can no longer use a triangle strip to generate a quad,
+instead we have to use face indices to determine how the vertices are
+joined. We also have to include face normals because faces can now point
+in different directions.</p>
+<p>The code for this is based this off the <code>Binding Textures</code> page.</p>
+<h2><a class="header" href="#loading-the-stl" id="loading-the-stl">Loading the STL</a></h2>
+<p>There are two formats for STL's: ascii and binary. For this we'll assume
+correctly formatted binary STL's. Because we're bundling them into the binary
+rather than letting the user select the STL, this will be robust enough. 
+If this were to be a &quot;generic&quot; STL viewer we'd need to have more advanced
+error handling.</p>
+<p>So, what is an STL file? The first 80 bytes are a header and are ignored.
+The next four bytes represent the number of faces. Then, for each face
+there is a face normal and three vertex positions (all as three f32's), and
+a u16 extra-data.
+We can extract all this information into it's raw parts using:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn extact_buffers_from_stl(stl: &amp;[u8]) -&gt; (Vec&lt;u16&gt;, Vec&lt;f32&gt;, Vec&lt;f32&gt;) {
+    let mut faces = std::vec::Vec::new();
+    let mut vertices = std::vec::Vec::new();
+    let mut normals = std::vec::Vec::new();
+
+    let num_faces = u32::from_le_bytes(stl[80..84].try_into().unwrap());
+
+    for face in 0..(num_faces) {
+        const STRIDE: u32 = 4 * 12 + 2;
+        const OFFSET: u32 = 84;
+
+        let face_offset = OFFSET + STRIDE * face;
+
+        let nx = get_f32(stl, face_offset + 4 * 0);
+        let ny = get_f32(stl, face_offset + 4 * 1);
+        let nz = get_f32(stl, face_offset + 4 * 2);
+        normals.push(nx);
+        normals.push(ny);
+        normals.push(nz);
+        normals.push(nx);
+        normals.push(ny);
+        normals.push(nz);
+        normals.push(nx);
+        normals.push(ny);
+        normals.push(nz);
+
+        vertices.push(get_f32(stl, face_offset + 4 * 3));
+        vertices.push(get_f32(stl, face_offset + 4 * 4));
+        vertices.push(get_f32(stl, face_offset + 4 * 5));
+
+        vertices.push(get_f32(stl, face_offset + 4 * 6));
+        vertices.push(get_f32(stl, face_offset + 4 * 7));
+        vertices.push(get_f32(stl, face_offset + 4 * 8));
+
+        vertices.push(get_f32(stl, face_offset + 4 * 9));
+        vertices.push(get_f32(stl, face_offset + 4 * 10));
+        vertices.push(get_f32(stl, face_offset + 4 * 11));
+
+        faces.push((face * 3) as u16);
+        faces.push((face * 3 + 1) as u16);
+        faces.push((face * 3 + 2) as u16);
+    }
+
+    (faces, vertices, normals)
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Note that the normal is pushed into the normals array three times. This
+is once for each vertex. </p>
+<p>Uploading the normals buffer to the GPU is the same as uploading the 
+positions buffer, but the face indices buffer is slightly different. 
+It's a bunch of u16's and openGL needs to know what it is. A slight 
+modification to the <code>upload_f32_array</code> function results in:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn upload_indices_array(
+    gl: &amp;WebGl2RenderingContext,
+    indices: Vec&lt;u16&gt;,
+) -&gt; Result&lt;WebGlBuffer, QuadError&gt; {
+    let index_buffer = gl.create_buffer().ok_or(QuadError::BufferCreationFailed)?;
+    gl.bind_buffer(
+        WebGl2RenderingContext::ELEMENT_ARRAY_BUFFER,
+        Some(&amp;index_buffer),
+    );
+
+    let memory_buffer = wasm_bindgen::memory()
+        .dyn_into::&lt;js_sys::WebAssembly::Memory&gt;()?
+        .buffer();
+
+    let indices_location = indices.as_ptr() as u32 / 2;
+    let indices_array = js_sys::Uint16Array::new(&amp;memory_buffer)
+        .subarray(indices_location, indices_location + indices.len() as u32);
+
+    gl.buffer_data_with_array_buffer_view(
+        WebGl2RenderingContext::ELEMENT_ARRAY_BUFFER,
+        &amp;indices_array,
+        WebGl2RenderingContext::STATIC_DRAW,
+    );
+
+    Ok(index_buffer)
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>And when rendering, we need to activate all these buffers. Remember that
+openGL is stateful, so you have to group all the operations on a single
+buffer. You can't do all the <code>bind_buffer</code> calls then all the 
+<code>enable_vertex_attrib_array</code> calls, you have to deal with each buffer in
+turn.</p>
+<p>This results in the render function looking like:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>    pub fn render(&amp;mut self, gl: &amp;WebGl2RenderingContext) {
+        gl.use_program(Some(&amp;self.program));
+
+        gl.uniform1f(self.uniform_time.as_ref(), self.time);
+        gl.uniform2f(
+            self.uniform_resolution.as_ref(),
+            self.resolution.0 as f32,
+            self.resolution.1 as f32,
+        );
+
+        bind_2d_texture_to_uniform(
+            &amp;gl,
+            &amp;self.uniform_image_matcap,
+            &amp;self.image_matcap,
+            TextureUnit::Unit0,
+        );
+
+        gl.enable_vertex_attrib_array(self.attrib_vertex_positions);
+        gl.bind_buffer(
+            WebGl2RenderingContext::ARRAY_BUFFER,
+            Some(&amp;self.position_buffer),
+        );
+        gl.vertex_attrib_pointer_with_i32(
+            self.attrib_vertex_positions,
+            3, // num components
+            WebGl2RenderingContext::FLOAT,
+            false, // normalize
+            0,     // stride
+            0,     // offset
+        );
+
+        gl.enable_vertex_attrib_array(self.attrib_vertex_normals);
+        gl.bind_buffer(
+            WebGl2RenderingContext::ARRAY_BUFFER,
+            Some(&amp;self.normal_buffer),
+        );
+        gl.vertex_attrib_pointer_with_i32(
+            self.attrib_vertex_normals,
+            3,     // num components
+            WebGl2RenderingContext::FLOAT,
+            false, // normalize
+            0,     // stride
+            0,     // offset
+        );
+
+        gl.bind_buffer(
+            WebGl2RenderingContext::ELEMENT_ARRAY_BUFFER,
+            Some(&amp;self.faces_buffer),
+        );
+
+        gl.draw_elements_with_i32(
+            WebGl2RenderingContext::TRIANGLES,
+            self.num_face_indices as i32,
+            WebGl2RenderingContext::UNSIGNED_SHORT,
+            0,
+        );
+    }
+<span class="boring">}
+</span></code></pre></pre>
+<p>I based this off the <code>binding_textures</code> code, so now I did a bunch of
+refactoring including things like:</p>
+<ul>
+<li>Renaming it from <code>quad.rs</code> to <code>geometry.rs</code> and <code>stl.rs</code></li>
+<li>Moving shader loading and texture loading external to the geometry handling</li>
+</ul>
+<h2><a class="header" href="#shaders" id="shaders">Shaders</a></h2>
+<p>The shader for 2D simply wrote the vertex position straight to the screen
+position. If we simply write the x/y position of the vertices to the screen
+position we'll end up with a top view of our object. By multiplying our
+vertex positions by a transformation matrix we can rotate the object around:</p>
+<pre><code class="language-glsl">#version 300 es
+
+precision mediump float;
+in vec4 vert_pos;
+in vec4 vert_nor;
+
+uniform vec2 iResolution;
+uniform float iTime;
+
+out vec4 screen_pos;
+out vec4 screen_nor;
+
+
+mat4 rot_y(float angle) {
+        float c = cos(angle);
+        float s = sin(angle);
+        return mat4(
+                vec4(c, 0.0, s, 0.0),
+                vec4(0.0, 1.0, 0.0, 0.0),
+                vec4(-s, 0.0, c, 0.0),
+                vec4(0.0, 0.0, 0.0, 1.0)
+        );
+}
+
+mat4 rot_x(float angle) {
+        float c = cos(angle);
+        float s = sin(angle);
+        return mat4(
+                vec4(1.0, 0.0, 0.0, 0.0),
+                vec4(0.0, c, s, 0.0),
+                vec4(0.0, -s, c, 0.0),
+                vec4(0.0, 0.0, 0.0, 1.0)
+        );
+}
+
+
+
+void main() {
+        
+        mat4 pan = rot_y(iTime);
+        mat4 tilt = rot_x(sin(iTime));
+        
+        mat4 mat = tilt * pan;
+        
+        screen_pos = mat * vert_pos;
+        screen_nor = mat * vert_nor;
+	
+        gl_Position = screen_pos;
+        gl_Position.x *= iResolution.y / iResolution.x;
+        gl_Position.w = 1.0;
+}
+</code></pre>
+<p>A trick to providing &quot;lighting&quot; for simple scenes like this is to sample
+an image using the geometry normals. With an image like this:</p>
+<p><img src="./src/resources/matcap.png" alt="A matcap made in blender" /></p>
+<p>It provides a &quot;screen space lighting&quot;. As far as I know this is called
+a matcap, and is simple and cheap. So the fragment shader simply looks
+like:</p>
+<pre><code class="language-glsl">#version 300 es
+
+precision mediump float;
+in vec4 screen_pos;
+in vec4 screen_nor;
+out vec4 FragColor;
+
+uniform sampler2D image_matcap;
+
+void main() {
+    vec2 matcap_coords = screen_nor.xy * 0.5 + vec2(0.5);
+    vec4 matcap = texture(image_matcap, matcap_coords);
+
+    FragColor = matcap;
+}
+</code></pre>
+<p>The final result is:</p>
+<p><canvas id="stl_viewer_load_stl"></canvas></p>
+<p>You'll noticce there's some clipping on the monkey head ears. This is 
+because clip space runs from <code>-1.0</code> to <code>1.0</code> on the <code>z</code> axis and we 
+aren't doing any manipulation in the vertex shader to compensate for
+this.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="../stl_viewer.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="../stl_viewer_camera_lookaround/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="../stl_viewer.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="../stl_viewer_camera_lookaround/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+        <script type="text/javascript" src="../custom.js"></script>
+        
+
+        
+
+    </body>
+</html>

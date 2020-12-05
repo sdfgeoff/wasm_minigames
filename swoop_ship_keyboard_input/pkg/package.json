@@ -1,0 +1,13 @@
+{
+  "name": "swoop_ship_keyboard_input",
+  "collaborators": [
+    "Geoffrey Irons <sdfgeoff@gmail.com>"
+  ],
+  "version": "0.1.0",
+  "files": [
+    "swoop_ship_keyboard_input_bg.wasm",
+    "swoop_ship_keyboard_input.js"
+  ],
+  "module": "swoop_ship_keyboard_input.js",
+  "sideEffects": false
+}

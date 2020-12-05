@@ -1,0 +1,13 @@
+{
+  "name": "swoop_camera_positioning",
+  "collaborators": [
+    "Geoffrey Irons <sdfgeoff@gmail.com>"
+  ],
+  "version": "0.1.0",
+  "files": [
+    "swoop_camera_positioning_bg.wasm",
+    "swoop_camera_positioning.js"
+  ],
+  "module": "swoop_camera_positioning.js",
+  "sideEffects": false
+}

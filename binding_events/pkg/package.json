@@ -1,0 +1,13 @@
+{
+  "name": "binding_events",
+  "collaborators": [
+    "Geoffrey Irons <sdfgeoff@gmail.com>"
+  ],
+  "version": "0.1.0",
+  "files": [
+    "binding_events_bg.wasm",
+    "binding_events.js"
+  ],
+  "module": "binding_events.js",
+  "sideEffects": false
+}

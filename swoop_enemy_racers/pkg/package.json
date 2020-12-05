@@ -1,0 +1,13 @@
+{
+  "name": "swoop_enemy_racers",
+  "collaborators": [
+    "Geoffrey Irons <sdfgeoff@gmail.com>"
+  ],
+  "version": "0.1.0",
+  "files": [
+    "swoop_enemy_racers_bg.wasm",
+    "swoop_enemy_racers.js"
+  ],
+  "module": "swoop_enemy_racers.js",
+  "sideEffects": false
+}

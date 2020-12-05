@@ -1,0 +1,13 @@
+{
+  "name": "swoop_drawing_the_player",
+  "collaborators": [
+    "Geoffrey Irons <sdfgeoff@gmail.com>"
+  ],
+  "version": "0.1.0",
+  "files": [
+    "swoop_drawing_the_player_bg.wasm",
+    "swoop_drawing_the_player.js"
+  ],
+  "module": "swoop_drawing_the_player.js",
+  "sideEffects": false
+}

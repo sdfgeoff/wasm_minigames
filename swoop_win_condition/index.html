@@ -1,0 +1,420 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Win Condition - wasm_games_in_rust</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="../favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="../favicon.png">
+        
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+        <link rel="stylesheet" href="../custom.css">
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../what_its_all_about.html"><strong aria-hidden="true">1.</strong> What It's All About</a></li><li class="chapter-item expanded "><a href="../the_basics.html"><strong aria-hidden="true">2.</strong> The Basics</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../building_and_loading_wasm/index.html"><strong aria-hidden="true">2.1.</strong> Building and loading WASM</a></li><li class="chapter-item expanded "><a href="../cancel_load_animation/index.html"><strong aria-hidden="true">2.2.</strong> Cancel the load animation</a></li><li class="chapter-item expanded "><a href="../binding_events/index.html"><strong aria-hidden="true">2.3.</strong> Binding Events</a></li><li class="chapter-item expanded "><a href="../a_first_shader/index.html"><strong aria-hidden="true">2.4.</strong> A First Shader</a></li><li class="chapter-item expanded "><a href="../fixing_resolution/index.html"><strong aria-hidden="true">2.5.</strong> Fixing the Resolution</a></li><li class="chapter-item expanded "><a href="../passing_in_uniforms/index.html"><strong aria-hidden="true">2.6.</strong> Passing in Uniforms</a></li><li class="chapter-item expanded "><a href="../binding_textures/index.html"><strong aria-hidden="true">2.7.</strong> Binding Textures</a></li></ol></li><li class="chapter-item expanded "><a href="../a_first_game_swoop.html"><strong aria-hidden="true">3.</strong> A First Game: Swoop</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../swoop_drawing_the_player/index.html"><strong aria-hidden="true">3.1.</strong> Drawing The Player Ship</a></li><li class="chapter-item expanded "><a href="../swoop_drawing_the_map/index.html"><strong aria-hidden="true">3.2.</strong> Drawing The Map</a></li><li class="chapter-item expanded "><a href="../swoop_ship_motion_physics/index.html"><strong aria-hidden="true">3.3.</strong> Ship Motion Physics</a></li><li class="chapter-item expanded "><a href="../swoop_ship_keyboard_input/index.html"><strong aria-hidden="true">3.4.</strong> Keyboard Input</a></li><li class="chapter-item expanded "><a href="../swoop_ship_collision_physics/index.html"><strong aria-hidden="true">3.5.</strong> Ship Collision Physics</a></li><li class="chapter-item expanded "><a href="../swoop_ship_spawn_points/index.html"><strong aria-hidden="true">3.6.</strong> Ship Spawn Points</a></li><li class="chapter-item expanded "><a href="../swoop_map_generation/index.html"><strong aria-hidden="true">3.7.</strong> Map Generation</a></li><li class="chapter-item expanded "><a href="../swoop_camera_positioning/index.html"><strong aria-hidden="true">3.8.</strong> Camera Positioning</a></li><li class="chapter-item expanded "><a href="../swoop_enemy_racers/index.html"><strong aria-hidden="true">3.9.</strong> Enemy Racers</a></li><li class="chapter-item expanded "><a href="../swoop_engine_trails/index.html"><strong aria-hidden="true">3.10.</strong> Engine Trails</a></li><li class="chapter-item expanded "><a href="../swoop_wingtip_trails/index.html"><strong aria-hidden="true">3.11.</strong> Wingtip Trails and Optimizations</a></li><li class="chapter-item expanded "><a href="../swoop_start_sequence/index.html"><strong aria-hidden="true">3.12.</strong> Start Sequence and Fonts</a></li><li class="chapter-item expanded "><a href="../swoop_counting_laps/index.html"><strong aria-hidden="true">3.13.</strong> Counting Laps</a></li><li class="chapter-item expanded "><a href="../swoop_win_condition/index.html" class="active"><strong aria-hidden="true">3.14.</strong> Win Condition</a></li></ol></li><li class="chapter-item expanded "><a href="../stl_viewer.html"><strong aria-hidden="true">4.</strong> STL Viewer</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../stl_viewer_load_stl/index.html"><strong aria-hidden="true">4.1.</strong> Load and Render STL Files</a></li><li class="chapter-item expanded "><a href="../stl_viewer_camera_lookaround/index.html"><strong aria-hidden="true">4.2.</strong> Camera Lookaround</a></li><li class="chapter-item expanded "><a href="../stl_viewer_background/index.html"><strong aria-hidden="true">4.3.</strong> Background and Appearance</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">wasm_games_in_rust</h1>
+
+                    <div class="right-buttons">
+                        
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#win-condition" id="win-condition">Win Condition</a></h1>
+<p>We can now count laps, but the lap counter goes up indefinitely.
+At some point teh game should end and you should see a more
+detailed scoreboard - things like best lap time and average lap time.</p>
+<p>Let's put a new state in the GameState enum:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>enum GameState {
+    Menu,
+    Playing,
+    ScoreScreen,
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>And a function to the gameplay struct to check if the game is
+completed:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>    /// Returns True when the game is complete.
+    /// The game is considered complete when everyone has
+    /// done enough laps
+    pub fn game_complete(&amp;self) -&gt; bool {
+        for score in self.scores.iter() {
+            if score.laps.len() &lt; NUM_LAPS_TO_WIN {
+                return false
+            }
+        }
+        return true
+    }
+<span class="boring">}
+</span></code></pre></pre>
+<p>And in the App struct's play_game function, we can now initiate
+the state change:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>    pub fn play_game(&amp;mut self, dt: f64) {
+        self.gameplay.update(dt, &amp;self.key_map);
+        let ship_entity_refs = self.gameplay.ship_entities.iter().collect();
+        let trail_entity_refs = self.gameplay.trails.iter().collect();
+
+        self.renderer.render(
+            &amp;self.gameplay.camera.get_camera_matrix(),
+            ship_entity_refs,
+            trail_entity_refs,
+            self.gameplay.get_text_entities(),
+        );
+
+        // If the game is finished, show the score screen
+        if self.gameplay.game_complete() {
+            self.game_state = GameState::ScoreScreen;
+        }
+    }
+<span class="boring">}
+</span></code></pre></pre>
+<p>And we can write another function that runs in the <code>ScoreScreen</code> state:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub fn show_scores(&amp;mut self, dt: f64) {
+        self.gameplay.update(dt * 0.1, &amp;self.key_map);
+        let ship_entity_refs = self.gameplay.ship_entities.iter().collect();
+        let trail_entity_refs = self.gameplay.trails.iter().collect();
+
+        self.renderer.render(
+            &amp;self.gameplay.camera.get_camera_matrix(),
+            ship_entity_refs,
+            trail_entity_refs,
+            self.score_screen.get_text_entities(),
+        );
+
+        // If the game is finished, show the score screen
+        if self.key_map.start_game == KeyState::JustReleased {
+            self.game_state = GameState::Menu;
+            self.reset();
+        }
+    }
+<span class="boring">}
+</span></code></pre></pre>
+<p>You may notice something strange there. I'm still calling <code>self.gameplay.update</code>
+and I'm still rendering the ship entities and trails. That's because I think
+it would be cool for the game to continue slow-motion in the background.</p>
+<p>I have, of course, created a ScoreScreen struct that contains the text
+entities. There's not much particularly complex in it except for the
+code that populates the score screen text:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl ScoreScreen {
+
+    &lt;&lt;&lt; snip &gt;&gt;&gt;
+
+    pub fn populate_scores(&amp;mut self, ships: &amp;Vec&lt;Ship&gt;, scores: &amp;Vec&lt;Score&gt;) {
+        self.scores.clear();
+
+        let mut ship_and_score_refs: Vec&lt;(&amp;Ship, &amp;Score)&gt; =
+            ships.iter().zip(scores.iter()).collect();
+        ship_and_score_refs.sort_by(|a, b| a.1.cmp(b.1));
+
+        self.scores.append_string(&quot;   Avg   Best&quot;, &amp;[0.5, 0.5, 0.5]);
+
+        for (ship, score) in ship_and_score_refs {
+            let color = [ship.color.0, ship.color.1, ship.color.2];
+            
+            let best_lap = score.get_best_lap();
+            let average_lap = score.get_average_lap();
+            
+            self.scores.append_string(&quot;~ &quot;, &amp;color);
+            self.scores.append_string(&amp;format_time(average_lap), &amp;color);
+            self.scores.append_string(&quot; &quot;, &amp;color);
+            self.scores.append_string(&amp;format_time(best_lap), &amp;color);
+        }
+    }
+
+}
+
+fn format_time(time: Option&lt;f64&gt;) -&gt; String {
+    if let Some(sec) = time {
+        let seconds = sec as u32;
+        let millis = (sec.fract() * 100.0).floor() as u32;
+        format!(&quot;{:02}:{:02}&quot;, seconds, millis)
+    } else {
+        &quot;--:--&quot;.to_string()
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Not to much complex there, just fetch the average and best lap times for
+each player. Oops, better implement those:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl Score {
+
+    &lt;&lt;&lt; snip &gt;&gt;&gt;
+    /// Returns a vector of the times for each lap
+    pub fn get_lap_timings(&amp;self) -&gt; Vec&lt;f64&gt; {
+        let mut lap_times = vec![];
+        let mut lap_start_time = 0.0;
+        for lap_end_time in &amp;self.laps {
+            lap_times.push(lap_end_time - lap_start_time);
+            lap_start_time = *lap_end_time;
+        }
+        // First &quot;lap&quot; is the time it takes to get across
+        // the start line
+        lap_times.drain(0..1);
+        lap_times
+    }
+
+    /// Returns the average lap time
+    pub fn get_average_lap(&amp;self) -&gt; Option&lt;f64&gt; {
+        let lap_timings = self.get_lap_timings();
+
+        if lap_timings.len() &gt; 0 {
+            let mut total_time = 0.0;
+            for lap_time in &amp;lap_timings {
+                total_time += lap_time
+            }
+            Some(total_time / (lap_timings.len() as f64))
+        } else {
+            None
+        }
+        
+    }
+
+    pub fn get_best_lap(&amp;self) -&gt; Option&lt;f64&gt; {
+        let mut lap_timings = self.get_lap_timings();
+        
+        // Lap timings should never be NAN
+        lap_timings.sort_by(|a, b| a.partial_cmp(b).unwrap());
+        lap_timings.first().cloned()
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Remember how the scores are stored as the times that the player
+crosses the line? This means that we need the function <code>get_lap_timings()</code> 
+to get the duration for each lap.</p>
+<p>And that's about it really for the score screen.</p>
+<p><canvas id="swoop_win_condition"></canvas></p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="../swoop_counting_laps/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="../stl_viewer.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="../swoop_counting_laps/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="../stl_viewer.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+        <script type="text/javascript" src="../custom.js"></script>
+        
+
+        
+
+    </body>
+</html>
