@@ -114,7 +114,7 @@ impl App {
             let num_ships = self.ship_entities.len();
 
             for (id, ship) in self.ship_entities.iter_mut().enumerate() {
-                let offset = ((id as f32) - ((num_ships - 1) as f32) * 0.5);
+                let offset = (id as f32) - ((num_ships - 1) as f32) * 0.5;
 
                 let offset_vec = (
                     (startline_tangent.0 * offset - startline_normal.0) * SHIP_SPACING,

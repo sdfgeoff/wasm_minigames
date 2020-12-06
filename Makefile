@@ -14,8 +14,6 @@ WASM_BINDGEN_FLAGS = --target web --no-typescript
 TARGET_FOLDERS = $(dir $(wildcard $(WORKSPACE_DIR)/*/*/Cargo.toml))
 TARGET_NAMES = $(notdir $(patsubst %/,%,$(TARGET_FOLDERS)))
 
-.PHONY: book
-
 # If DEBUG=1, add --debug to the WASM_PACK flags
 DEBUG ?= 0
 ifeq ($(DEBUG), 1)
@@ -27,9 +25,14 @@ else
 endif
 
 
-# Default target
-all: book
 
+# Default target
+.PHONY: book
+.DEFAULT_GOAL: book
+
+
+# Package as a statically-serveable bunch of HTML pages that have
+# writing about how the programs were made
 book: examples
 	mkdir -p $(BOOK_DIR)/gen
 	
@@ -45,21 +48,22 @@ book: examples
 	cd $(BOOK_DIR); $(MDBOOK) build -d $(BOOK_OUTPUT_FOLDER)
 
 
-# Build all wasm
+# Build all rust code into WASM
 wasm:
 	cd $(WORKSPACE_DIR); cargo build --target wasm32-unknown-unknown $(BUILD_FLAGS)
 
 
-static:
-	cp $(STATIC_DIR)/example.css $(WASM_OUTPUT_FOLDER)
+# Create a full-screen HTML page for each game
+examples: $(TARGET_NAMES)
+	cp $(STATIC_DIR)/example.css $(WASM_OUTPUT_FOLDER)	
 	cp $(STATIC_DIR)/example.js $(WASM_OUTPUT_FOLDER)
 	cp $(STATIC_DIR)/error.svg $(WASM_OUTPUT_FOLDER)
 	cp $(STATIC_DIR)/click_icon.svg $(WASM_OUTPUT_FOLDER)
 	cp $(STATIC_DIR)/loading.gif $(WASM_OUTPUT_FOLDER)
+	
 
-
-examples: $(TARGET_NAMES)
-$(TARGET_NAMES): wasm static
+# Create bindings for a single WASM file
+$(TARGET_NAMES): wasm
 	cd $(WORKSPACE_DIR); wasm-bindgen $(ARTIFACT_DIR)/$@.wasm $(WASM_BINDGEN_FLAGS) --out-dir $(WASM_OUTPUT_FOLDER)
 	sed 's,{ID},$@,g' $(STATIC_DIR)/example.html > $(WASM_OUTPUT_FOLDER)/$@.html
 	
@@ -67,5 +71,8 @@ $(TARGET_NAMES): wasm static
 fmt:
 	cd $(WORKSPACE_DIR); cargo fmt
 
-
+clean:
+	rm -r $(WASM_OUTPUT_FOLDER)
+	rm -r $(BOOK_OUTPUT_FOLDER)
+	rm -r $(BOOK_DIR)/gen
 

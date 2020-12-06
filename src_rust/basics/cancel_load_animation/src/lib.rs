@@ -13,7 +13,7 @@ extern "C" {
 // created using `new Core()`
 #[wasm_bindgen]
 pub struct Core {
-    canvas: HtmlCanvasElement,
+    _canvas: HtmlCanvasElement,
 }
 
 #[wasm_bindgen]
@@ -35,7 +35,7 @@ impl Core {
 
         let canvas: HtmlCanvasElement = element.dyn_into().expect("Not a canvas");
 
-        Self { canvas }
+        Self { _canvas: canvas }
     }
 
     #[wasm_bindgen]

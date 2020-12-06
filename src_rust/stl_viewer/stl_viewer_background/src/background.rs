@@ -1,9 +1,7 @@
-use std::convert::TryInto;
 use web_sys::{WebGl2RenderingContext, WebGlBuffer};
 
-use super::geometry::{upload_f32_array, upload_indices_array, GeometryError};
+use super::geometry::{upload_f32_array, GeometryError};
 use super::shader_background::ShaderBackground;
-use glam::{Mat4, Vec3};
 
 use wasm_bindgen::prelude::wasm_bindgen;
 #[wasm_bindgen]

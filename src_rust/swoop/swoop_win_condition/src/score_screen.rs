@@ -1,12 +1,11 @@
-use super::text_sprite::TextBox;
-use super::ship::Ship;
 use super::score::Score;
+use super::ship::Ship;
+use super::text_sprite::TextBox;
 
 pub struct ScoreScreen {
     title: TextBox,
     scores: TextBox,
     instructions: TextBox,
-
 }
 
 impl ScoreScreen {
@@ -46,17 +45,16 @@ impl ScoreScreen {
 
         for (ship, score) in ship_and_score_refs {
             let color = [ship.color.0, ship.color.1, ship.color.2];
-            
+
             let best_lap = score.get_best_lap();
             let average_lap = score.get_average_lap();
-            
+
             self.scores.append_string("~ ", &color);
             self.scores.append_string(&format_time(average_lap), &color);
             self.scores.append_string(" ", &color);
             self.scores.append_string(&format_time(best_lap), &color);
         }
     }
-
 }
 
 fn format_time(time: Option<f64>) -> String {

@@ -8,12 +8,11 @@ pub struct Score {
 }
 
 impl Score {
-    pub fn new() -> Self{
+    pub fn new() -> Self {
         Self {
-            laps: vec!(),
+            laps: vec![],
             previous_progress: 0.0,
         }
-
     }
 
     pub fn reset(&mut self, map: &Map, ship: &Ship) {
@@ -72,12 +71,11 @@ impl Score {
         } else {
             None
         }
-        
     }
 
     pub fn get_best_lap(&self) -> Option<f64> {
         let mut lap_timings = self.get_lap_timings();
-        
+
         // Lap timings should never be NAN
         lap_timings.sort_by(|a, b| a.partial_cmp(b).unwrap());
         lap_timings.first().cloned()

@@ -8,12 +8,11 @@ pub struct Score {
 }
 
 impl Score {
-    pub fn new() -> Self{
+    pub fn new() -> Self {
         Self {
-            laps: vec!(),
+            laps: vec![],
             previous_progress: 0.0,
         }
-
     }
 
     pub fn reset(&mut self, map: &Map, ship: &Ship) {

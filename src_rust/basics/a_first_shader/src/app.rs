@@ -12,7 +12,7 @@ extern "C" {
 }
 
 pub struct App {
-    canvas: HtmlCanvasElement,
+    _canvas: HtmlCanvasElement,
     gl: WebGl2RenderingContext,
     triangle: FirstTriangle,
 }
@@ -39,7 +39,7 @@ impl App {
         };
 
         Self {
-            canvas,
+            _canvas: canvas,
             gl,
             triangle,
         }

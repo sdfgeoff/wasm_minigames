@@ -259,7 +259,11 @@ impl GamePlay {
         let winner_score = ship_and_score_refs.first().expect("No Ships").1;
 
         self.leaderboard_text.append_string(
-            &format!("Lap {}/{}", winner_score.laps.len() - 1, NUM_LAPS_TO_WIN - 1),
+            &format!(
+                "Lap {}/{}",
+                winner_score.laps.len() - 1,
+                NUM_LAPS_TO_WIN - 1
+            ),
             &[0.5, 0.5, 0.5],
         );
         for (ship, score) in ship_and_score_refs {
@@ -284,16 +288,16 @@ impl GamePlay {
             }
         }
     }
-    
+
     /// Returns True when the game is complete.
     /// The game is considered complete when everyone has
     /// done enough laps
     pub fn game_complete(&self) -> bool {
         for score in self.scores.iter() {
             if score.laps.len() < NUM_LAPS_TO_WIN {
-                return false
+                return false;
             }
         }
-        return true
+        return true;
     }
 }

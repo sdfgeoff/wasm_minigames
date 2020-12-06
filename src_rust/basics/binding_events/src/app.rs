@@ -9,12 +9,12 @@ extern "C" {
 }
 
 pub struct App {
-    canvas: HtmlCanvasElement,
+    _canvas: HtmlCanvasElement,
 }
 
 impl App {
     pub fn new(canvas: HtmlCanvasElement) -> Self {
-        Self { canvas }
+        Self { _canvas: canvas }
     }
 
     pub fn animation_frame(&mut self) {

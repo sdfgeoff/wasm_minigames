@@ -1,6 +1,6 @@
 use wasm_bindgen::prelude::wasm_bindgen;
 use wasm_bindgen::{JsCast, JsValue};
-use web_sys::{window, HtmlCanvasElement, KeyEvent, MouseEvent, WebGl2RenderingContext};
+use web_sys::{HtmlCanvasElement, KeyEvent, MouseEvent, WebGl2RenderingContext};
 
 use super::camera::Camera;
 use super::shader_stl::ShaderStl;
@@ -106,8 +106,8 @@ impl App {
             WebGl2RenderingContext::COLOR_BUFFER_BIT | WebGl2RenderingContext::DEPTH_BUFFER_BIT,
         );
 
-        let now = window().unwrap().performance().unwrap().now();
-        let time = (now / 1000.0) as f32;
+        //let now = window().unwrap().performance().unwrap().now();
+        //let time = (now / 1000.0) as f32;
 
         let (world_to_camera, camera_to_screen) = self.camera.to_matrices();
         self.shader_stl
