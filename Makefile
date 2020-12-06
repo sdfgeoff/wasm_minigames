@@ -9,9 +9,10 @@ WASM_PACK_FLAGS = --target web --no-typescript
 
 
 # Figure out what targets are available in the cargo workspace
-TARGET_FOLDERS = $(dir $(wildcard $(WORKSPACE_DIR)/*/Cargo.toml))
-TARGET_NAMES = $(notdir $(patsubst %/,%,$(TARGET_FOLDERS)))
+TARGET_FOLDERS = $(dir $(wildcard $(WORKSPACE_DIR)/*/*/Cargo.toml))
+TARGET_NAMES = $(patsubst $(WORKSPACE_DIR)/%/,%,$(TARGET_FOLDERS))
 
+.PHONY: book
 
 # If DEBUG=1, add --debug to the WASM_PACK flags
 DEBUG ?= 0
@@ -27,7 +28,7 @@ all: book
 
 book: wasm
 	$(MDBOOK) build $(BOOK_DIR)
-	rm $(BOOK_DIR)/book/*/pkg/.gitignore
+	rm $(BOOK_DIR)/book/*/*/pkg/.gitignore
 
 # Generate a target for each entry in the Cargo workspace and group them
 # under "wasm" to build all of them
@@ -36,7 +37,7 @@ $(TARGET_NAMES):
 	cd $(WORKSPACE_DIR); wasm-pack build $(WASM_PACK_FLAGS) $@
 	
 	
-	sed 's/{ID}/$@/g' $(BOOK_DIR)/example.html > $(WORKSPACE_DIR)/$@/pkg/index.html
+	sed 's,{ID},$@,g' $(BOOK_DIR)/example.html > $(WORKSPACE_DIR)/$@/pkg/index.html
 	cp $(BOOK_DIR)/example.css $(WORKSPACE_DIR)/$@/pkg/
 	cp $(BOOK_DIR)/example.js $(WORKSPACE_DIR)/$@/pkg/
 	cp $(BOOK_DIR)/src/error.svg $(WORKSPACE_DIR)/$@/pkg/

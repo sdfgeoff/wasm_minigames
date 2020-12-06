@@ -25,7 +25,9 @@ function setup_canvas() {
     for (let canvas of canvases) {
         let options = canvas.getAttribute("options") || ""
         let id = canvas.id.split("-")[0] // So we can have multiple canvas' with the same app and different options
-        let module_path = './' + id + '/pkg/'+ id +'.js' // Path to WASM JS bindings
+        
+        let directory = document.location.pathname.split('/').slice(0, -1).join('/')
+        let module_path = directory + '/pkg/'+ id +'.js' // Path to WASM JS bindings
         canvas.tabIndex = 1
         canvas.addEventListener("click", function() {
             load(canvas, module_path, options)

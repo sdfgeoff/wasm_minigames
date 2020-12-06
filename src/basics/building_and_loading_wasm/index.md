@@ -28,7 +28,7 @@ Now you need to load it from HTML/js. For all the examples in this book, loading
 is an invocation of the function:
 
 ```javascript
-{{#include ../../custom.js}}
+{{#include ../../../custom.js}}
 ```
 
 using an element like:
