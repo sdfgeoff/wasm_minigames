@@ -1,2 +1,4 @@
-book
+bin_book
+bin_wasm
+gen
 *.blend[0-9]
