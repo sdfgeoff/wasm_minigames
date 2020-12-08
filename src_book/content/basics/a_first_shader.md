@@ -35,6 +35,6 @@ A triangle!
 
 Most of the ported code for is in the file `triangle.rs`:
 ```rust
-{{#include ../../src_rust/basics/a_first_shader/src/triangle.rs}}
+{{#include ../../../src_rust/basics/a_first_shader/src/triangle.rs}}
 ```
 

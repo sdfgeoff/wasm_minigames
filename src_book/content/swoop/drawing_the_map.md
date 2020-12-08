@@ -20,7 +20,7 @@ the only code in the `ship_sprites.rs` and `map_sprite.rs` is to do
 with handling uniforms - which is likely to be pretty shader specific.
 
 ```
-{{#include ../../src_rust/swoop/swoop_drawing_the_map/src/shader.rs}}
+{{#include ../../../src_rust/swoop/swoop_drawing_the_map/src/shader.rs}}
 ```
 
 
@@ -101,7 +101,7 @@ Flying around a circular track isn't very interesting, so we can use
 a fourier series to distort it based on the angle from the center:
 
 ```
-{{#include ../../src_rust/swoop/swoop_drawing_the_map/src/resources/map_fourier_1.frag}}
+{{#include ../../../src_rust/swoop/swoop_drawing_the_map/src/resources/map_fourier_1.frag}}
 ```
 
 And the resulting track:
@@ -121,5 +121,5 @@ Looks like a pretty small map? That's OK, we can tweak it using the
 
 The final map rendering shader is:
 ```
-{{#include ../../src_rust/swoop/swoop_drawing_the_map/src/resources/map_visualized.frag}}
+{{#include ../../../src_rust/swoop/swoop_drawing_the_map/src/resources/map_visualized.frag}}
 ```

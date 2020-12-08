@@ -2,7 +2,7 @@
 authors = ["sdfgeoff"]
 language = "en"
 multilingual = false
-src = ""
+src = "content"
 title = "wasm_games_in_rust"
 
 [build]
@@ -10,5 +10,5 @@ create-missing = false
 
 
 [output.html]
-additional-css = ["gen/book_extra.css"]
-additional-js = ["gen/book_extra.js"]
+additional-css = ["content/book_extra.css"]
+additional-js = ["content/book_extra.js"]

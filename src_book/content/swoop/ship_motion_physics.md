@@ -70,7 +70,7 @@ position += velocity * delta_time
 Turns out that's all that's really required:
 
 ```rust
-{{#include ../../src_rust/swoop/swoop_ship_motion_physics/src/ship.rs}}
+{{#include ../../../src_rust/swoop/swoop_ship_motion_physics/src/ship.rs}}
 ```
 
 Connect up some input to one of the ships:

@@ -4,7 +4,7 @@ dist: xenial
 
 cache:
   directories:
-    - $TRAVIS_BUILD_DIR/src/target
+    - $TRAVIS_BUILD_DIR/src_rust/target
     - $HOME/.cargo
 
 rust:
@@ -13,7 +13,7 @@ rust:
 before_script:
   - (test -x $HOME/.cargo/bin/cargo-install-update || cargo install cargo-update)
   - (test -x $HOME/.cargo/bin/mdbook || cargo install --vers "^0.3" mdbook)
-  - (test -x $HOME/.cargo/bin/wasm-pack || cargo install --vers "^0.9" wasm-pack)
+  - (test -x $HOME/.cargo/bin/wasm-bindgen || cargo install --vers "^0.2.69" wasm-bindgen)
   - cargo install-update -a
 
 script:
@@ -25,7 +25,7 @@ deploy:
   provider: pages
   skip_cleanup: true
   token: $GITHUB_TOKEN
-  local_dir: $TRAVIS_BUILD_DIR/book
+  local_dir: $TRAVIS_BUILD_DIR/bin_book
   keep_history: false
   on:
     branch: master

@@ -10,7 +10,7 @@ like Gimp rather than hand-coding lines as a bunch of coordinates.
 
 Here's our ship texture:
 
-![Player Ship Texture](../../src_rust/swoop/swoop_drawing_the_player/src/resources/ship.png)
+![Player Ship Texture](../../../src_rust/swoop/swoop_drawing_the_player/src/resources/ship.png)
 
 You may notice it's a little different to the ship we're trying to draw.
 That's because I want to be able to turn the engine on and off. I also
@@ -27,7 +27,7 @@ into a nice neon glow.
 
 The fragment shader that does the rendering isn't too complex:
 ```frag
-{{#include ../../src_rust/swoop/swoop_drawing_the_player/src/resources/ship.frag}}
+{{#include ../../../src_rust/swoop/swoop_drawing_the_player/src/resources/ship.frag}}
 ```
 You should be able to spot how the shader separates the engine flare 
 from the ship, and how it generates the neon gradient of colors.
@@ -66,7 +66,7 @@ it to get `camera_to_world`.
 
 So we end up with the matrix chain:
 ```glsl
-{{#include ../../src_rust/swoop/swoop_drawing_the_player/src/resources/ship.vert}}
+{{#include ../../../src_rust/swoop/swoop_drawing_the_player/src/resources/ship.vert}}
 ```
 
 -------------------------------------------------
@@ -115,7 +115,7 @@ As mentioned before, I didn't want to pull in a full crate like `glam`
 or `nalgebra`, so instead I wrote a small module `transform.rs` 
 containing:
 ```rust
-{{#include ../../src_rust/swoop/swoop_drawing_the_player/src/transform.rs}}
+{{#include ../../../src_rust/swoop/swoop_drawing_the_player/src/transform.rs}}
 ```
 
 ---------------------------------------------------

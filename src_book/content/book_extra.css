@@ -1,0 +1,18 @@
+canvas {
+    height: 480px;
+    width: 640px;
+    background: grey url("../click_icon.svg") no-repeat center;
+    background-size: 100px 100px;
+}
+
+canvas.loading {
+    background: black url("../loading.gif") no-repeat center;
+}
+
+canvas.loaded {
+    background: black;
+}
+
+canvas.error {
+    background: black url("../error.svg") no-repeat center;
+}

@@ -136,7 +136,7 @@ Oookay, we should be ready to go now, right? Well....
 Lets create a shader that uses a some textures:
 
 ```glsl
-{{#include ../../src_rust/basics/binding_textures/src/resources/shader.frag}}
+{{#include ../../../src_rust/basics/binding_textures/src/resources/shader.frag}}
 ```
 The `vec2 uv = screen_pos.xy * 0.5 - 0.5` is because the `screen_pos` variable goes
 from -1 to 1, but texture coordinates in the `texture` function go from 0 to 1.

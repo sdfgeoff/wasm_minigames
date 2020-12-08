@@ -5,7 +5,7 @@ type as `cdylib`.
 
 It's probably easiest to look at a working Cargo.toml:
 ```toml
-{{#include ../../src_rust/basics/building_and_loading_wasm/Cargo.toml}}
+{{#include ../../../src_rust/basics/building_and_loading_wasm/Cargo.toml}}
 ```
 
 Rust has a great tool called [wasm-pack](https://github.com/rustwasm/wasm-pack) which makes the process of building
@@ -28,7 +28,7 @@ Now you need to load it from HTML/js. For all the examples in this book, loading
 is an invocation of the function:
 
 ```javascript
-{{#include ../gen/book_extra.js}}
+{{#include ../book_extra.js}}
 ```
 
 using an element like:
@@ -40,7 +40,7 @@ using an element like:
 A very simple rust webassembly program looks like:
 
 ```rust
-{{#include ../../src_rust/basics/building_and_loading_wasm/src/lib.rs}}
+{{#include ../../../src_rust/basics/building_and_loading_wasm/src/lib.rs}}
 ```
 
 All up this creates:
