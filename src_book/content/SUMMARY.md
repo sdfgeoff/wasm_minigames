@@ -29,4 +29,6 @@
     - [Camera Lookaround](stl_viewer/stl_viewer_camera_lookaround/index.md)
     - [Background and Appearance](stl_viewer/stl_viewer_background/index.md)
 - [A Second Game: Pilot](pilot/index.md)
-    - [The Game Plan](pilot/the_game_plan.md)
+    - [Concept Art](pilot/concept_art.md)
+    - [Architecture Planning](pilot/architecture_plan.md)
+    - [Resource Management](pilot/resource_management.md)
