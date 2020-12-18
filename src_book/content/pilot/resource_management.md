@@ -299,6 +299,65 @@ fn extact_buffers_from_mesh(mesh: &[u8]) -> (Vec<u16>, Vec<f32>, Vec<f32>) {
 }
 ```
 
+
+Eh, whatever, let's do the texture mapping now
+```python
+if mesh.uv_layers:
+    uv = tuple(mesh.uv_layers[0].data[loop_index].uv)
+else:
+    uv = (0.0, 0.0)
+```
+
+```rust
+let verts_start = 4;
+let normals_start = verts_start + num_verts * 4 * 3;
+let uv0_start = normals_start + num_verts * 4 * 3;
+let indices_start = uv0_start + num_verts * 4 * 2;
+
+let vertices = parse_f32_array(&mesh[verts_start..], num_verts*3);
+let normals = parse_f32_array(&mesh[normals_start..], num_verts*3);
+let uv0 = parse_f32_array(&mesh[uv0_start..], num_verts*2);
+let indices = parse_u16_array(&mesh[indices_start..], num_faces*3);
+```
+
+```rust
+if vertex_attributes.uv0 != 0xFFFFFFFF {
+    gl.enable_vertex_attrib_array(vertex_attributes.uv0);
+    gl.bind_buffer(
+        WebGl2RenderingContext::ARRAY_BUFFER,
+        Some(&self.uv0.buffer),
+    );
+    gl.vertex_attrib_pointer_with_i32(
+        vertex_attributes.uv0,
+        2, // num components
+        WebGl2RenderingContext::FLOAT,
+        false, // normalize
+        0,     // stride
+        0,     // offset
+    );
+}
+```
+
+```glsl
+    vec4 new_col = color * texture(image_albedo, uv0);
+    
+    vec3 out_col = new_col.rgb;
+    out_col = out_col * diffuse;
+    out_col += reflection * fresnel * 0.5;
+    out_col *= 1.0 - fresnel * 0.5;
+
+    FragColor.rgb = out_col;
+    FragColor.a = new_col.a;
+
+```
+
+And voila:
+
+
+<canvas id="pilot_resource_management">
+
+
+
 You may notice there appears to be a seam along the top of the vehicle. 
 This is actually because of the seam in the image used for the 
 background and it occurs because we are sampling the background based 
@@ -306,5 +365,3 @@ on the normal of the surface. Most of the time using the normal is
 fine, but because the background is an equirectangular map, it has a 
 pole at the top and bottom. At these points exactly what pixel gets 
 sampled is a bit hit-and-miss.
-
-<canvas id="pilot_resource_management">
