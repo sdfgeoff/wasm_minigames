@@ -299,4 +299,12 @@ fn extact_buffers_from_mesh(mesh: &[u8]) -> (Vec<u16>, Vec<f32>, Vec<f32>) {
 }
 ```
 
+You may notice there appears to be a seam along the top of the vehicle. 
+This is actually because of the seam in the image used for the 
+background and it occurs because we are sampling the background based 
+on the normal of the surface. Most of the time using the normal is 
+fine, but because the background is an equirectangular map, it has a 
+pole at the top and bottom. At these points exactly what pixel gets 
+sampled is a bit hit-and-miss.
+
 <canvas id="pilot_resource_management">

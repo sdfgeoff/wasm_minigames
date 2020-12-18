@@ -4,12 +4,14 @@ precision mediump float;
 in vec3 screen_nor;
 in vec3 world_nor;
 in vec3 screen_pos;
+in vec2 uv0;
 
 out vec4 FragColor;
 
 in mat4 camera_to_world;
 
 uniform sampler2D image_matcap;
+uniform sampler2D image_albedo;
 uniform vec4 color;
 
 
@@ -37,12 +39,15 @@ void main() {
     
     float fresnel = 1.0 - dot(screen_nor, vec3(0.0, 0.0, 1.0));
     
-    vec3 out_col = color.rgb;
+    
+    vec4 new_col = color * texture(image_albedo, uv0);
+    
+    vec3 out_col = new_col.rgb;
     out_col = out_col * diffuse;
     out_col += reflection * fresnel * 0.5;
     out_col *= 1.0 - fresnel * 0.5;
 
     FragColor.rgb = out_col;
-    FragColor.a = color.a;
+    FragColor.a = new_col.a;
 }
 

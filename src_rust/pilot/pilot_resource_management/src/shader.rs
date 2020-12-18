@@ -5,6 +5,7 @@ use web_sys::{WebGl2RenderingContext, WebGlProgram, WebGlShader};
 pub struct VertexAttributes {
     pub positions: u32,
     pub normals: u32,
+    pub uv0: u32,
 }
 
 impl VertexAttributes {
@@ -12,6 +13,7 @@ impl VertexAttributes {
         Self {
             positions: gl.get_attrib_location(&program, "vert_pos") as u32,
             normals: gl.get_attrib_location(&program, "vert_nor") as u32,
+            uv0: gl.get_attrib_location(&program, "vert_uv0") as u32,
         }
     }
 }

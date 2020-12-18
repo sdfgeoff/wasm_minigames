@@ -69,6 +69,8 @@ impl App {
         };
 
         shader_stl.image_matcap = Some(resources.png_images.matcap.clone());
+        shader_stl.image_albedo = Some(resources.png_images.ship_tex.clone());
+        
         shader_background.image_matcap = Some(resources.png_images.matcap.clone());
 
         let camera = Camera::new();
@@ -152,7 +154,7 @@ impl App {
             self.shader_stl.set_entity_data(
                 &self.gl,
                 Mat4::from_translation(Vec3::new(0.0, 0.0, 0.0)),
-                Vec4::new(0.8, 0.3, 0.3, 1.0),
+                Vec4::new(1.0, 1.0,1.0, 1.0),
             );
             self.resources
                 .meshes
@@ -162,7 +164,7 @@ impl App {
             self.shader_stl.set_entity_data(
                 &self.gl,
                 Mat4::from_translation(Vec3::new(0.0, 0.0, 0.0)),
-                Vec4::new(0.97, 0.45, 0.023, 1.0),
+                Vec4::new(1.0, 1.0, 1.0, 1.0),
             );
             self.resources
                 .meshes
@@ -172,7 +174,7 @@ impl App {
             self.shader_stl.set_entity_data(
                 &self.gl,
                 Mat4::from_translation(Vec3::new(0.0, 0.0, 0.0)),
-                Vec4::new(0.4, 0.3, 0.3, 1.0),
+                Vec4::new(1.0, 1.0, 1.0, 1.0),
             );
             self.resources
                 .meshes
@@ -182,7 +184,7 @@ impl App {
             self.shader_stl.set_entity_data(
                 &self.gl,
                 Mat4::from_translation(Vec3::new(0.0, 0.0, 0.0)),
-                Vec4::new(0.3, 0.3, 0.3, 1.0),
+                Vec4::new(1.0, 1.0, 1.0, 1.0),
             );
             self.resources
                 .meshes

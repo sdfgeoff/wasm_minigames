@@ -3,10 +3,12 @@
 precision mediump float;
 in vec3 vert_pos;
 in vec3 vert_nor;
+in vec2 vert_uv0;
 
 out vec3 screen_nor;
 out vec3 screen_pos;
 out vec3 world_nor;
+out vec2 uv0;
 
 out mat4 camera_to_world;
 
@@ -28,7 +30,9 @@ void main() {
     camera_to_world = inverse(world_to_camera);
 
     pos = model_to_screen * pos;
-    nor = model_to_camera * nor;        
+    nor = model_to_camera * nor;    
+    
+    uv0 = vert_uv0;    
     
     screen_pos = pos.xyz / pos.w;
     screen_nor = nor.xyz;

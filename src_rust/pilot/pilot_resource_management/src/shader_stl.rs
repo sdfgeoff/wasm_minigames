@@ -21,6 +21,7 @@ pub struct ShaderStl {
     pub attributes: shader::VertexAttributes,
 
     pub uniform_image_matcap: Option<WebGlUniformLocation>,
+    pub uniform_image_albedo: Option<WebGlUniformLocation>,
     pub uniform_color: Option<WebGlUniformLocation>,
 
     pub uniform_world_to_camera: Option<WebGlUniformLocation>,
@@ -28,6 +29,7 @@ pub struct ShaderStl {
     pub uniform_camera_to_screen: Option<WebGlUniformLocation>,
 
     pub image_matcap: Option<WebGlTexture>,
+    pub image_albedo: Option<WebGlTexture>,
 }
 
 impl ShaderStl {
@@ -44,6 +46,7 @@ impl ShaderStl {
         let attributes = shader::VertexAttributes::new(gl, &program);
 
         let uniform_image_matcap = gl.get_uniform_location(&program, "image_matcap");
+        let uniform_image_albedo = gl.get_uniform_location(&program, "image_albedo");
         let uniform_color = gl.get_uniform_location(&program, "color");
 
         let uniform_world_to_camera = gl.get_uniform_location(&program, "world_to_camera");
@@ -55,6 +58,7 @@ impl ShaderStl {
             attributes,
 
             uniform_image_matcap,
+            uniform_image_albedo,
             uniform_color,
 
             uniform_world_to_camera,
@@ -62,6 +66,7 @@ impl ShaderStl {
             uniform_camera_to_screen,
 
             image_matcap: None,
+            image_albedo: None,
         })
     }
 
@@ -92,6 +97,12 @@ impl ShaderStl {
             &self.uniform_image_matcap,
             &self.image_matcap,
             TextureUnit::Unit0,
+        );
+        bind_2d_texture_to_uniform(
+            &gl,
+            &self.uniform_image_albedo,
+            &self.image_albedo,
+            TextureUnit::Unit1,
         );
     }
 

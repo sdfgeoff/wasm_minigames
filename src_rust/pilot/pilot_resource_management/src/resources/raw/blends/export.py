@@ -23,6 +23,7 @@ def export_mesh(obj, filepath):
     verts = []
     normals = []
     indices = []
+    uv0 = []
     
     dedup_data_lookup = {}
     
@@ -35,12 +36,18 @@ def export_mesh(obj, filepath):
             vert = mesh.vertices[loop.vertex_index]
             position = tuple(vert.co)
             normal = tuple(loop.normal)
+            
+            if mesh.uv_layers:
+                uv = tuple(mesh.uv_layers[0].data[loop_index].uv)
+            else:
+                uv = (0.0, 0.0)
 
-            dedup = (position, normal)
+            dedup = (position, normal, uv)
             if dedup not in dedup_data_lookup:
                 index = len(verts)
                 verts.append(position)
                 normals.append(normal)
+                uv0.append(uv)
                 dedup_data_lookup[dedup] = index
             else:
                 index = dedup_data_lookup[dedup]
@@ -65,6 +72,8 @@ def export_mesh(obj, filepath):
         out_data += struct.pack("fff", *vert)
     for normal in normals:
         out_data += struct.pack("fff", *normal)
+    for uv in uv0:
+        out_data += struct.pack("ff", *uv)
     for index in indices:
         out_data += struct.pack("HHH", *index)
     

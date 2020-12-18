@@ -34,6 +34,7 @@ pub struct BufferDef {
 pub struct Geometry {
     positions: BufferDef,
     normals: BufferDef,
+    uv0: BufferDef,
     indices: BufferDef,
 }
 
@@ -42,6 +43,7 @@ impl Geometry {
         gl: &WebGl2RenderingContext,
         positions: &Vec<f32>,
         normals: &Vec<f32>,
+        uv0: &Vec<f32>,
         indices: &Vec<u16>,
     ) -> Result<Self, GeometryError> {
         Ok(Self {
@@ -51,6 +53,10 @@ impl Geometry {
             },
             normals: BufferDef {
                 buffer: upload_f32_array(gl, normals)?,
+                buffer_length: normals.len() as i32,
+            },
+            uv0: BufferDef {
+                buffer: upload_f32_array(gl, uv0)?,
                 buffer_length: normals.len() as i32,
             },
             indices: BufferDef {
@@ -85,6 +91,22 @@ impl Geometry {
             gl.vertex_attrib_pointer_with_i32(
                 vertex_attributes.normals,
                 3, // num components
+                WebGl2RenderingContext::FLOAT,
+                false, // normalize
+                0,     // stride
+                0,     // offset
+            );
+        }
+        
+        if vertex_attributes.uv0 != 0xFFFFFFFF {
+            gl.enable_vertex_attrib_array(vertex_attributes.uv0);
+            gl.bind_buffer(
+                WebGl2RenderingContext::ARRAY_BUFFER,
+                Some(&self.uv0.buffer),
+            );
+            gl.vertex_attrib_pointer_with_i32(
+                vertex_attributes.uv0,
+                2, // num components
                 WebGl2RenderingContext::FLOAT,
                 false, // normalize
                 0,     // stride
