@@ -22,7 +22,7 @@ impl Camera {
         Self {
             elevation: 0.0,
             azimuth: 0.0,
-            distance: 7.0,
+            distance: 15.0,
             fov: 1.0,
             near: 0.1,
             far: 500.0,

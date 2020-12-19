@@ -26,9 +26,6 @@ pub struct App {
 
     resolution: (u32, u32),
     click_location: Option<(i32, i32)>,
-
-    dirty: bool,
-    last_render_time: f32,
 }
 
 impl App {
@@ -53,7 +50,7 @@ impl App {
             }
         };
 
-        let mut shader_stl = match ShaderStl::new(&gl, &resources) {
+        let shader_stl = match ShaderStl::new(&gl, &resources) {
             Ok(g) => g,
             Err(err) => {
                 log(&format!("ShaderStl error {:?}", err));
@@ -67,9 +64,6 @@ impl App {
                 panic!("ShaderStl error");
             }
         };
-
-        shader_stl.image_matcap = Some(resources.png_images.matcap.clone());
-        shader_stl.image_albedo = Some(resources.png_images.ship_tex.clone());
         
         shader_background.image_matcap = Some(resources.png_images.matcap.clone());
 
@@ -84,8 +78,6 @@ impl App {
             camera,
             resolution: (100, 100),
             click_location: None,
-            dirty: true,
-            last_render_time: 0.0,
         }
     }
 
@@ -105,8 +97,6 @@ impl App {
             self.camera.aspect = (client_width as f32) / (client_height as f32);
             self.resolution = (client_width, client_height);
 
-            self.dirty = true;
-
             log(&format!("Resized to {}:{}", client_width, client_height));
         }
     }
@@ -116,19 +106,11 @@ impl App {
         let now = window().unwrap().performance().unwrap().now();
         let time = (now / 1000.0) as f32;
 
-        let time_since_render = time - self.last_render_time;
-        if time_since_render > 0.2 {
-            self.dirty = true;
-        }
 
-        if self.dirty {
-            self.render();
-            self.dirty = false;
-            self.last_render_time = time;
-        }
+        self.render(time);
     }
 
-    fn render(&mut self) {
+    fn render(&mut self, time: f32) {
         self.gl.clear(
             WebGl2RenderingContext::COLOR_BUFFER_BIT | WebGl2RenderingContext::DEPTH_BUFFER_BIT,
         );
@@ -148,59 +130,101 @@ impl App {
 
         {
             // Render the models
-            self.shader_stl
-                .setup(&self.gl, world_to_camera, camera_to_screen);
-
-            self.shader_stl.set_entity_data(
+            self.shader_stl.setup(
                 &self.gl,
-                Mat4::from_translation(Vec3::new(0.0, 0.0, 0.0)),
-                Vec4::new(1.0, 1.0,1.0, 1.0),
+                &world_to_camera,
+                &camera_to_screen,
+                &Some(self.resources.png_images.matcap.clone()),
+                &Some(self.resources.png_images.ship_tex.clone())
             );
-            self.resources
-                .meshes
-                .vehicle_dashboard
-                .bind_and_render(&self.gl, &self.shader_stl.attributes);
 
-            self.shader_stl.set_entity_data(
-                &self.gl,
-                Mat4::from_translation(Vec3::new(0.0, 0.0, 0.0)),
-                Vec4::new(1.0, 1.0, 1.0, 1.0),
-            );
-            self.resources
-                .meshes
-                .vehicle_cockpit_frame
-                .bind_and_render(&self.gl, &self.shader_stl.attributes);
-
-            self.shader_stl.set_entity_data(
-                &self.gl,
-                Mat4::from_translation(Vec3::new(0.0, 0.0, 0.0)),
-                Vec4::new(1.0, 1.0, 1.0, 1.0),
-            );
-            self.resources
-                .meshes
-                .vehicle_overhead_panel
-                .bind_and_render(&self.gl, &self.shader_stl.attributes);
-
-            self.shader_stl.set_entity_data(
-                &self.gl,
-                Mat4::from_translation(Vec3::new(0.0, 0.0, 0.0)),
-                Vec4::new(1.0, 1.0, 1.0, 1.0),
-            );
-            self.resources
-                .meshes
-                .vehicle_chassis
-                .bind_and_render(&self.gl, &self.shader_stl.attributes);
+            {
+                // Ship
+                let mut ship_position = Mat4::from_translation(Vec3::new(f32::sin(time) + 3.0, 0.0, 0.0));
+                ship_position = ship_position * Mat4::from_rotation_ypr(-0.3 + f32::cos(time)*0.2, 0.0,time);
+                let ship_color = Vec4::new(1.0, 1.0,1.0, 1.0);
+                let glass_color = Vec4::new(0.2, 0.2, 0.6, 0.2);
+                
+                
+                let ship_entities = vec![
+                    &self.resources.meshes.vehicle_dashboard,
+                    &self.resources.meshes.vehicle_cockpit_frame,
+                    &self.resources.meshes.vehicle_overhead_panel,
+                    &self.resources.meshes.vehicle_chassis,
+                    &self.resources.meshes.vehicle_dashboard,
+                ];
+                self.shader_stl.set_entity_data(
+                    &self.gl,
+                    ship_position,
+                    ship_color,
+                );
+                
+                for ship_entity in ship_entities {                    
+                    ship_entity.bind_and_render(&self.gl, &self.shader_stl.attributes);
+                }
+                
+                self.shader_stl.set_entity_data(
+                    &self.gl,
+                    ship_position,
+                    glass_color,
+                );
+                self.resources
+                    .meshes
+                    .vehicle_glass
+                    .bind_and_render(&self.gl, &self.shader_stl.attributes);
+            }
             
-            
-            self.shader_stl.set_entity_data(
+            // Set up for the other assets
+            self.shader_stl.setup(
                 &self.gl,
-                Mat4::from_translation(Vec3::new(0.0, 0.0, 0.0)),
-                Vec4::new(0.2, 0.2, 0.6, 0.2),
+                &world_to_camera,
+                &camera_to_screen,
+                &Some(self.resources.png_images.matcap.clone()),
+                &Some(self.resources.png_images.other_assets.clone())
             );
-            self.resources
-                .meshes
-                .vehicle_glass
-                .bind_and_render(&self.gl, &self.shader_stl.attributes);
+            
+            {
+                // Other objects dotted around
+                self.shader_stl.set_entity_data(
+                    &self.gl,
+                    Mat4::from_translation(Vec3::new(0.0, 0.0, 2.0)),
+                    Vec4::new(1.0, 1.0, 1.0, 1.0),
+                );
+                self.resources
+                    .meshes
+                    .other_assets_landing_pad
+                    .bind_and_render(&self.gl, &self.shader_stl.attributes);
+
+                self.shader_stl.set_entity_data(
+                    &self.gl,
+                    Mat4::from_translation(Vec3::new(10.0, 0.0, 2.0)),
+                    Vec4::new(1.0, 1.0, 1.0, 1.0),
+                );
+                self.resources
+                    .meshes
+                    .other_assets_light_truss
+                    .bind_and_render(&self.gl, &self.shader_stl.attributes);
+
+
+                self.shader_stl.set_entity_data(
+                    &self.gl,
+                    Mat4::from_translation(Vec3::new(10.0, 10.0, -2.0)),
+                    Vec4::new(1.0, 1.0, 1.0, 1.0),
+                );
+                self.resources
+                    .meshes
+                    .other_assets_fuel_tank
+                    .bind_and_render(&self.gl, &self.shader_stl.attributes);
+                self.shader_stl.set_entity_data(
+                    &self.gl,
+                    Mat4::from_translation(Vec3::new(7.0, 18.0, -2.0)),
+                    Vec4::new(1.0, 1.0, 1.0, 1.0),
+                );
+                self.resources
+                    .meshes
+                    .other_assets_fuel_tank
+                    .bind_and_render(&self.gl, &self.shader_stl.attributes);
+            }
         }
     }
 
@@ -218,18 +242,15 @@ impl App {
                 self.camera.azimuth += percentage_x;
                 self.camera.elevation -= percentage_y;
                 self.camera.elevation = f32::min(f32::max(self.camera.elevation, -1.4), 1.4);
-                self.dirty = true;
             }
             None => {}
         }
     }
     pub fn mouse_down(&mut self, event: MouseEvent) {
         self.click_location = Some((event.client_x(), event.client_y()));
-        self.dirty = true;
     }
     pub fn mouse_up(&mut self, _event: MouseEvent) {
         self.click_location = None;
-        self.dirty = true;
     }
 
     pub fn key_event(&mut self, event: KeyEvent) {

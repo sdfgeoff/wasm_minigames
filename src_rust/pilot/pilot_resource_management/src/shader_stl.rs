@@ -27,9 +27,6 @@ pub struct ShaderStl {
     pub uniform_world_to_camera: Option<WebGlUniformLocation>,
     pub uniform_world_to_model: Option<WebGlUniformLocation>,
     pub uniform_camera_to_screen: Option<WebGlUniformLocation>,
-
-    pub image_matcap: Option<WebGlTexture>,
-    pub image_albedo: Option<WebGlTexture>,
 }
 
 impl ShaderStl {
@@ -64,17 +61,16 @@ impl ShaderStl {
             uniform_world_to_camera,
             uniform_world_to_model,
             uniform_camera_to_screen,
-
-            image_matcap: None,
-            image_albedo: None,
         })
     }
 
     pub fn setup(
         &self,
         gl: &WebGl2RenderingContext,
-        world_to_camera: Mat4,
-        camera_to_screen: Mat4,
+        world_to_camera: &Mat4,
+        camera_to_screen: &Mat4,
+        image_matcap: &Option<WebGlTexture>,
+        image_albedo: &Option<WebGlTexture>,
     ) {
         gl.use_program(Some(&self.program));
         
@@ -95,13 +91,13 @@ impl ShaderStl {
         bind_2d_texture_to_uniform(
             &gl,
             &self.uniform_image_matcap,
-            &self.image_matcap,
+            image_matcap,
             TextureUnit::Unit0,
         );
         bind_2d_texture_to_uniform(
             &gl,
             &self.uniform_image_albedo,
-            &self.image_albedo,
+            image_albedo,
             TextureUnit::Unit1,
         );
     }

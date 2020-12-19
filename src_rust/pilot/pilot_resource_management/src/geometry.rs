@@ -67,7 +67,7 @@ impl Geometry {
     }
 
     /// Mage sure everything is set up for rendering this geometry
-    pub fn bind(&mut self, gl: &WebGl2RenderingContext, vertex_attributes: &VertexAttributes) {
+    pub fn bind(&self, gl: &WebGl2RenderingContext, vertex_attributes: &VertexAttributes) {
         gl.enable_vertex_attrib_array(vertex_attributes.positions);
         gl.bind_buffer(
             WebGl2RenderingContext::ARRAY_BUFFER,
@@ -121,7 +121,7 @@ impl Geometry {
     }
 
     /// Actually render this geometry
-    pub fn render(&mut self, gl: &WebGl2RenderingContext) {
+    pub fn render(&self, gl: &WebGl2RenderingContext) {
         gl.draw_elements_with_i32(
             WebGl2RenderingContext::TRIANGLES,
             self.indices.buffer_length,
@@ -135,7 +135,7 @@ impl Geometry {
     /// geometry with this shader. Otherwise you can optimize by
     /// calling `bind` once and `render` lots.
     pub fn bind_and_render(
-        &mut self,
+        &self,
         gl: &WebGl2RenderingContext,
         vertex_attributes: &VertexAttributes,
     ) {

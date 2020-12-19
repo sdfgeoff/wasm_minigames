@@ -351,17 +351,22 @@ if vertex_attributes.uv0 != 0xFFFFFFFF {
 
 ```
 
+
 And voila:
 
 
 <canvas id="pilot_resource_management">
 
+That path the ship is following? Yeah, it's just a bunch of sine waves
+plugged together.
+The strange lighting on the landing platform? I think that's because the 
+background is sampled based on the normal, and for a face poining 
+directly along the Z axis it hits the seam in the equirectangular map.
+
+It's worth noting that the binary is now approaching 900kb. Most of 
+that is occupied by the ship texture which is ~350kb. With a bit of luck
+there won't be too many more textures or models required so it shouldn't
+grow too much more. When the size approaches a couple Mb we may have to
+somehow indicate the load status of the WASM blob.
 
 
-You may notice there appears to be a seam along the top of the vehicle. 
-This is actually because of the seam in the image used for the 
-background and it occurs because we are sampling the background based 
-on the normal of the surface. Most of the time using the normal is 
-fine, but because the background is an equirectangular map, it has a 
-pole at the top and bottom. At these points exactly what pixel gets 
-sampled is a bit hit-and-miss.
