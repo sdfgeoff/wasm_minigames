@@ -3,8 +3,10 @@ use wasm_bindgen::{JsCast, JsValue};
 use web_sys::{window, HtmlCanvasElement, KeyEvent, MouseEvent, WebGl2RenderingContext};
 
 use super::camera::Camera;
+use super::framebuffer::GBuffer;
 use super::resources::Resources;
 use super::shader_background::ShaderBackground;
+use super::shader_lighting_pass::ShaderLightingPass;
 use super::shader_stl::ShaderStl;
 
 use glam::{Mat4, Vec3, Vec4};
@@ -21,8 +23,11 @@ pub struct App {
     gl: WebGl2RenderingContext,
     shader_stl: ShaderStl,
     shader_background: ShaderBackground,
+    shader_lighting_pass: ShaderLightingPass,
     camera: Camera,
     resources: Resources,
+
+    gbuffer: GBuffer,
 
     resolution: (u32, u32),
     click_location: Option<(i32, i32)>,
@@ -31,6 +36,8 @@ pub struct App {
 impl App {
     pub fn new(canvas: HtmlCanvasElement) -> Self {
         let gl = get_gl_context(&canvas).expect("No GL Canvas");
+
+        let float_tex_extension = gl.get_extension("EXT_color_buffer_float");
 
         gl.clear_color(0.0, 0.0, 0.0, 1.0);
         gl.enable(WebGl2RenderingContext::DEPTH_TEST);
@@ -41,6 +48,8 @@ impl App {
         if gl.is_null() {
             panic!("No Webgl");
         }
+
+        let resolution = (100, 100);
 
         let resources = match Resources::new(&gl) {
             Ok(g) => g,
@@ -64,8 +73,17 @@ impl App {
                 panic!("ShaderStl error");
             }
         };
+        let shader_lighting_pass = match ShaderLightingPass::new(&gl, &resources) {
+            Ok(g) => g,
+            Err(err) => {
+                log(&format!("ShaderStl error {:?}", err));
+                panic!("ShaderStl error");
+            }
+        };
 
-        shader_background.image_matcap = Some(resources.png_images.matcap.clone());
+        shader_background.image_matcap = resources.png_images.matcap.clone();
+
+        let gbuffer = GBuffer::new(&gl, resolution).expect("Failed to create GBuffer");
 
         let camera = Camera::new();
 
@@ -75,8 +93,10 @@ impl App {
             resources,
             shader_stl,
             shader_background,
+            shader_lighting_pass,
+            gbuffer,
             camera,
-            resolution: (100, 100),
+            resolution,
             click_location: None,
         }
     }
@@ -97,6 +117,10 @@ impl App {
             self.camera.aspect = (client_width as f32) / (client_height as f32);
             self.resolution = (client_width, client_height);
 
+            self.gbuffer.delete(&self.gl);
+            self.gbuffer =
+                GBuffer::new(&self.gl, self.resolution).expect("Failed to create GBuffer");
+
             log(&format!("Resized to {}:{}", client_width, client_height));
         }
     }
@@ -110,6 +134,7 @@ impl App {
     }
 
     fn render(&mut self, time: f32) {
+        self.gbuffer.bind(&self.gl);
         self.gl.clear(
             WebGl2RenderingContext::COLOR_BUFFER_BIT | WebGl2RenderingContext::DEPTH_BUFFER_BIT,
         );
@@ -120,7 +145,6 @@ impl App {
             // Render the background
             self.shader_background
                 .setup(&self.gl, world_to_camera, camera_to_screen);
-            //self.background.render(&self.gl, &self.shader_background);
             self.resources
                 .meshes
                 .quad_quad
@@ -133,8 +157,8 @@ impl App {
                 &self.gl,
                 &world_to_camera,
                 &camera_to_screen,
-                &Some(self.resources.png_images.matcap.clone()),
-                &Some(self.resources.png_images.ship_tex.clone()),
+                &self.resources.png_images.matcap,
+                &self.resources.png_images.ship_tex,
             );
 
             {
@@ -144,14 +168,13 @@ impl App {
                 ship_position =
                     ship_position * Mat4::from_rotation_ypr(-0.3 + f32::cos(time) * 0.2, 0.0, time);
                 let ship_color = Vec4::new(1.0, 1.0, 1.0, 1.0);
-                let glass_color = Vec4::new(0.2, 0.2, 0.6, 0.2);
+                //~ let glass_color = Vec4::new(0.2, 0.2, 0.6, 0.2);
 
                 let ship_entities = vec![
                     &self.resources.meshes.vehicle_dashboard,
                     &self.resources.meshes.vehicle_cockpit_frame,
                     &self.resources.meshes.vehicle_overhead_panel,
                     &self.resources.meshes.vehicle_chassis,
-                    &self.resources.meshes.vehicle_dashboard,
                 ];
                 self.shader_stl
                     .set_entity_data(&self.gl, ship_position, ship_color);
@@ -160,12 +183,15 @@ impl App {
                     ship_entity.bind_and_render(&self.gl, &self.shader_stl.attributes);
                 }
 
-                self.shader_stl
-                    .set_entity_data(&self.gl, ship_position, glass_color);
-                self.resources
-                    .meshes
-                    .vehicle_glass
-                    .bind_and_render(&self.gl, &self.shader_stl.attributes);
+                //~ self.shader_stl.set_entity_data(
+                //~ &self.gl,
+                //~ ship_position,
+                //~ glass_color,
+                //~ );
+                //~ self.resources
+                //~ .meshes
+                //~ .vehicle_glass
+                //~ .bind_and_render(&self.gl, &self.shader_stl.attributes);
             }
 
             // Set up for the other assets
@@ -173,8 +199,8 @@ impl App {
                 &self.gl,
                 &world_to_camera,
                 &camera_to_screen,
-                &Some(self.resources.png_images.matcap.clone()),
-                &Some(self.resources.png_images.other_assets.clone()),
+                &self.resources.png_images.matcap,
+                &self.resources.png_images.other_assets,
             );
 
             {
@@ -219,6 +245,20 @@ impl App {
                     .bind_and_render(&self.gl, &self.shader_stl.attributes);
             }
         }
+
+        self.gl
+            .bind_framebuffer(WebGl2RenderingContext::FRAMEBUFFER, None);
+        self.shader_lighting_pass.setup(
+            &self.gl,
+            &self.gbuffer.normal_depth_target,
+            &self.gbuffer.albedo_target,
+            &self.resources.png_images.matcap,
+        );
+
+        self.resources
+            .meshes
+            .quad_quad
+            .bind_and_render(&self.gl, &self.shader_lighting_pass.attributes);
     }
 
     pub fn mouse_move(&mut self, event: MouseEvent) {

@@ -1,0 +1,41 @@
+[package]
+name = "pilot_basic_deferred"
+version = "0.1.0"
+authors = ["Geoffrey Irons <sdfgeoff@gmail.com>"]
+edition = "2018"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+wasm-bindgen="0.2.69"
+js-sys="0.3.40"
+glam="0.10.0"
+
+[dependencies.web-sys]
+version = "0.3.4"
+features = [
+    "Document",
+    "Event",
+    "Blob",
+    "BlobPropertyBag",
+    "Url",
+    "HtmlCanvasElement",
+    "HtmlImageElement",
+    "HtmlElement",
+    "KeyEvent",
+    "MouseEvent",
+    'Performance',
+    "WebGl2RenderingContext",
+    "WebGlFramebuffer",
+    "WebGlShader",
+    "WebGlTexture",
+    "WebGlBuffer",
+    "WebGlProgram",
+    "WebGlUniformLocation",
+    "Window",
+]
+
+[build-dependencies]
+codegen="0.1.3"
+glsl="6.0.0"

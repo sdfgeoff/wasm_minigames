@@ -8,10 +8,12 @@ use web_sys::{window, Event, HtmlCanvasElement, KeyEvent, MouseEvent};
 
 mod app;
 mod camera;
+mod framebuffer;
 mod geometry;
 mod mesh;
 mod shader;
 mod shader_background;
+mod shader_lighting_pass;
 mod shader_stl;
 mod texture;
 

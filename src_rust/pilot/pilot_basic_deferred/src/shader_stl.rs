@@ -74,11 +74,8 @@ impl ShaderStl {
     ) {
         gl.use_program(Some(&self.program));
 
-        gl.enable(WebGl2RenderingContext::BLEND);
-        gl.blend_func(
-            WebGl2RenderingContext::SRC_ALPHA,
-            WebGl2RenderingContext::ONE_MINUS_SRC_ALPHA,
-        );
+        //gl.enable(WebGl2RenderingContext::BLEND);
+        //gl.blend_func(WebGl2RenderingContext::SRC_ALPHA, WebGl2RenderingContext::ONE_MINUS_SRC_ALPHA);
 
         gl.uniform_matrix4fv_with_f32_array(
             self.uniform_world_to_camera.as_ref(),

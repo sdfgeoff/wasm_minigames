@@ -355,7 +355,7 @@ if vertex_attributes.uv0 != 0xFFFFFFFF {
 And voila:
 
 
-<canvas id="pilot_resource_management">
+<canvas id="pilot_resource_management"></canvas>
 
 That path the ship is following? Yeah, it's just a bunch of sine waves
 plugged together.

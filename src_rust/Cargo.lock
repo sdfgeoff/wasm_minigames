@@ -205,6 +205,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "pilot_basic_deferred"
+version = "0.1.0"
+dependencies = [
+ "codegen",
+ "glam",
+ "glsl",
+ "js-sys",
+ "wasm-bindgen",
+ "web-sys",
+]
+
+[[package]]
 name = "pilot_resource_management"
 version = "0.1.0"
 dependencies = [

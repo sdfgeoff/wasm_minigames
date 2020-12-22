@@ -97,7 +97,10 @@ fn generate_png_images(out_scope: &mut Scope, files: &Vec<PathBuf>) {
             field_name,
             file.to_str().unwrap(),
         ));
-        png_struct.field(&format!("pub {}", field_name), "web_sys::WebGlTexture");
+        png_struct.field(
+            &format!("pub {}", field_name),
+            "Option<web_sys::WebGlTexture>",
+        );
     }
 
     png_struct_initilizer.line("})");
