@@ -33,3 +33,4 @@
     - [Architecture Planning](pilot/architecture_plan.md)
     - [Resource Management](pilot/resource_management.md)
     - [Basic Deferred](pilot/basic_deferred.md)
+    - [Cave Rendering](pilot/cave_rendering.md)
