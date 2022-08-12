@@ -173,6 +173,6 @@ to get the duration for each lap.
 
 And that's about it really for the score screen.
 
-<canvas id="swoop_win_condition"></canvas>
+<canvas id="swoop/swoop_win_condition"></canvas>
 
 

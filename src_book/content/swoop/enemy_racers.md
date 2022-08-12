@@ -265,7 +265,7 @@ pub fn calc_ai_control(ship: &mut Ship, skill: f32, map: &Map) {
 
 And there we have it:
 
-<canvas id="swoop_enemy_racers"></canvas>
+<canvas id="swoop/swoop_enemy_racers"></canvas>
 
 I can always beat yellow (no lookahead), often beat yellow (0.5s max 
 lookahead) and am not ever close to purple (1s lookahead). I suppose 

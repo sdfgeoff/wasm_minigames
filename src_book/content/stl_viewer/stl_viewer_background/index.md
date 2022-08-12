@@ -118,7 +118,7 @@ void main() {
 
 And our final canvas is:
 
-<canvas id="stl_viewer_background"></canvas>
+<canvas id="stl_viewer/stl_viewer_background"></canvas>
 
 Because I was developing this on my laptop away from a power socket,
 I also changed the rendering to only render periodically, but to force

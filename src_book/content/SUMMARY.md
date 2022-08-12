@@ -28,7 +28,7 @@
     - [Load and Render STL Files](stl_viewer/stl_viewer_load_stl/index.md)
     - [Camera Lookaround](stl_viewer/stl_viewer_camera_lookaround/index.md)
     - [Background and Appearance](stl_viewer/stl_viewer_background/index.md)
-- [A Second Game: Pilot](pilot/index.md)
+- [A Second Game: Pilot (abandoned)](pilot/index.md)
     - [Concept Art](pilot/concept_art.md)
     - [Architecture Planning](pilot/architecture_plan.md)
     - [Resource Management](pilot/resource_management.md)

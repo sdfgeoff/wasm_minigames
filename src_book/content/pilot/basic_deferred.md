@@ -154,7 +154,7 @@ something deferred renderers struggle with. Will I re-enable it? Maybe.
 You'll also notice a lot more aliasing artifaces - another disadvantage
 of deferred rendering. But the result so far:
 
-<canvas id="pilot_basic_deferred"></canvas>
+<canvas id="pilot/pilot_basic_deferred"></canvas>
 
 
 

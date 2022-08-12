@@ -173,5 +173,5 @@ ships with one "ship sprite":
 ---------------------------------------------------
 Proof that it all works:
 
-<canvas id="swoop_drawing_the_player"></canvas>
+<canvas id="swoop/swoop_drawing_the_player"></canvas>
 

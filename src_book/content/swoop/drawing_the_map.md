@@ -26,7 +26,7 @@ with handling uniforms - which is likely to be pretty shader specific.
 
 So anyway, here's drawing the coordinates for the map:
 
-<canvas id="swoop_drawing_the_map-0" options="coords"></canvas>
+<canvas id="swoop/swoop_drawing_the_map-0" options="coords"></canvas>
 
 
 ------------------------------------
@@ -73,7 +73,7 @@ FragColor = vec4(vec3(track_sdf > 0.0), 1.0);
 
 This gives us:
 
-<canvas id="swoop_drawing_the_map-1" options="circle_1"></canvas>
+<canvas id="swoop/swoop_drawing_the_map-1" options="circle_1"></canvas>
 
 You can see there's a black circle in the middle of the screen. This
 would mean that the player can fly anywhere in that circle. We want the
@@ -86,7 +86,7 @@ some negative (track) area:
 track_sdf = abs(track_sdf) - track_width;
 ```
 
-<canvas id="swoop_drawing_the_map-2" options="circle_2"></canvas>
+<canvas id="swoop/swoop_drawing_the_map-2" options="circle_2"></canvas>
 
 (Note that the blue ship is invisible because the ships use additive
 blending)
@@ -106,7 +106,7 @@ a fourier series to distort it based on the angle from the center:
 
 And the resulting track:
 
-<canvas id="swoop_drawing_the_map-3" options="fourier_1"></canvas>
+<canvas id="swoop/swoop_drawing_the_map-3" options="fourier_1"></canvas>
 
 It shouldn't be hard to port the map function into rust when it comes
 time to write the collision detection.
@@ -114,7 +114,7 @@ time to write the collision detection.
 Now to make it look pretty by adding a grid in the background and
 drawing some lines around the edge:
 
-<canvas id="swoop_drawing_the_map-4" options="visualized"></canvas>
+<canvas id="swoop/swoop_drawing_the_map-4" options="visualized"></canvas>
 
 Looks like a pretty small map? That's OK, we can tweak it using the
 `track_width` and `track_base_radius` parameters later.

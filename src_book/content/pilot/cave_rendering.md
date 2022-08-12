@@ -63,4 +63,4 @@ plane/shader, so we can work with that.The first thing we need to do is
 pass in the camera transform
 
 
-<canvas id="pilot_cave_rendering"></canvas>
+<canvas id="pilot/pilot_cave_rendering"></canvas>

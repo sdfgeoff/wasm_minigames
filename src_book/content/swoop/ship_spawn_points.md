@@ -217,4 +217,4 @@ modeling "intersection" operation).
 
 And the result of all this is:
 
-<canvas id="swoop_ship_spawn_points"></canvas>
+<canvas id="swoop/swoop_ship_spawn_points"></canvas>

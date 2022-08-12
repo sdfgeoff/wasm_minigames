@@ -256,7 +256,7 @@ gl_Position = vec4(pos, 0.0, 1.0);
 
 And we're good to go!
 
-<canvas id="swoop_engine_trails"></canvas>
+<canvas id="swoop/swoop_engine_trails"></canvas>
 
 Now, there is a bit more to it than was described in this page. I added 
 another array called `data_buffer` that contains if the engine is on or 

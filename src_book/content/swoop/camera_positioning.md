@@ -120,7 +120,7 @@ const SMOOTHING: f32 = 0.4;
 
 The result is:
 
-<canvas id="swoop_camera_positioning"></canvas>
+<canvas id="swoop/swoop_camera_positioning"></canvas>
 
 Now compare it to the previous page. The game is exactly the same, but
 you can probably fly around without crashing now!

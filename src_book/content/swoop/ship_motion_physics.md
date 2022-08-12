@@ -95,7 +95,7 @@ Connect up some input to one of the ships:
 
 And we are good to go:
 
-<canvas id="swoop_ship_motion_physics"></canvas>
+<canvas id="swoop/swoop_ship_motion_physics"></canvas>
 
 You'll notice that once you start turning it keeps turning, that's because
 we haven't yet turned the keypress events into something that cleanly

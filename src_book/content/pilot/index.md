@@ -32,3 +32,15 @@ Unlike the initial demos and the swoop game which were small enough
 that we could launc into them without a clear idea of where we were going,
 this game requires a bit more planning - both on the gameplay/content
 side and on the Rust architecture side.
+
+
+# Abandoned?
+Yeah, I never managed to get the signed distance field of the cave to
+render properly alongside the geometry of the player ship and other
+assets. It's take some sitting down and figuring out how projection
+matrices actually work :)
+
+So anyway, I'll stick this up here because it contains my initial attempts
+at deferred rendering - which may well be useful later (in fact,
+I've referred to this example countless times when experimenting with other
+openGL programs such as <a href="http://sdfgeoff.space/pages/scalable_editable_raster_graphics__serg_/index.html">sverg</a> and <a href="http://sdfgeoff.space/pages/gametoy__a_shadertoy_alike_for_making_games/index.html">gametoy</a>)

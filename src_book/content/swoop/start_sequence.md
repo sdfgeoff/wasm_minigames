@@ -551,6 +551,6 @@ We can now create a text box for the countdown and update it as needed
 That was a long one but here we have it: A menu and a countdown at the
 start of the game. 
 
-<canvas id="swoop_start_sequence"></canvas>
+<canvas id="swoop/swoop_start_sequence"></canvas>
 
 

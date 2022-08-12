@@ -266,7 +266,7 @@ void main() {
 
 The final result is:
 
-<canvas id="stl_viewer_load_stl"></canvas>
+<canvas id="stl_viewer/stl_viewer_load_stl"></canvas>
 
 You'll noticce there's some clipping on the monkey head ears. This is 
 because clip space runs from `-1.0` to `1.0` on the `z` axis and we 

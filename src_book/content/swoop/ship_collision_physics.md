@@ -218,7 +218,7 @@ not to wall slide.
 
 And there we have it, simple physics completed:
 
-<canvas id="swoop_ship_collision_physics"></canvas>
+<canvas id="swoop/swoop_ship_collision_physics"></canvas>
 
 You'll notice you can get some jitter when pushing other ships into 
 walls and corners. This is because we aren't doing any of the clever 

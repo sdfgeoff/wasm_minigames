@@ -169,5 +169,5 @@ locations and checking that the camera moves around as we would expect:
 
 And the result is:
 
-<canvas id="stl_viewer_camera_lookaround"></canvas>
+<canvas id="stl_viewer/stl_viewer_camera_lookaround"></canvas>
 

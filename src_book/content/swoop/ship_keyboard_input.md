@@ -165,7 +165,7 @@ self.key_map.update();
 ```
 
 And the result is:
-<canvas id="swoop_ship_keyboard_input"></canvas>
+<canvas id="swoop/swoop_ship_keyboard_input"></canvas>
 
 Why implement it all this way? Why not convert the key string to an 
 enum then use a hashmap to store key state, and make the KeyMap more 

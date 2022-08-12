@@ -453,7 +453,7 @@ enough I don't consider it a problem, but this is worth investigating
 in the future.
 
 ### The End result
-<canvas id="swoop_wingtip_trails"></canvas>
+<canvas id="swoop/swoop_wingtip_trails"></canvas>
 
 There shouldn't be much difference except it has engine trails and 
 should run a touch better.

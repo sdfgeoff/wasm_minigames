@@ -75,4 +75,4 @@ This is the sort of thing you can fiddle with all day, so we'll leave it
 here and move on.
 
 
-<canvas id="swoop_map_generation"></canvas>
+<canvas id="swoop/swoop_map_generation"></canvas>

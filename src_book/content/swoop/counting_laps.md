@@ -250,6 +250,6 @@ I'd love to know!
 Anyway, the only thing to do now is to play it and see how far ahead
 purple actually gets.....
 
-<canvas id="swoop_counting_laps"></canvas>
+<canvas id="swoop/swoop_counting_laps"></canvas>
 
 
