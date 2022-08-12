@@ -43,25 +43,28 @@ impl Camera {
             self.distance * sa * ce,
             self.distance * se,
         );
-        let world_to_camera =
-            Mat4::look_at_rh(self.center + position, self.center + Vec3::new(0.0, 0.0, 0.0), Vec3::new(0.0, 0.0, 1.0));
+        let world_to_camera = Mat4::look_at_rh(
+            self.center + position,
+            self.center + Vec3::new(0.0, 0.0, 0.0),
+            Vec3::new(0.0, 0.0, 1.0),
+        );
 
-        let mut camera_to_screen = Mat4::perspective_rh_gl(self.fov, self.aspect, self.near, self.far);
-        
+        let mut camera_to_screen =
+            Mat4::perspective_rh_gl(self.fov, self.aspect, self.near, self.far);
+
         //~ let mut x_axis = camera_to_screen.x_axis();
         //~ x_axis[2] = x_axis[2] / self.far;
         //~ camera_to_screen.set_x_axis(x_axis);
-        
+
         //~ let mut y_axis = camera_to_screen.y_axis();
         //~ y_axis[2] = y_axis[2] / self.far;
         //~ camera_to_screen.set_y_axis(y_axis);
-        
+
         //~ let mut z_axis = camera_to_screen.z_axis();
         //~ z_axis[0] = z_axis[0] / self.far;
         //~ z_axis[1] = z_axis[1] / self.far;
-//        z_axis[2] = z_axis[2] / self.far;
+        //        z_axis[2] = z_axis[2] / self.far;
         //~ camera_to_screen.set_z_axis(z_axis);
-        
 
         (world_to_camera, camera_to_screen)
     }

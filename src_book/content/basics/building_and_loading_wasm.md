@@ -34,7 +34,7 @@ is an invocation of the function:
 using an element like:
 
 ```html
-<canvas id="building_and_loading_wasm"></canvas>
+<canvas id="basics/building_and_loading_wasm"></canvas>
 ```
 
 A very simple rust webassembly program looks like:
@@ -45,7 +45,7 @@ A very simple rust webassembly program looks like:
 
 All up this creates:
 
-<canvas id="building_and_loading_wasm"></canvas>
+<canvas id="basics/building_and_loading_wasm"></canvas>
 
 You'll notice when you click on it plays a loading animation. That's done in
 in CSS. Normally this would get cancelled from inside the WASM binary, but

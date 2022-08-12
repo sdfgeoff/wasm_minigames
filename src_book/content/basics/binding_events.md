@@ -97,7 +97,7 @@ them. This is easy enough with `e.stop_propagation()` and `e.prevent_default()`
 which both prevent other handlers on the page and the browser from seeing the
 event.
 
-<canvas id="binding_events"></canvas>
+<canvas id="basics/binding_events"></canvas>
 
 Once again there's nothing visible, but if you check the console you'll see all
 the events reported by the WASM

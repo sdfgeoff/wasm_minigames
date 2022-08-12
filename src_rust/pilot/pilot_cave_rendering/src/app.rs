@@ -128,7 +128,7 @@ impl App {
     pub fn animation_frame(&mut self) {
         self.check_resize();
         let now = window().unwrap().performance().unwrap().now();
-        
+
         let time = (now / 1000.0) as f32;
 
         self.render(time);
@@ -207,14 +207,14 @@ impl App {
             {
                 // Other objects dotted around
                 //~ self.shader_stl.set_entity_data(
-                    //~ &self.gl,
-                    //~ Mat4::from_translation(Vec3::new(0.0, 0.0, 2.0)),
-                    //~ Vec4::new(1.0, 1.0, 1.0, 1.0),
+                //~ &self.gl,
+                //~ Mat4::from_translation(Vec3::new(0.0, 0.0, 2.0)),
+                //~ Vec4::new(1.0, 1.0, 1.0, 1.0),
                 //~ );
                 //~ self.resources
-                    //~ .meshes
-                    //~ .other_assets_landing_pad
-                    //~ .bind_and_render(&self.gl, &self.shader_stl.attributes);
+                //~ .meshes
+                //~ .other_assets_landing_pad
+                //~ .bind_and_render(&self.gl, &self.shader_stl.attributes);
 
                 self.shader_stl.set_entity_data(
                     &self.gl,

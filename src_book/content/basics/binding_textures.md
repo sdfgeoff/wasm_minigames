@@ -218,4 +218,4 @@ pub fn render(&mut self, gl: &WebGl2RenderingContext) {
 
 After all that confuffling, The end result is:
 
-<canvas id="binding_textures"></canvas>
+<canvas id="basics/binding_textures"></canvas>

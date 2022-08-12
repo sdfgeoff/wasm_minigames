@@ -7,7 +7,7 @@ function load(canvas, module_path, options) {
     import(module_path)
     .then((module) => {
         module.default().then(function(obj){
-            let core = new module.Core(canvas.id, options)
+            let core = new module.Core(canvas, options)
             core.start()
             canvas.core = core
         }).catch(function(e){
@@ -25,7 +25,7 @@ function setup_canvas() {
     for (let canvas of canvases) {
         let options = canvas.getAttribute("options") || ""
         let id = canvas.id.split("-")[0] // So we can have multiple canvas' with the same app and different options
-        let module_path = '../gen/'+ id +'.js' // Path to WASM JS bindings
+        let module_path = '../gen/'+ id +'/game.js' // Path to WASM JS bindings
         canvas.tabIndex = 1
         canvas.addEventListener("click", function() {
             load(canvas, module_path, options)

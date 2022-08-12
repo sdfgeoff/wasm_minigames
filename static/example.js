@@ -7,7 +7,7 @@ function load(canvas, module_path, options) {
     import(module_path)
     .then((module) => {
         module.default().then(function(obj){
-            let core = new module.Core(canvas.id, options)
+            let core = new module.Core(canvas, options)
             core.start()
             canvas.core = core
         }).catch(function(e){

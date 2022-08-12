@@ -32,4 +32,4 @@ per second. Unfortunately there isn't an "onresize" event that works for
 generic elements. This could be run just when the canvas initalizes, but then
 it won't catch the user zooming.
 
-<canvas id="fixing_resolution"></canvas>
+<canvas id="basics/fixing_resolution"></canvas>

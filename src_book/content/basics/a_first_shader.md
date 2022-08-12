@@ -29,7 +29,7 @@ Porting from the Mozilla tutorials wasn't too hard, but:
 
 After that, we have:
 
-<canvas id="a_first_shader"></canvas>
+<canvas id="basics/a_first_shader"></canvas>
 
 A triangle!
 

@@ -1,75 +1,120 @@
 pub struct VertexShaders {
-    pub model: web_sys::WebGlShader,
-    pub full_screen_quad: web_sys::WebGlShader,
     pub background: web_sys::WebGlShader,
+    pub full_screen_quad: web_sys::WebGlShader,
+    pub model: web_sys::WebGlShader,
 }
 
 impl VertexShaders {
     fn new(gl: &web_sys::WebGl2RenderingContext) -> Result<Self, crate::shader::ShaderError> {
         Ok(Self {
-            model: crate::shader::load_shader(gl, web_sys::WebGl2RenderingContext::VERTEX_SHADER, include_str!("raw/model.vert"))?,
-            full_screen_quad: crate::shader::load_shader(gl, web_sys::WebGl2RenderingContext::VERTEX_SHADER, include_str!("raw/full_screen_quad.vert"))?,
-            background: crate::shader::load_shader(gl, web_sys::WebGl2RenderingContext::VERTEX_SHADER, include_str!("raw/background.vert"))?,
+            background: crate::shader::load_shader(
+                gl,
+                web_sys::WebGl2RenderingContext::VERTEX_SHADER,
+                include_str!("raw/background.vert"),
+            )?,
+            full_screen_quad: crate::shader::load_shader(
+                gl,
+                web_sys::WebGl2RenderingContext::VERTEX_SHADER,
+                include_str!("raw/full_screen_quad.vert"),
+            )?,
+            model: crate::shader::load_shader(
+                gl,
+                web_sys::WebGl2RenderingContext::VERTEX_SHADER,
+                include_str!("raw/model.vert"),
+            )?,
         })
     }
 }
 
 pub struct FragmentShaders {
-    pub model: web_sys::WebGlShader,
     pub background: web_sys::WebGlShader,
     pub lighting_pass: web_sys::WebGlShader,
+    pub model: web_sys::WebGlShader,
 }
 
 impl FragmentShaders {
     fn new(gl: &web_sys::WebGl2RenderingContext) -> Result<Self, crate::shader::ShaderError> {
         Ok(Self {
-            model: crate::shader::load_shader(gl, web_sys::WebGl2RenderingContext::FRAGMENT_SHADER, include_str!("raw/model.frag"))?,
-            background: crate::shader::load_shader(gl, web_sys::WebGl2RenderingContext::FRAGMENT_SHADER, include_str!("raw/background.frag"))?,
-            lighting_pass: crate::shader::load_shader(gl, web_sys::WebGl2RenderingContext::FRAGMENT_SHADER, include_str!("raw/lighting_pass.frag"))?,
+            background: crate::shader::load_shader(
+                gl,
+                web_sys::WebGl2RenderingContext::FRAGMENT_SHADER,
+                include_str!("raw/background.frag"),
+            )?,
+            lighting_pass: crate::shader::load_shader(
+                gl,
+                web_sys::WebGl2RenderingContext::FRAGMENT_SHADER,
+                include_str!("raw/lighting_pass.frag"),
+            )?,
+            model: crate::shader::load_shader(
+                gl,
+                web_sys::WebGl2RenderingContext::FRAGMENT_SHADER,
+                include_str!("raw/model.frag"),
+            )?,
         })
     }
 }
 
 pub struct PngImages {
     pub matcap: Option<web_sys::WebGlTexture>,
-    pub ship_tex: Option<web_sys::WebGlTexture>,
     pub other_assets: Option<web_sys::WebGlTexture>,
+    pub ship_tex: Option<web_sys::WebGlTexture>,
 }
 
 impl PngImages {
     fn new(gl: &web_sys::WebGl2RenderingContext) -> Result<Self, crate::texture::TextureError> {
         Ok(Self {
             matcap: crate::texture::load_texture(gl, include_bytes!("raw/matcap.png"))?,
-            ship_tex: crate::texture::load_texture(gl, include_bytes!("raw/ship_tex.png"))?,
             other_assets: crate::texture::load_texture(gl, include_bytes!("raw/other_assets.png"))?,
+            ship_tex: crate::texture::load_texture(gl, include_bytes!("raw/ship_tex.png"))?,
         })
     }
 }
 
 pub struct Meshes {
-    pub quad_quad: crate::geometry::Geometry,
-    pub vehicle_chassis: crate::geometry::Geometry,
-    pub vehicle_cockpit_frame: crate::geometry::Geometry,
-    pub vehicle_glass: crate::geometry::Geometry,
-    pub vehicle_overhead_panel: crate::geometry::Geometry,
-    pub vehicle_dashboard: crate::geometry::Geometry,
     pub other_assets_fuel_tank: crate::geometry::Geometry,
     pub other_assets_landing_pad: crate::geometry::Geometry,
     pub other_assets_light_truss: crate::geometry::Geometry,
+    pub quad_quad: crate::geometry::Geometry,
+    pub vehicle_chassis: crate::geometry::Geometry,
+    pub vehicle_cockpit_frame: crate::geometry::Geometry,
+    pub vehicle_dashboard: crate::geometry::Geometry,
+    pub vehicle_glass: crate::geometry::Geometry,
+    pub vehicle_overhead_panel: crate::geometry::Geometry,
 }
 
 impl Meshes {
     fn new(gl: &web_sys::WebGl2RenderingContext) -> Result<Self, crate::geometry::GeometryError> {
         Ok(Self {
+            other_assets_fuel_tank: crate::mesh::load_mesh(
+                gl,
+                include_bytes!("raw/other_assets_fuel_tank.mesh"),
+            )?,
+            other_assets_landing_pad: crate::mesh::load_mesh(
+                gl,
+                include_bytes!("raw/other_assets_landing_pad.mesh"),
+            )?,
+            other_assets_light_truss: crate::mesh::load_mesh(
+                gl,
+                include_bytes!("raw/other_assets_light_truss.mesh"),
+            )?,
             quad_quad: crate::mesh::load_mesh(gl, include_bytes!("raw/quad_quad.mesh"))?,
-            vehicle_chassis: crate::mesh::load_mesh(gl, include_bytes!("raw/vehicle_chassis.mesh"))?,
-            vehicle_cockpit_frame: crate::mesh::load_mesh(gl, include_bytes!("raw/vehicle_cockpit_frame.mesh"))?,
+            vehicle_chassis: crate::mesh::load_mesh(
+                gl,
+                include_bytes!("raw/vehicle_chassis.mesh"),
+            )?,
+            vehicle_cockpit_frame: crate::mesh::load_mesh(
+                gl,
+                include_bytes!("raw/vehicle_cockpit_frame.mesh"),
+            )?,
+            vehicle_dashboard: crate::mesh::load_mesh(
+                gl,
+                include_bytes!("raw/vehicle_dashboard.mesh"),
+            )?,
             vehicle_glass: crate::mesh::load_mesh(gl, include_bytes!("raw/vehicle_glass.mesh"))?,
-            vehicle_overhead_panel: crate::mesh::load_mesh(gl, include_bytes!("raw/vehicle_overhead_panel.mesh"))?,
-            vehicle_dashboard: crate::mesh::load_mesh(gl, include_bytes!("raw/vehicle_dashboard.mesh"))?,
-            other_assets_fuel_tank: crate::mesh::load_mesh(gl, include_bytes!("raw/other_assets_fuel_tank.mesh"))?,
-            other_assets_landing_pad: crate::mesh::load_mesh(gl, include_bytes!("raw/other_assets_landing_pad.mesh"))?,
-            other_assets_light_truss: crate::mesh::load_mesh(gl, include_bytes!("raw/other_assets_light_truss.mesh"))?,
+            vehicle_overhead_panel: crate::mesh::load_mesh(
+                gl,
+                include_bytes!("raw/vehicle_overhead_panel.mesh"),
+            )?,
         })
     }
 }

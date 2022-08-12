@@ -1,4 +1,5 @@
 use wasm_bindgen::prelude::wasm_bindgen;
+use web_sys::HtmlCanvasElement;
 
 // Pull in the console.log function so we can debug things more easily
 #[wasm_bindgen]
@@ -15,8 +16,8 @@ pub struct Core {}
 #[wasm_bindgen]
 impl Core {
     #[wasm_bindgen(constructor)]
-    pub fn new(canvas_id: String) -> Self {
-        log(&format!("WASM Started for canvas {}", canvas_id));
+    pub fn new(canvas: HtmlCanvasElement) -> Self {
+        log(&format!("WASM Started for canvas {}", canvas.id()));
         Self {}
     }
 

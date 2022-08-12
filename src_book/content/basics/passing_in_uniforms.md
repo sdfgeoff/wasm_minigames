@@ -12,7 +12,7 @@ There are two parts to passing in a uniform:
 
 I've also changed the triangle to being a single full-screen quad. This means
 we can now do fancy pixel-shader-rendering:
-<canvas id="passing_in_uniforms"></canvas>
+<canvas id="basics/passing_in_uniforms"></canvas>
 
 Yes that's a single quad. The Shader is [taken from
 shadertoy](https://www.shadertoy.com/view/tt2XzG), written [by
