@@ -64,10 +64,29 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2e8c087f005730276d1096a652e92a8bacee2e2472bcc9715a74d2bec38b5820"
 
 [[package]]
+name = "bytemuck"
+version = "1.11.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a5377c8865e74a160d21f29c2d40669f53286db6eab59b88540cbb12ffc8b835"
+
+[[package]]
 name = "cancel_load_animation"
 version = "0.1.0"
 dependencies = [
  "js-sys",
+ "wasm-bindgen",
+ "web-sys",
+]
+
+[[package]]
+name = "cavefly_basics"
+version = "0.1.0"
+dependencies = [
+ "console_error_panic_hook",
+ "glam 0.21.3",
+ "glow",
+ "js-sys",
+ "qoi",
  "wasm-bindgen",
  "web-sys",
 ]
@@ -131,6 +150,24 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "668e725370f2b2243a5f43c6e4be6be3d501fb2441b81f7ee604ef766b5ab91b"
 dependencies = [
  "version_check",
+]
+
+[[package]]
+name = "glam"
+version = "0.21.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "518faa5064866338b013ff9b2350dc318e14cc4fcd6cb8206d7e7c9886c98815"
+
+[[package]]
+name = "glow"
+version = "0.11.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d8bd5877156a19b8ac83a29b2306fe20537429d318f3ff0a1a2119f8d9c61919"
+dependencies = [
+ "js-sys",
+ "slotmap",
+ "wasm-bindgen",
+ "web-sys",
 ]
 
 [[package]]
@@ -222,7 +259,7 @@ name = "pilot_basic_deferred"
 version = "0.1.0"
 dependencies = [
  "codegen",
- "glam",
+ "glam 0.10.0",
  "glsl",
  "js-sys",
  "wasm-bindgen",
@@ -234,7 +271,7 @@ name = "pilot_cave_rendering"
 version = "0.1.0"
 dependencies = [
  "codegen",
- "glam",
+ "glam 0.10.0",
  "glsl",
  "js-sys",
  "wasm-bindgen",
@@ -246,7 +283,7 @@ name = "pilot_resource_management"
 version = "0.1.0"
 dependencies = [
  "codegen",
- "glam",
+ "glam 0.10.0",
  "glsl",
  "js-sys",
  "wasm-bindgen",
@@ -260,6 +297,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "04f5f085b5d71e2188cb8271e5da0161ad52c3f227a661a3c135fdf28e258b12"
 dependencies = [
  "unicode-xid",
+]
+
+[[package]]
+name = "qoi"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "21259622fa9dfe4a094c4c91a1ef9963324e2453136f55ad5b05a8850e6c6d19"
+dependencies = [
+ "bytemuck",
 ]
 
 [[package]]
@@ -278,10 +324,19 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "941ba9d78d8e2f7ce474c015eea4d9c6d25b6a3327f9832ee29a4de27f91bbb8"
 
 [[package]]
+name = "slotmap"
+version = "1.0.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e1e08e261d0e8f5c43123b7adf3e4ca1690d655377ac93a03b2c9d3e98de1342"
+dependencies = [
+ "version_check",
+]
+
+[[package]]
 name = "stl_viewer_background"
 version = "0.1.0"
 dependencies = [
- "glam",
+ "glam 0.10.0",
  "js-sys",
  "wasm-bindgen",
  "web-sys",
@@ -291,7 +346,7 @@ dependencies = [
 name = "stl_viewer_camera_lookaround"
 version = "0.1.0"
 dependencies = [
- "glam",
+ "glam 0.10.0",
  "js-sys",
  "wasm-bindgen",
  "web-sys",

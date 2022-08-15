@@ -38,11 +38,11 @@ book: examples
 examples: $(TARGET_NAMES)
 
 
-# Build a single example
+# To build a single example we need a wasm file and an HTML file (approximately)
 $(TARGET_NAMES): %: $(WASM_OUTPUT_FOLDER)/%/game_bg.wasm $(WASM_OUTPUT_FOLDER)/%/game.html
 
 
-	
+# The HTML file we copy from the static files
 $(WASM_OUTPUT_FOLDER)%/game.html: $(shell find $(STATIC_DIR))
 	mkdir -p $(dir $@)
 	# Most static files we just copy
@@ -52,13 +52,16 @@ $(WASM_OUTPUT_FOLDER)%/game.html: $(shell find $(STATIC_DIR))
 	# But we have to tell the name of the game to the HTML page
 	sed 's,{ID},$(notdir $*),g' $(STATIC_DIR)/example.html > $@
 	
-	
 
+# The WASM we generate with wasm-pack
+define BUILD_WASM_TEMPLATE
+$(WASM_OUTPUT_FOLDER)/$(1)/game_bg.wasm: $(shell find $(WORKSPACE_DIR)/$(1))
+	cd $(WORKSPACE_DIR)/$(1); wasm-pack build  $(WASM_BINDGEN_FLAGS) --out-dir $(WASM_OUTPUT_FOLDER)/$(1) --out-name game
+	rm $(WASM_OUTPUT_FOLDER)/$(1)/package.json
+endef
 
-# Create bindings for a single game
-$(WASM_OUTPUT_FOLDER)%/game_bg.wasm: $(shell find $(WORKSPACE_DIR)/**/*)
-	cd $(WORKSPACE_DIR)/$*; wasm-pack build  $(WASM_BINDGEN_FLAGS) --out-dir $(WASM_OUTPUT_FOLDER)/$* --out-name game
-	rm $(WASM_OUTPUT_FOLDER)/$*/package.json
+#Create rules for each game
+$(foreach target_name,$(TARGET_NAMES),$(eval $(call BUILD_WASM_TEMPLATE,$(target_name))))
 
 
 fmt:

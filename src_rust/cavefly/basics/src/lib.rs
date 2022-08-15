@@ -6,20 +6,12 @@ use wasm_bindgen::prelude::{wasm_bindgen, Closure};
 use wasm_bindgen::JsCast;
 use web_sys::{window, Event, HtmlCanvasElement, KeyboardEvent, MouseEvent};
 
-mod ai;
 mod app;
-mod camera;
-mod engine_trail;
-mod engine_trail_sprite;
-mod keymap;
-mod map;
-mod map_sprite;
-mod physics;
+mod mesh;
+mod renderer;
 mod shader;
-mod ship;
-mod ship_sprite;
-mod texture;
-mod transform;
+
+pub use renderer::{WorldState};
 
 // Pull in the console.log function so we can debug things more easily
 #[wasm_bindgen]
@@ -40,6 +32,7 @@ pub struct Core {
 impl Core {
     #[wasm_bindgen(constructor)]
     pub fn new(canvas: HtmlCanvasElement, options: String) -> Self {
+        console_error_panic_hook::set_once();
         log(&format!(
             "WASM Started for canvas '{}' with options '{}'",
             canvas.id(),

@@ -39,7 +39,8 @@ impl Core {
     pub fn new(canvas: HtmlCanvasElement, options: String) -> Self {
         log(&format!(
             "WASM Started for canvas '{}' with options '{}'",
-            canvas.id(), options
+            canvas.id(),
+            options
         ));
 
         canvas.set_class_name("loaded");
