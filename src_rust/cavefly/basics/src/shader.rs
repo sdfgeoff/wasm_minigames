@@ -15,19 +15,35 @@ pub enum ShaderError {
 pub struct Shader {
     pub program: Program,
     pub attrib_vertex_positions: u32,
+    pub uniforms: std::collections::HashMap<String, glow::UniformLocation>,
 }
 
 impl Shader {
-    pub fn new(gl: &Context, vert: &str, frag: &str) -> Result<Self, ShaderError> {
+    pub fn new(
+        gl: &Context,
+        vert: &str,
+        frag: &str,
+        uniform_names: Vec<String>,
+    ) -> Result<Self, ShaderError> {
         let program = unsafe { init_shader_program(gl, vert, frag)? };
         let attrib_vertex_positions = unsafe {
             gl.get_attrib_location(program, "aVertexPosition")
                 .expect("No vertx positions?")
         };
 
+        let mut uniforms = std::collections::HashMap::with_capacity(uniform_names.len());
+
+        for uniform_name in uniform_names {
+            let uniform_location = unsafe { gl.get_uniform_location(program, &uniform_name) };
+            if let Some(loc) = uniform_location {
+                uniforms.insert(uniform_name, loc);
+            }
+        }
+
         Ok(Self {
             program,
             attrib_vertex_positions,
+            uniforms,
         })
     }
 

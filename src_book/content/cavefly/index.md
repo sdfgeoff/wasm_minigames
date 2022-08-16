@@ -21,10 +21,7 @@ libraries.
    over opengles/webgl and means we don't have to keep pulling things in from web_sys and not quite so many things need `excepts()`. As a bonus, it's a lot more cross platform than directly using webGL. However, using glow does cut us off from using
    the browser to load textures for us, so we'll have to also pull in:
 
-3. qoi-rust. Hey what? qoi is the "quite ok image format" and it is simple enough to be described on a single side
-   of an A4 page. This rust library will allow is to store/transfer textures. In the past I used png format (which
-   is far more common), but png format has a million different compression/pixel format options and making sure that
-   our program supports all those takes a large amount of boilerplate. On the other hand, QOI is 8bpp RGB or RGBA.
+3. png. We need to be able to decode images and PNG's are both compressed and support RGBA. 
 
 
 ## What makes up this game?

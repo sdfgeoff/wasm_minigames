@@ -10,8 +10,9 @@ mod app;
 mod mesh;
 mod renderer;
 mod shader;
+mod texture;
 
-pub use renderer::{WorldState};
+pub use renderer::WorldState;
 
 // Pull in the console.log function so we can debug things more easily
 #[wasm_bindgen]

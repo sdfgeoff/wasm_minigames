@@ -14,7 +14,7 @@ console_error_panic_hook="0.1.6"
 
 glam="0.21.3"
 glow="0.11.2"
-qoi="0.4.0"
+png="0.17.5"
 
 
 [dependencies.web-sys]
