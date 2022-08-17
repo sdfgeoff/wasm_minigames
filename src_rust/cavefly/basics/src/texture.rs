@@ -10,6 +10,7 @@ pub enum TextureError {
     CreateTextureFailed(String),
 }
 
+#[allow(dead_code)]
 pub enum InterpolationMode {
     Nearest,
     Linear,
@@ -26,6 +27,7 @@ impl InterpolationMode {
     }
 }
 
+#[allow(dead_code)]
 pub enum EdgeMode {
     Repeat,
     Mirror,
@@ -76,12 +78,12 @@ impl Texture {
         let image_pixels = &buf[..info.buffer_size()];
 
         let tex_format = match reader.output_color_type() {
-            (ColorType::Rgb, BitDepth::Eight) => OutputBufferFormat::RGB8,
-            (ColorType::Rgb, BitDepth::Sixteen) => OutputBufferFormat::RGBA16UI,
-            (ColorType::Rgba, BitDepth::Eight) => OutputBufferFormat::RGBA8,
-            (ColorType::Rgba, BitDepth::Sixteen) => OutputBufferFormat::RGBA16UI,
-            (ColorType::Grayscale, BitDepth::Eight) => OutputBufferFormat::R8,
-            (ColorType::Grayscale, BitDepth::Sixteen) => OutputBufferFormat::R16UI,
+            (ColorType::Rgb, BitDepth::Eight) => TexturePixelFormat::RGB8,
+            (ColorType::Rgb, BitDepth::Sixteen) => TexturePixelFormat::RGBA16UI,
+            (ColorType::Rgba, BitDepth::Eight) => TexturePixelFormat::RGBA8,
+            (ColorType::Rgba, BitDepth::Sixteen) => TexturePixelFormat::RGBA16UI,
+            (ColorType::Grayscale, BitDepth::Eight) => TexturePixelFormat::R8,
+            (ColorType::Grayscale, BitDepth::Sixteen) => TexturePixelFormat::R16UI,
             (_, _) => unimplemented!("Unsupported PNG Pixel Type"),
         };
 
@@ -170,7 +172,8 @@ impl Texture {
 /// For a list of supposedly working ones see:
 /// https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texImage2D
 #[allow(non_camel_case_types)]
-pub enum OutputBufferFormat {
+#[allow(dead_code)]
+pub enum TexturePixelFormat {
     R8,
     R8_SNORM,
     R16F,
@@ -221,7 +224,7 @@ pub enum OutputBufferFormat {
     RGBA32I,
     RGBA32UI,
 }
-impl OutputBufferFormat {
+impl TexturePixelFormat {
     pub fn to_sized_internal_format(&self) -> u32 {
         match self {
             Self::R8 => glow::R8,
@@ -383,6 +386,8 @@ impl OutputBufferFormat {
             Self::RGBA32UI => glow::UNSIGNED_INT,
         }
     }
+
+    #[allow(dead_code)]
     pub fn to_channel_count(&self) -> usize {
         match self {
             Self::R8 => 1,

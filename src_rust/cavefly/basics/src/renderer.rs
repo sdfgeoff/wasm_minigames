@@ -77,22 +77,30 @@ pub fn render(gl: &Context, renderer_state: &RendererState, world_state: &WorldS
 
         gl.clear_color(0.2, 0.2, 0.2, 1.0);
         gl.clear(glow::COLOR_BUFFER_BIT | glow::DEPTH_BUFFER_BIT);
-
-        renderer_state.shaders.test_shader.bind(gl);
-        renderer_state.textures.test_texture1.bind_to_uniform(
-            gl,
-            0,
-            renderer_state.shaders.test_shader.uniforms.get("image_texture_1")
-        );
-        renderer_state.textures.test_texture2.bind_to_uniform(
-            gl,
-            1,
-            renderer_state.shaders.test_shader.uniforms.get("image_texture_2")
-        );
-        renderer_state.meshes.quad.bind(
-            gl,
-            renderer_state.shaders.test_shader.attrib_vertex_positions,
-        );
-        renderer_state.meshes.quad.render(gl);
     }
+
+    renderer_state.shaders.test_shader.bind(gl);
+    renderer_state.textures.test_texture1.bind_to_uniform(
+        gl,
+        0,
+        renderer_state
+            .shaders
+            .test_shader
+            .uniforms
+            .get("image_texture_1"),
+    );
+    renderer_state.textures.test_texture2.bind_to_uniform(
+        gl,
+        1,
+        renderer_state
+            .shaders
+            .test_shader
+            .uniforms
+            .get("image_texture_2"),
+    );
+    renderer_state.meshes.quad.bind(
+        gl,
+        renderer_state.shaders.test_shader.attrib_vertex_positions,
+    );
+    renderer_state.meshes.quad.render(gl);
 }

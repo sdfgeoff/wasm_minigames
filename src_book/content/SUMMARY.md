@@ -35,3 +35,4 @@
     - [Basic Deferred](pilot/basic_deferred.md)
     - [Cave Rendering](pilot/cave_rendering.md)
 - [A Third Game: Cavefly](cavefly/index.md)
+    - [Basics](cavefly/basics.md)

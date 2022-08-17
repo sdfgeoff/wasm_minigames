@@ -11,15 +11,12 @@ What does it look like? This:
 Video:
 <iframe width="560" height="315" src="https://www.youtube.com/embed/Xo3KWO04eHM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-Drawing on my experience with Swoop and a couple other openGL projects, I think I'm going to decide to pull in a couple more rust
-libraries.
+Drawing on my experience with Swoop and a couple other openGL projects, I think I'm going to decide to pull in a couple more rust libraries.
 
-1. glam. Vectormath and matrices. It was a bit of a pain writing this ourselves in swoop, and as games grow in complexity
-   I don't want to re-invent the wheel. GLAM is a fairly simple library that provides 2-4d vectors/matrices.
+1. glam. Vectormath and matrices. It was a bit of a pain writing this ourselves in swoop, and as games grow in complexity I don't want to re-invent the wheel. GLAM is a fairly simple library that provides 2-4d vectors/matrices.
 
 2. glow. Glow provides a very thin layer
-   over opengles/webgl and means we don't have to keep pulling things in from web_sys and not quite so many things need `excepts()`. As a bonus, it's a lot more cross platform than directly using webGL. However, using glow does cut us off from using
-   the browser to load textures for us, so we'll have to also pull in:
+   over opengles/webgl and means we don't have to keep pulling things in from web_sys and not quite so many things need `excepts()`. As a bonus, it's a lot more cross platform than directly using webGL. However, using glow does cut us off from using the browser to load textures for us, so we'll have to also pull in:
 
 3. png. We need to be able to decode images and PNG's are both compressed and support RGBA. 
 

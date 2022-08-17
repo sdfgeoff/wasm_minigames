@@ -2,7 +2,7 @@ use js_sys::Date;
 use wasm_bindgen::JsCast;
 use web_sys::{window, HtmlCanvasElement, KeyboardEvent, MouseEvent};
 
-use super::renderer::{load_meshes, load_shaders, render, RendererState, load_textures};
+use super::renderer::{load_meshes, load_shaders, load_textures, render, RendererState};
 use super::WorldState;
 
 use glow::Context;
@@ -46,7 +46,7 @@ impl App {
             pixels_per_centimeter: window().unwrap().device_pixel_ratio(),
             meshes: load_meshes(&gl).expect("Failed to laod meshes"),
             shaders: load_shaders(&gl).expect("Failed to laod shaders"),
-            textures: load_textures(&gl).expect("Failed to load textures")
+            textures: load_textures(&gl).expect("Failed to load textures"),
         };
 
         Self {
