@@ -17,8 +17,8 @@ jobs:
     - name: Install mdbook
       run: test -x $HOME/.cargo/bin/mdbook || cargo install --vers "^0.4" mdbook
       
-    - name: Install WasmBindgen
-      run: test -x $HOME/.cargo/bin/wasm-bindgen || cargo install --vers "^0.2.79" wasm-bindgen-cli
+    - name: Install WasmPack
+      run: test -x $HOME/.cargo/bin/wasm-pack || cargo install --vers "^0.10.3" wasm-pack
 
     - name: Build
       run: make
