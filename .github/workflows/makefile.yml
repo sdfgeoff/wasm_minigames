@@ -1,0 +1,36 @@
+name: Build
+
+on:
+  push:
+    branches: [ "master", "ci-test" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Install Cargo
+      run: test -x $HOME/.cargo/bin/cargo-install-update || cargo install cargo-update
+    
+    - name: Install mdbook
+      run: test -x $HOME/.cargo/bin/mdbook || cargo install --vers "^0.3" mdbook
+      
+    - name: Install WasmBindgen
+      run: test -x $HOME/.cargo/bin/wasm-bindgen || cargo install --vers "^0.2.69" wasm-bindgen-cli)
+    
+    - name: Update Deps
+      run: cargo install-update -a
+
+    - name: Build
+      run: make
+
+    - name: Upload To Github Pages
+      uses: actions/upload-pages-artifact@v1.0.7
+      with:
+        # Path of the directory containing the static assets.
+        path: /bin_book
