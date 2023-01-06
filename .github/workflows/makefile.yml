@@ -2,7 +2,7 @@ name: Build
 
 on:
   push:
-    branches: [ "master", "ci-test" ]
+    branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
 
@@ -18,7 +18,7 @@ jobs:
       run: test -x $HOME/.cargo/bin/mdbook || cargo install --vers "^0.4" mdbook
       
     - name: Install WasmBindgen
-      run: test -x $HOME/.cargo/bin/wasm-bindgen || cargo install --vers "^0.2.79" wasm-bindgen-cli)
+      run: test -x $HOME/.cargo/bin/wasm-bindgen || cargo install --vers "^0.2.79" wasm-bindgen-cli
 
     - name: Build
       run: make
