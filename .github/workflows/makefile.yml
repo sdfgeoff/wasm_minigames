@@ -14,17 +14,11 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     
-    - name: Install Cargo
-      run: test -x $HOME/.cargo/bin/cargo-install-update || cargo install cargo-update
-    
     - name: Install mdbook
-      run: test -x $HOME/.cargo/bin/mdbook || cargo install --vers "^0.3" mdbook
+      run: test -x $HOME/.cargo/bin/mdbook || cargo install --vers "^0.4" mdbook
       
     - name: Install WasmBindgen
-      run: test -x $HOME/.cargo/bin/wasm-bindgen || cargo install --vers "^0.2.69" wasm-bindgen-cli)
-    
-    - name: Update Deps
-      run: cargo install-update -a
+      run: test -x $HOME/.cargo/bin/wasm-bindgen || cargo install --vers "^0.2.79" wasm-bindgen-cli)
 
     - name: Build
       run: make
