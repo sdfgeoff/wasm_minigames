@@ -151,6 +151,7 @@ impl App {
                 .quad_quad
                 .bind_and_render(&self.gl, &self.shader_background.attributes);
         }
+        
 
         {
             // Render the models
@@ -226,6 +227,8 @@ impl App {
                     .other_assets_light_truss
                     .bind_and_render(&self.gl, &self.shader_stl.attributes);
 
+
+                
                 self.shader_stl.set_entity_data(
                     &self.gl,
                     Mat4::from_translation(Vec3::new(10.0, 10.0, -2.0)),
@@ -235,15 +238,18 @@ impl App {
                     .meshes
                     .other_assets_fuel_tank
                     .bind_and_render(&self.gl, &self.shader_stl.attributes);
-                self.shader_stl.set_entity_data(
-                    &self.gl,
-                    Mat4::from_translation(Vec3::new(7.0, 18.0, -2.0)),
-                    Vec4::new(1.0, 1.0, 1.0, 1.0),
-                );
-                self.resources
-                    .meshes
-                    .other_assets_fuel_tank
-                    .bind_and_render(&self.gl, &self.shader_stl.attributes);
+                
+                for i in 0..20 {
+                    self.shader_stl.set_entity_data(
+                        &self.gl,
+                        Mat4::from_translation(Vec3::new(7.0, (10 * (i as u32)) as f32, -2.0)),
+                        Vec4::new(1.0, 1.0, 1.0, 1.0),
+                    );
+                    self.resources
+                        .meshes
+                        .other_assets_fuel_tank
+                        .bind_and_render(&self.gl, &self.shader_stl.attributes);
+                }
             }
         }
 

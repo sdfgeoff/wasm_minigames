@@ -5,10 +5,11 @@ in vec3 vert_pos;
 in vec3 vert_nor;
 in vec2 vert_uv0;
 
-out vec3 screen_nor;
-out vec3 screen_pos;
-out vec3 world_nor;
+out vec4 screen_nor;
+out vec4 screen_pos;
+out vec4 world_nor;
 out vec2 uv0;
+out float dist_from_camera;
 
 out mat4 camera_to_world;
 
@@ -24,20 +25,16 @@ void main() {
     
     vec4 pos = vec4(vert_pos, 1.0);
     vec4 nor = vec4(vert_nor, 0.0);
-    
-    world_nor = (model_to_world * nor).xyz;
-    
-    camera_to_world = inverse(world_to_camera);
 
-    pos = model_to_screen * pos;
-    nor = model_to_camera * nor; 
-    
-    pos.z = pos.z * pos.w / 500.0;// * pos.w; // Linearize Depth Buffer   
-    
-    uv0 = vert_uv0;    
-    
-    screen_pos = pos.xyz / pos.w;
-    screen_nor = nor.xyz;
-    
-    gl_Position = pos;
+    uv0 = vert_uv0;
+
+    screen_pos = model_to_screen * pos;
+
+    screen_nor = model_to_screen * nor;
+    world_nor = model_to_world * nor;
+    vec4 world_pos = model_to_world * pos;
+
+    dist_from_camera = length(world_pos.xyz - world_to_camera[3].xyz);
+
+    gl_Position = screen_pos;
 }

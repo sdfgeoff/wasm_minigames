@@ -53,6 +53,8 @@ float sample_tex(vec3 coord) {
 
 
 float map(vec3 coord) {
+    coord += vec3(25.0, 110.0, 6.0);
+
     float rocks = 0.5 - sample_tex(coord);
     return rocks;
 }
@@ -64,6 +66,7 @@ float map(vec3 coord) {
 /// the maximum distance is reached.
 vec4 raymarch(vec3 start_point, vec3 direction, int steps, float max_dist) {
     vec3 position = start_point;
+
     
     float dist = 0.0;
     
@@ -114,6 +117,7 @@ void main() {
     mat4 camera_to_world = inverse(world_to_camera);
     mat4 screen_to_camera = inverse(camera_to_screen);
     mat4 screen_to_world = camera_to_world * screen_to_camera;
+    mat4 world_to_screen = inverse(screen_to_world);
     
     vec2 vert_pos = uv0 * 2.0 - 1.0;
     
@@ -121,58 +125,24 @@ void main() {
     vec4 ray_direction_camera = screen_to_camera * ray_direction_screen;
     vec4 ray_direction_world = camera_to_world * ray_direction_camera;
     
-    //~ vec4 world_pos_tmp = screen_to_world * 
-    //~ vec3 world_pos = world_pos_tmp.xyz;// / world_pos_tmp.w;
-    //~ vec3 world_nor = normalize(world_pos);
-    
     vec3 ray_start = camera_to_world[3].xyz;
     vec3 ray_direction = normalize(ray_direction_world.xyz);
     
-    ray_start += vec3(25.0, 110.0, 6.0);
-    
-    //ray_start *= 0.05;
-    //ray_start += 0.2;
-    
+    ray_start += ray_direction * camera_near; // So that a march distance of zero is the camera near plane
+
     vec4 data = raymarch(ray_start, ray_direction, max_steps, max_draw_distance);
-    
-    //vec3 normal = calc_normal(data.xyz);
-    
-    //~ vec2 uv = uv0;
-    //~ uv = (uv - 0.5) * 2.0;
-    
-    
-    //~ mat4 camera_transform = mat4(
-        //~ vec4(1.0, 0.0, 0.0, 0.0),
-        //~ vec4(0.0, 1.0, 0.0, 0.0),
-        //~ vec4(0.0, 0.0, 1.0, 0.0),
-        //~ vec4(0.0, 1.6, 3.6, 0.0)
-    //~ );
-    //~ vec3 start_point = camera_transform[3].xyz;
-    //~ vec3 direction = normalize(vec3(uv * 0.5, 1.0));
-    //~ direction = (camera_transform * vec4(direction, 0.0)).xyz;
-    
-    //~ vec4 data = raymarch(start_point, direction, max_steps, max_draw_distance);
     
     vec3 surface_normal = calc_normal(data.xyz);
     
-    float lighting = dot(surface_normal, vec3(0.5)) * 0.5 + 0.5;
-    
-    float fog = pow(data.a, 0.5) * 1.5;//pow(dist, 2.0);
-    
     vec3 surface_color = texture_surface(data.xyz, surface_normal);
     
-    vec3 col = vec3(1.0);
-    col *= surface_color;
-    //col *= lighting;
-    col = mix(col, FOG_COLOR, fog);
+    albedo.rgb = surface_color;
     
-    
-    
-    
-    albedo.rgb = surface_color;//vec3(uv0, 0.0);//matcap * 0.5;
-    
-    normal_depth = vec4(surface_normal, data.a);
-    
-    gl_FragDepth =  data.a + 0.4;// * 0.005 + 0.995;
+    normal_depth = vec4(surface_normal, data.a * max_draw_distance);
+
+    vec3 intersection_point = data.xyz; 
+    vec4 screen_pos = world_to_screen * vec4( intersection_point, 1.0 );
+    gl_FragDepth = screen_pos.z / screen_pos.w;
+
 }
 
