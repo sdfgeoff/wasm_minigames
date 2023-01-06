@@ -27,4 +27,4 @@ jobs:
       uses: actions/upload-pages-artifact@v1.0.7
       with:
         # Path of the directory containing the static assets.
-        path: /bin_book
+        path: ./bin_book
