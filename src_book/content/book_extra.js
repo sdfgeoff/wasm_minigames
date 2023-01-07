@@ -30,6 +30,23 @@ function setup_canvas() {
         canvas.addEventListener("click", function() {
             load(canvas, module_path, options)
         }, {'once':true})
+
+        const linkContainer = document.createElement('div');
+        linkContainer.style.display = 'flex'
+        linkContainer.style.gap = '3em'
+
+        const fullscreen = document.createElement('a')
+        fullscreen.innerHTML = "Fullscreen"
+        fullscreen.href = '../gen/'+ id +'/game.html'
+        linkContainer.appendChild(fullscreen)
+
+        const code = document.createElement('a')
+        code.innerHTML = "Github"
+        code.href = 'https://github.com/sdfgeoff/wasm_minigames/tree/master/src_rust'
+        linkContainer.appendChild(code)
+
+
+        canvas.parentElement.insertBefore(linkContainer, canvas.nextSibling)
     }
 }
 setup_canvas()

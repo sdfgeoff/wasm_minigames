@@ -1,5 +1,5 @@
 [package]
-name = "cavefly_basics"
+name = "in_the_air_basics"
 version = "0.1.0"
 authors = ["Geoffrey Irons <sdfgeoff@gmail.com>"]
 edition = "2018"

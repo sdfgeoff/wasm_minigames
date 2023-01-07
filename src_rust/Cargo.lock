@@ -91,19 +91,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "cavefly_basics"
-version = "0.1.0"
-dependencies = [
- "console_error_panic_hook",
- "glam 0.21.3",
- "glow",
- "js-sys",
- "png",
- "wasm-bindgen",
- "web-sys",
-]
-
-[[package]]
 name = "cfg-if"
 version = "0.1.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -214,6 +201,32 @@ name = "hashbrown"
 version = "0.9.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d7afe4a420e3fe79967a00898cc1f4db7c8a49a9333a29f8a4bd76a253d5cd04"
+
+[[package]]
+name = "in_the_air_basics"
+version = "0.1.0"
+dependencies = [
+ "console_error_panic_hook",
+ "glam 0.21.3",
+ "glow",
+ "js-sys",
+ "png",
+ "wasm-bindgen",
+ "web-sys",
+]
+
+[[package]]
+name = "in_the_air_framebuffers"
+version = "0.1.0"
+dependencies = [
+ "console_error_panic_hook",
+ "glam 0.21.3",
+ "glow",
+ "js-sys",
+ "png",
+ "wasm-bindgen",
+ "web-sys",
+]
 
 [[package]]
 name = "indexmap"
