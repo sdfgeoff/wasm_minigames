@@ -181,8 +181,8 @@ renderer_state.meshes.quad.render(gl);
 I think this is tidy enough, and it allows sharing tetures and shader programs bewteen different in-game entities.
 
 ## All Done?
-Yeah, all switched to `glow`. There are quite a few other minor changes - I pulled in code for generating mipmaps etc. from other projects I've worked on over the past few months. But here it is, looking exactly like the [Binding Textures](../basics/binding_textures.md) page, but now in GLAM and with our new resource management.
+Yeah, all switched to `glow`. There are quite a few other minor changes - I pulled in code for generating mipmaps etc. from other projects I've worked on over the past few months. But here it is, looking exactly like the [Binding Textures](../basics/binding_textures.md) page, but now in `glow` and with our new resource management.
 
-<canvas id="cavefly/basics"></canvas>
+<canvas id="in_the_air/basics"></canvas>
 
 Oh yeah, it's flipped vertically. WebGL had `gl.pixel_storei(GL::UNPACK_FLIP_Y_WEBGL, 1);`, but OpenGLES doesn't have the `UNPACK_FLIP` texture storage option. Oh well, I'll just flip my textures manually on disk 😀.

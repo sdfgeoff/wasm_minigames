@@ -34,5 +34,5 @@
     - [Resource Management](pilot/resource_management.md)
     - [Basic Deferred](pilot/basic_deferred.md)
     - [Cave Rendering](pilot/cave_rendering.md)
-- [A Third Game: Cavefly](cavefly/index.md)
-    - [Basics](cavefly/basics.md)
+- [A Third Demo: "In the Air"](in_the_air/index.md)
+    - [Basics](in_the_air/basics.md)
