@@ -44,3 +44,8 @@ So anyway, I'll stick this up here because it contains my initial attempts
 at deferred rendering - which may well be useful later (in fact,
 I've referred to this example countless times when experimenting with other
 openGL programs such as <a href="http://sdfgeoff.space/pages/scalable_editable_raster_graphics__serg_/index.html">sverg</a> and <a href="http://sdfgeoff.space/pages/gametoy__a_shadertoy_alike_for_making_games/index.html">gametoy</a>)
+
+# Somewhat Unabandoned
+Uhm, 2 years on I managed to get the signed distance field to render properly!
+Yay! But I don't think I'll pick up the game as was originally planned here.
+I have other things to build....

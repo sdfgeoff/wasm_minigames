@@ -59,8 +59,39 @@ prime, then the resulting cave will be fairly aperiodic.
 
 ## Implementing it
 So lets implement it in our game. We already have a background 
-plane/shader, so we can work with that.The first thing we need to do is 
-pass in the camera transform
+plane/shader, so we can work with that. The first thing we need to do is 
+pass in the camera transform and projection matrix so we are rendering
+from the same viewpoint. This all lines up, but it is always in the background.
+We need to have it intersect with the rendered geometry.
 
+To do this we have to write to the fragment depth in the same way that
+the geometry is.
+There are no-doubt more efficient ways to do this, but what I found worked
+was to project the intersection point back into screen space:
+
+```
+    vec3 intersection_point = data.xyz; 
+    vec4 screen_pos = world_to_screen * vec4( intersection_point, 1.0 );
+    gl_FragDepth = screen_pos.z / screen_pos.w;
+```
+Where data.xyz comes from the raymarching. 
+
+To make sure it all lines up, I also had to divide the geometry's position
+by the `w` component inside the fragment shader.
+
+```
+void main() {
+    albedo = color * texture(image_albedo, uv0);
+    normal_depth = vec4(world_nor.xyz, dist_from_camera);
+    
+    gl_FragDepth =  screen_pos.z / screen_pos.w;
+}
+```
+I will happily state that I have no clue what I'm doing here, but it seems
+to work - with the caveat that it took me ~2 years to finally get this working!
 
 <canvas id="pilot/pilot_cave_rendering"></canvas>
+
+But anyway, yay! Signed distance fields integrated with a deferred renderer!
+
+
