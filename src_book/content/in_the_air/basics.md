@@ -1,4 +1,4 @@
-# Cavefly Basics
+# In The Air Basics
 
 ## Switching to Glow (and png's)
 So as mentioned in the intro, we're switching to use `glow` for openGL. Mostly everything is the same, but we now have to load images ourselves and feed the pixel data across to the GPU. 
