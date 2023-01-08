@@ -3,10 +3,11 @@ use wasm_bindgen::JsCast;
 use web_sys::{window, HtmlCanvasElement, KeyboardEvent, MouseEvent};
 
 use super::renderer::{
-    load_framebuffers, load_meshes, load_shaders, load_textures, render, resize_buffers,
+    load_framebuffers, load_shader_programs, load_textures, render, resize_buffers,
     RendererState,
 };
 use super::WorldState;
+use super::resources::StaticResources;
 
 use glow::Context;
 
@@ -46,6 +47,9 @@ impl App {
 
         let target_resolution = calculate_resolution(&canvas);
 
+        let static_resources = StaticResources::load(&gl);
+        let shader_programs = load_shader_programs(&gl, &static_resources).expect("Failed to load shaders");
+
         let textures = load_textures(&gl, &target_resolution)
             .expect("Failed to load textures");
         let framebuffers = load_framebuffers(&gl, &textures).expect("Failed to load Fraimbuffers");
@@ -53,8 +57,8 @@ impl App {
         let renderer = RendererState {
             resolution: target_resolution,
             pixels_per_centimeter: window().unwrap().device_pixel_ratio(),
-            meshes: load_meshes(&gl).expect("Failed to load meshes"),
-            shaders: load_shaders(&gl).expect("Failed to load shaders"),
+            static_resources,
+            shader_programs,
             textures: textures,
             framebuffers: framebuffers,
         };

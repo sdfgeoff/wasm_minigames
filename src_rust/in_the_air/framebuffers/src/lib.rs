@@ -6,10 +6,13 @@ use wasm_bindgen::prelude::{wasm_bindgen, Closure};
 use wasm_bindgen::JsCast;
 use web_sys::{window, Event, HtmlCanvasElement, KeyboardEvent, MouseEvent};
 
+mod resources;
 mod app;
 mod mesh;
+mod mesh_loader;
 mod renderer;
 mod shader;
+mod shader_program;
 mod texture;
 mod framebuffer;
 

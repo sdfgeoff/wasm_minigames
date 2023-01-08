@@ -6,7 +6,7 @@ meshes, a framebuffer depends upon the textures, so first the textures (that the
 framebuffers will write to) need to be created, then the framebuffers can be
 created.
 
-Note that `load_textures` also creates the empty textures.
+Note that `load_textures` also creates the empty textures for the framebuffers.
 
 ```rust
 let textures = load_textures(&gl).expect("Failed to load textures");
@@ -22,6 +22,10 @@ let renderer = RendererState {
 };
 ```
 
-The textures for the framebuffer I set up to sample as GL_NEAREST so they won't alias.
+The next question is: how do we test it? Well, why not set up the whole pipe?
+
+Let's render a cube into the gbuffer, do something simple inside the lighting pass,
+and splat that onto the screen at the end.
+
 
 <canvas id="in_the_air/framebuffers"></canvas>

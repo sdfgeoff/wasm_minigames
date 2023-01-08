@@ -1,0 +1,8 @@
+{
+    "files.exclude": {
+        ".vscode": true,
+        "bin_book": true,
+        "bin_wasm": true,
+        "src_rust/target": true
+    }
+}
