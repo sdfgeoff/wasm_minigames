@@ -14,8 +14,16 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     
+    - name: Cache Cargo Deps
+      id: cargo-cache
+      uses: actions/cache@v3
+      with:
+        path: $HOME/.cargo/bin/*
+        key: ${{ runner.os }}-cargo
+    
     - name: Install mdbook
       run: test -x $HOME/.cargo/bin/mdbook || cargo install --vers "^0.4" mdbook
+      
       
     - name: Install WasmPack
       run: test -x $HOME/.cargo/bin/wasm-pack || cargo install --vers "^0.10.3" wasm-pack
@@ -40,6 +48,8 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+      
+    if: github.ref == 'refs/heads/master'
     
     runs-on: ubuntu-latest
     steps:
