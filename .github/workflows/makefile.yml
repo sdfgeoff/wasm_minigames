@@ -18,15 +18,15 @@ jobs:
       id: cargo-cache
       uses: actions/cache@v3
       with:
-        path: $HOME/.cargo/bin/
+        path: ~/.cargo/bin/
         key: ${{ runner.os }}-cargo
     
     - name: Install mdbook
-      run: test -x $HOME/.cargo/bin/mdbook || cargo install --vers "^0.4" mdbook
+      run: test -x ~/.cargo/bin/mdbook || cargo install --vers "^0.4" mdbook
       
       
     - name: Install WasmPack
-      run: test -x $HOME/.cargo/bin/wasm-pack || cargo install --vers "^0.10.3" wasm-pack
+      run: test -x ~/.cargo/bin/wasm-pack || cargo install --vers "^0.10.3" wasm-pack
 
     - name: Build
       run: make
