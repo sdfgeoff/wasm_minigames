@@ -18,7 +18,7 @@ jobs:
       id: cargo-cache
       uses: actions/cache@v3
       with:
-        path: $HOME/.cargo/bin/*
+        path: $HOME/.cargo/bin/
         key: ${{ runner.os }}-cargo
     
     - name: Install mdbook
