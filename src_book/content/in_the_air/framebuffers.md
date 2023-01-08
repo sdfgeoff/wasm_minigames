@@ -25,8 +25,7 @@ let renderer = RendererState {
 The next question is: how do we test it? Well, why not set up the whole pipe?
 
 Let's render something into the gbuffer, do something simple inside the lighting pass,
-and splat that onto the screen at the end. We don't have a camera yet, so
-we'll just splat a texture into the gbuffer.
+and splat that onto the screen at the end. 
 
 So we need to:
 
@@ -38,4 +37,41 @@ So we need to:
  6. Render to the screen
 
 
+Binding the framebuffer is easy enough, a call to gl.bindFramebuffer does that
+and means that any subsequent draw calls go into the buffer.
+
+We don't have a camera or transforms yet, so
+we'll just splat a texture into the gbuffer directly.
+```frag
+#version 300 es
+
+precision mediump float;
+
+uniform sampler2D albedo_texture;
+uniform sampler2D metallic_roughness_texture;
+
+in vec2 uv0;
+
+layout(location=0) out vec4 buffer_color;
+layout(location=1) out vec4 buffer_geometry;
+layout(location=2) out vec4 buffer_material;
+
+void main() {
+    buffer_color = texture(albedo_texture, uv0);
+    buffer_material = texture(metallic_roughness_texture, uv0);
+    buffer_geometry = vec4(uv0, 1.0, 0.5);
+}
+```
+
+I then spent two hours debugging a problem where the same texture was appearing in
+both the color buffer and material buffer. Inspecting with  spector.js` browser
+plugin revealed that both of the input textures were the same. After inspecting
+the code for setting up textures, checking that the two textures were on
+different texture units, I finally figured out that ... I was assigning the
+same texture to both! Whoops.
+
+The display shader splits the three buffers to each side, and a passthrough 
+shader splats them onto the screen, and wth that...
+
 <canvas id="in_the_air/framebuffers"></canvas>
+
