@@ -1,5 +1,6 @@
 use glow::{Context, HasContext};
 
+use super::attributes::AttributePositions;
 use super::shader::Shader;
 
 #[derive(Debug)]
@@ -10,7 +11,7 @@ pub enum ShaderProgramError {
 
 pub struct ShaderProgram {
     pub program: glow::Program,
-    pub attrib_vertex_positions: u32,
+    pub attributes: AttributePositions,
     pub uniforms: std::collections::HashMap<String, glow::UniformLocation>,
 }
 
@@ -22,9 +23,13 @@ impl ShaderProgram {
         uniform_names: Vec<String>,
     ) -> Result<Self, ShaderProgramError> {
         let program = unsafe { init_shader_program(gl, vert_shader, frag_shader)? };
-        let attrib_vertex_positions = unsafe {
-            gl.get_attrib_location(program, "aVertexPosition")
-                .expect("No vertx positions?")
+
+        let attributes = unsafe {
+            AttributePositions {
+                position: gl.get_attrib_location(program, "attribute_vertex_position"),
+                uv0: gl.get_attrib_location(program, "attribute_vertex_uv0"),
+                normal: gl.get_attrib_location(program, "attribute_vertex_normal"),
+            }
         };
 
         let mut uniforms = std::collections::HashMap::with_capacity(uniform_names.len());
@@ -38,7 +43,7 @@ impl ShaderProgram {
 
         Ok(Self {
             program,
-            attrib_vertex_positions,
+            attributes,
             uniforms,
         })
     }

@@ -51,7 +51,10 @@ pub fn load_shader_programs(
             gl,
             &static_resources.vertex_shaders.model_shader,
             &static_resources.fragment_shaders.model_shader,
-            vec![],
+            vec![
+                "metallic_roughness_texture".to_string(),
+                "albedo_texture".to_string(),
+            ],
         )?,
         volume_and_light: ShaderProgram::new(
             gl,
@@ -194,16 +197,42 @@ fn render_gbuffer(gl: &Context, renderer_state: &RendererState, _world_state: &W
         gl.clear(glow::COLOR_BUFFER_BIT | glow::DEPTH_BUFFER_BIT);
     }
 
-    renderer_state.shader_programs.model.bind(gl);
+    let active_shader_program = &renderer_state.shader_programs.model;
+    let active_mesh = &renderer_state.static_resources.meshes.quad_quad;
 
-    renderer_state.static_resources.meshes.quad_quad.bind(
-        gl,
-        renderer_state.shader_programs.model.attrib_vertex_positions,
-    );
-    renderer_state.static_resources.meshes.quad_quad.render(gl);
+    active_shader_program.bind(gl);
+    active_mesh.bind(gl, &active_shader_program.attributes);
+
+    renderer_state
+        .static_resources
+        .textures
+        .vehicle_albedo
+        .bind_to_uniform(
+            gl, 
+            0, 
+            active_shader_program.uniforms.get("albedo_texture")
+        );
+
+    renderer_state
+        .static_resources
+        .textures
+        .vehicle_roughness_metal
+        .bind_to_uniform(
+            gl,
+            1,
+            active_shader_program
+                .uniforms
+                .get("metallic_roughness_texture"),
+        );
+
+    active_mesh.render(gl);
 }
 
-fn render_volume_and_lighting(gl: &Context, renderer_state: &RendererState, _world_state: &WorldState) {
+fn render_volume_and_lighting(
+    gl: &Context,
+    renderer_state: &RendererState,
+    _world_state: &WorldState,
+) {
     // Render our GBuffer to the Display Buffer
     renderer_state.framebuffers.display_buffer.bind(gl);
 
@@ -218,15 +247,11 @@ fn render_volume_and_lighting(gl: &Context, renderer_state: &RendererState, _wor
         gl.clear(glow::COLOR_BUFFER_BIT | glow::DEPTH_BUFFER_BIT);
     }
 
-    renderer_state.shader_programs.volume_and_light.bind(gl);
+    let active_shader_program = &renderer_state.shader_programs.volume_and_light;
+    let active_mesh = &renderer_state.static_resources.meshes.quad_quad;
 
-    renderer_state.static_resources.meshes.quad_quad.bind(
-        gl,
-        renderer_state
-            .shader_programs
-            .volume_and_light
-            .attrib_vertex_positions,
-    );
+    active_shader_program.bind(gl);
+    active_mesh.bind(gl, &active_shader_program.attributes);
 
     renderer_state.textures.buffer_color.bind_to_uniform(
         gl,
@@ -256,10 +281,8 @@ fn render_volume_and_lighting(gl: &Context, renderer_state: &RendererState, _wor
             .get("buffer_material"),
     );
 
-    renderer_state.static_resources.meshes.quad_quad.render(gl);
+    active_mesh.render(gl);
 }
-
-
 
 pub fn render(gl: &Context, renderer_state: &RendererState, world_state: &WorldState) {
     render_gbuffer(gl, renderer_state, world_state);
@@ -281,7 +304,11 @@ pub fn render(gl: &Context, renderer_state: &RendererState, world_state: &WorldS
             gl.clear(glow::COLOR_BUFFER_BIT | glow::DEPTH_BUFFER_BIT);
         }
 
+        let active_shader_program = &renderer_state.shader_programs.passthrough;
+        let active_mesh = &renderer_state.static_resources.meshes.quad_quad;
+
         renderer_state.shader_programs.passthrough.bind(gl);
+        active_mesh.bind(gl, &active_shader_program.attributes);
 
         renderer_state.textures.buffer_display.bind_to_uniform(
             gl,
@@ -293,14 +320,7 @@ pub fn render(gl: &Context, renderer_state: &RendererState, world_state: &WorldS
                 .get("input_texture"),
         );
 
-        renderer_state.static_resources.meshes.quad_quad.bind(
-            gl,
-            renderer_state
-                .shader_programs
-                .passthrough
-                .attrib_vertex_positions,
-        );
-        renderer_state.static_resources.meshes.quad_quad.render(gl);
+        active_mesh.render(gl);
     }
 }
 

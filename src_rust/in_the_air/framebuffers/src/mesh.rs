@@ -1,3 +1,4 @@
+use super::attributes::AttributePositions;
 use super::mesh_loader;
 /// LOOK AT:
 /// https://rust-tutorials.github.io/learn-opengl/basics/001-drawing-a-triangle.html
@@ -19,20 +20,17 @@ pub struct Mesh {
 }
 
 impl Mesh {
-    pub fn bind(&self, gl: &Context, attrib_vertex_positions: u32) {
+    pub fn bind(&self, gl: &Context, attribute_positions: &AttributePositions) {
+        optionally_bind_buffer_to_attribute(
+            gl,
+            self.position_buffer,
+            attribute_positions.position,
+            3
+        );
+        optionally_bind_buffer_to_attribute(gl, self.normal_buffer, attribute_positions.normal, 3);
+        optionally_bind_buffer_to_attribute(gl, self.uv0_buffer, attribute_positions.uv0, 2);
+
         unsafe {
-            gl.enable_vertex_attrib_array(attrib_vertex_positions);
-            gl.bind_buffer(ARRAY_BUFFER, Some(self.position_buffer));
-
-            gl.vertex_attrib_pointer_f32(
-                attrib_vertex_positions, 
-                3,                       
-                FLOAT,               
-                false,            
-                0,                    
-                0,                    
-            );
-
             gl.bind_buffer(glow::ELEMENT_ARRAY_BUFFER, Some(self.indices_buffer));
         }
     }
@@ -69,6 +67,21 @@ unsafe fn upload_array_f32(gl: &Context, vertices: &[f32]) -> Result<Buffer, Mes
     gl.buffer_data_u8_slice(ARRAY_BUFFER, vec_f32_as_u8_slice(&vertices), STATIC_DRAW);
 
     Ok(vbo)
+}
+
+pub fn optionally_bind_buffer_to_attribute(
+    gl: &Context,
+    buffer: Buffer,
+    attribute_position: Option<u32>,
+    size: i32
+) {
+    if let Some(attribute_position) = attribute_position {
+        unsafe {
+            gl.enable_vertex_attrib_array(attribute_position);
+            gl.bind_buffer(ARRAY_BUFFER, Some(buffer));
+            gl.vertex_attrib_pointer_f32(attribute_position, size, FLOAT, false, 0, 0);
+        }
+    }
 }
 
 unsafe fn upload_indices_array(gl: &Context, indices: &[u16]) -> Result<Buffer, MeshError> {

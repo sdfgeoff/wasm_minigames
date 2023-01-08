@@ -7,6 +7,7 @@ use wasm_bindgen::JsCast;
 use web_sys::{window, Event, HtmlCanvasElement, KeyboardEvent, MouseEvent};
 
 mod resources;
+mod attributes;
 mod app;
 mod mesh;
 mod mesh_loader;
