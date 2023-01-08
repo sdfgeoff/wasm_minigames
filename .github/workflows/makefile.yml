@@ -14,8 +14,16 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     
+    - name: Cache Cargo Deps
+      id: cargo-cache
+      uses: actions/cache@v3
+      with:
+        path: $HOME/.cargo/bin/
+        key: ${{ runner.os }}-cargo
+    
     - name: Install mdbook
       run: test -x $HOME/.cargo/bin/mdbook || cargo install --vers "^0.4" mdbook
+      
       
     - name: Install WasmPack
       run: test -x $HOME/.cargo/bin/wasm-pack || cargo install --vers "^0.10.3" wasm-pack
@@ -28,3 +36,22 @@ jobs:
       with:
         # Path of the directory containing the static assets.
         path: ./bin_book
+    
+  deploy:
+    needs: build
+    
+    permissions:
+      pages: write      # to deploy to Pages
+      id-token: write   # to verify the deployment originates from an appropriate source
+      
+    # Deploy to the github-pages environment
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+      
+    if: github.ref == 'refs/heads/master'
+    
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy GitHub Pages site
+        uses: actions/deploy-pages@v1.2.3
