@@ -1,0 +1,35 @@
+[package]
+name = "in_the_air_framebuffers"
+version = "0.1.0"
+authors = ["Geoffrey Irons <sdfgeoff@gmail.com>"]
+edition = "2018"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+wasm-bindgen="0.2.69"
+js-sys="0.3.40"
+console_error_panic_hook="0.1.6"
+
+glam="0.21.3"
+glow="0.11.2"
+png="0.17.5"
+
+
+[dependencies.web-sys]
+version = "0.3.4"
+features = [
+    "console",
+    "Document",
+    "Event",
+    "HtmlCanvasElement",
+    "HtmlElement",
+    "KeyboardEvent",
+    "MouseEvent",
+    "WebGl2RenderingContext",
+    "WebGlShader",
+    "WebGlBuffer",
+    "WebGlProgram",
+    "Window",
+]

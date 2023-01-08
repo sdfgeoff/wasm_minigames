@@ -36,3 +36,4 @@
     - [Cave Rendering](pilot/cave_rendering.md)
 - [A Third Demo: "In the Air"](in_the_air/index.md)
     - [Basics](in_the_air/basics.md)
+    - [Framebuffers](in_the_air/framebuffers.md)

@@ -6,16 +6,8 @@ pub struct VertexShaders {
 impl VertexShaders {
     fn new(gl: &web_sys::WebGl2RenderingContext) -> Result<Self, crate::shader::ShaderError> {
         Ok(Self {
-            background: crate::shader::load_shader(
-                gl,
-                web_sys::WebGl2RenderingContext::VERTEX_SHADER,
-                include_str!("raw/background.vert"),
-            )?,
-            model: crate::shader::load_shader(
-                gl,
-                web_sys::WebGl2RenderingContext::VERTEX_SHADER,
-                include_str!("raw/model.vert"),
-            )?,
+            background: crate::shader::load_shader(gl, web_sys::WebGl2RenderingContext::VERTEX_SHADER, include_str!("raw/background.vert"))?,
+            model: crate::shader::load_shader(gl, web_sys::WebGl2RenderingContext::VERTEX_SHADER, include_str!("raw/model.vert"))?,
         })
     }
 }
@@ -28,16 +20,8 @@ pub struct FragmentShaders {
 impl FragmentShaders {
     fn new(gl: &web_sys::WebGl2RenderingContext) -> Result<Self, crate::shader::ShaderError> {
         Ok(Self {
-            background: crate::shader::load_shader(
-                gl,
-                web_sys::WebGl2RenderingContext::FRAGMENT_SHADER,
-                include_str!("raw/background.frag"),
-            )?,
-            model: crate::shader::load_shader(
-                gl,
-                web_sys::WebGl2RenderingContext::FRAGMENT_SHADER,
-                include_str!("raw/model.frag"),
-            )?,
+            background: crate::shader::load_shader(gl, web_sys::WebGl2RenderingContext::FRAGMENT_SHADER, include_str!("raw/background.frag"))?,
+            model: crate::shader::load_shader(gl, web_sys::WebGl2RenderingContext::FRAGMENT_SHADER, include_str!("raw/model.frag"))?,
         })
     }
 }
@@ -73,36 +57,15 @@ pub struct Meshes {
 impl Meshes {
     fn new(gl: &web_sys::WebGl2RenderingContext) -> Result<Self, crate::geometry::GeometryError> {
         Ok(Self {
-            other_assets_fuel_tank: crate::mesh::load_mesh(
-                gl,
-                include_bytes!("raw/other_assets_fuel_tank.mesh"),
-            )?,
-            other_assets_landing_pad: crate::mesh::load_mesh(
-                gl,
-                include_bytes!("raw/other_assets_landing_pad.mesh"),
-            )?,
-            other_assets_light_truss: crate::mesh::load_mesh(
-                gl,
-                include_bytes!("raw/other_assets_light_truss.mesh"),
-            )?,
+            other_assets_fuel_tank: crate::mesh::load_mesh(gl, include_bytes!("raw/other_assets_fuel_tank.mesh"))?,
+            other_assets_landing_pad: crate::mesh::load_mesh(gl, include_bytes!("raw/other_assets_landing_pad.mesh"))?,
+            other_assets_light_truss: crate::mesh::load_mesh(gl, include_bytes!("raw/other_assets_light_truss.mesh"))?,
             quad_quad: crate::mesh::load_mesh(gl, include_bytes!("raw/quad_quad.mesh"))?,
-            vehicle_chassis: crate::mesh::load_mesh(
-                gl,
-                include_bytes!("raw/vehicle_chassis.mesh"),
-            )?,
-            vehicle_cockpit_frame: crate::mesh::load_mesh(
-                gl,
-                include_bytes!("raw/vehicle_cockpit_frame.mesh"),
-            )?,
-            vehicle_dashboard: crate::mesh::load_mesh(
-                gl,
-                include_bytes!("raw/vehicle_dashboard.mesh"),
-            )?,
+            vehicle_chassis: crate::mesh::load_mesh(gl, include_bytes!("raw/vehicle_chassis.mesh"))?,
+            vehicle_cockpit_frame: crate::mesh::load_mesh(gl, include_bytes!("raw/vehicle_cockpit_frame.mesh"))?,
+            vehicle_dashboard: crate::mesh::load_mesh(gl, include_bytes!("raw/vehicle_dashboard.mesh"))?,
             vehicle_glass: crate::mesh::load_mesh(gl, include_bytes!("raw/vehicle_glass.mesh"))?,
-            vehicle_overhead_panel: crate::mesh::load_mesh(
-                gl,
-                include_bytes!("raw/vehicle_overhead_panel.mesh"),
-            )?,
+            vehicle_overhead_panel: crate::mesh::load_mesh(gl, include_bytes!("raw/vehicle_overhead_panel.mesh"))?,
         })
     }
 }
