@@ -9,9 +9,10 @@ use glow::{Context, HasContext};
 
 use super::resources::StaticResources;
 
-
 pub struct ShaderPrograms {
-    test_shader: ShaderProgram,
+    model: ShaderProgram,
+    volume_and_light: ShaderProgram,
+    passthrough: ShaderProgram,
 }
 
 pub struct Textures {
@@ -46,11 +47,27 @@ pub fn load_shader_programs(
     static_resources: &StaticResources,
 ) -> Result<ShaderPrograms, ShaderProgramError> {
     Ok(ShaderPrograms {
-        test_shader: ShaderProgram::new(
+        model: ShaderProgram::new(
+            gl,
+            &static_resources.vertex_shaders.model_shader,
+            &static_resources.fragment_shaders.model_shader,
+            vec![],
+        )?,
+        volume_and_light: ShaderProgram::new(
             gl,
             &static_resources.vertex_shaders.full_screen_quad,
-            &static_resources.fragment_shaders.test_frag,
-            vec!["image_texture_1".to_string(), "image_texture_2".to_string()],
+            &static_resources.fragment_shaders.volume_and_light,
+            vec![
+                "buffer_color".to_string(),
+                "buffer_material".to_string(),
+                "buffer_geometry".to_string(),
+            ],
+        )?,
+        passthrough: ShaderProgram::new(
+            gl,
+            &static_resources.vertex_shaders.full_screen_quad,
+            &static_resources.fragment_shaders.passthrough,
+            vec!["input_texture".to_string()],
         )?,
     })
 }
@@ -138,6 +155,14 @@ pub fn load_framebuffers(
         ColorAttachment::Attachment2,
     );
 
+    unsafe {
+        gl.draw_buffers(&[
+            glow::COLOR_ATTACHMENT0,
+            glow::COLOR_ATTACHMENT1,
+            glow::COLOR_ATTACHMENT2,
+        ]);
+    }
+
     let display_buffer = FrameBuffer::new(gl)?;
     bind_texture_to_framebuffer_color(
         gl,
@@ -145,63 +170,138 @@ pub fn load_framebuffers(
         &textures.buffer_display,
         ColorAttachment::Attachment0,
     );
-
+    unsafe {
+        gl.draw_buffers(&[glow::COLOR_ATTACHMENT0]);
+    }
     Ok(FrameBuffers {
         gbuffer: gbuffer,
         display_buffer: display_buffer,
     })
 }
 
-pub fn render(gl: &Context, renderer_state: &RendererState, world_state: &WorldState) {
-    unsafe {
-        gl.bind_framebuffer(glow::FRAMEBUFFER, None);
+fn render_gbuffer(gl: &Context, renderer_state: &RendererState, _world_state: &WorldState) {
+    // Render Opaque geometry to the G-buffer
+    renderer_state.framebuffers.gbuffer.bind(gl);
 
+    unsafe {
         gl.viewport(
             0,
             0,
             renderer_state.resolution[0],
             renderer_state.resolution[1],
         );
-
-        gl.clear_color(0.2, 0.2, 0.2, 1.0);
+        gl.clear_color(0.0, 0.0, 0.0, 0.0);
         gl.clear(glow::COLOR_BUFFER_BIT | glow::DEPTH_BUFFER_BIT);
     }
 
-    renderer_state.shader_programs.test_shader.bind(gl);
-    renderer_state
-        .static_resources
-        .textures
-        .vehicle_roughness_metal
-        .bind_to_uniform(
-            gl,
+    renderer_state.shader_programs.model.bind(gl);
+
+    renderer_state.static_resources.meshes.quad_quad.bind(
+        gl,
+        renderer_state.shader_programs.model.attrib_vertex_positions,
+    );
+    renderer_state.static_resources.meshes.quad_quad.render(gl);
+}
+
+fn render_volume_and_lighting(gl: &Context, renderer_state: &RendererState, _world_state: &WorldState) {
+    // Render our GBuffer to the Display Buffer
+    renderer_state.framebuffers.display_buffer.bind(gl);
+
+    unsafe {
+        gl.viewport(
             0,
-            renderer_state
-                .shader_programs
-                .test_shader
-                .uniforms
-                .get("image_texture_1"),
+            0,
+            renderer_state.resolution[0],
+            renderer_state.resolution[1],
         );
-    renderer_state
-        .static_resources
-        .textures
-        .vehicle_albedo
-        .bind_to_uniform(
-            gl,
-            1,
-            renderer_state
-                .shader_programs
-                .test_shader
-                .uniforms
-                .get("image_texture_2"),
-        );
+        gl.clear_color(0.0, 0.0, 0.0, 0.0);
+        gl.clear(glow::COLOR_BUFFER_BIT | glow::DEPTH_BUFFER_BIT);
+    }
+
+    renderer_state.shader_programs.volume_and_light.bind(gl);
+
     renderer_state.static_resources.meshes.quad_quad.bind(
         gl,
         renderer_state
             .shader_programs
-            .test_shader
+            .volume_and_light
             .attrib_vertex_positions,
     );
+
+    renderer_state.textures.buffer_color.bind_to_uniform(
+        gl,
+        0,
+        renderer_state
+            .shader_programs
+            .volume_and_light
+            .uniforms
+            .get("buffer_color"),
+    );
+    renderer_state.textures.buffer_geometry.bind_to_uniform(
+        gl,
+        1,
+        renderer_state
+            .shader_programs
+            .volume_and_light
+            .uniforms
+            .get("buffer_geometry"),
+    );
+    renderer_state.textures.buffer_material.bind_to_uniform(
+        gl,
+        2,
+        renderer_state
+            .shader_programs
+            .volume_and_light
+            .uniforms
+            .get("buffer_material"),
+    );
+
     renderer_state.static_resources.meshes.quad_quad.render(gl);
+}
+
+
+
+pub fn render(gl: &Context, renderer_state: &RendererState, world_state: &WorldState) {
+    render_gbuffer(gl, renderer_state, world_state);
+    render_volume_and_lighting(gl, renderer_state, world_state);
+
+    {
+        // Forward the display buffer to the screen
+        unsafe {
+            gl.bind_framebuffer(glow::FRAMEBUFFER, None);
+
+            gl.viewport(
+                0,
+                0,
+                renderer_state.resolution[0],
+                renderer_state.resolution[1],
+            );
+
+            gl.clear_color(0.0, 0.0, 0.0, 0.0);
+            gl.clear(glow::COLOR_BUFFER_BIT | glow::DEPTH_BUFFER_BIT);
+        }
+
+        renderer_state.shader_programs.passthrough.bind(gl);
+
+        renderer_state.textures.buffer_display.bind_to_uniform(
+            gl,
+            0,
+            renderer_state
+                .shader_programs
+                .passthrough
+                .uniforms
+                .get("input_texture"),
+        );
+
+        renderer_state.static_resources.meshes.quad_quad.bind(
+            gl,
+            renderer_state
+                .shader_programs
+                .passthrough
+                .attrib_vertex_positions,
+        );
+        renderer_state.static_resources.meshes.quad_quad.render(gl);
+    }
 }
 
 /// Configures the resolution of all of the textures used in the deferred geometry pipeline.

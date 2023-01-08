@@ -24,8 +24,18 @@ let renderer = RendererState {
 
 The next question is: how do we test it? Well, why not set up the whole pipe?
 
-Let's render a cube into the gbuffer, do something simple inside the lighting pass,
-and splat that onto the screen at the end.
+Let's render something into the gbuffer, do something simple inside the lighting pass,
+and splat that onto the screen at the end. We don't have a camera yet, so
+we'll just splat a texture into the gbuffer.
+
+So we need to:
+
+ 1. Bind the g-buffer
+ 2. Render some geometry
+ 3. Bind the dispay buffer
+ 4. Render a shader that samples the Gbuffer
+ 5. Bind the screen (A buffer of `None`)
+ 6. Render to the screen
 
 
 <canvas id="in_the_air/framebuffers"></canvas>

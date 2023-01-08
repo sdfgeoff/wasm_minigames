@@ -34,22 +34,28 @@ impl Meshes {
 
 pub struct VertexShaders {
     pub full_screen_quad: Shader,
+    pub model_shader: Shader,
 }
 impl VertexShaders {
     pub fn load(gl: &Context) -> Result<Self, ShaderError> {
         Ok(Self {
             full_screen_quad: Shader::new(gl, ShaderType::Vertex, include_str!("full_screen_quad.vert"))?,
+            model_shader: Shader::new(gl, ShaderType::Vertex, include_str!("model_shader.vert"))?,
         })
     }
 }
 
 pub struct FragmentShaders {
-    pub test_frag: Shader,
+    pub model_shader: Shader,
+    pub volume_and_light: Shader,
+    pub passthrough: Shader,
 }
 impl FragmentShaders{
     pub fn load(gl: &Context) -> Result<Self, ShaderError> {
         Ok(Self {
-            test_frag: Shader::new(gl, ShaderType::Fragment, include_str!("test.frag"))?,
+            model_shader: Shader::new(gl, ShaderType::Fragment, include_str!("model_shader.frag"))?,
+            volume_and_light: Shader::new(gl, ShaderType::Fragment, include_str!("volume_and_light.frag"))?,
+            passthrough: Shader::new(gl, ShaderType::Fragment, include_str!("passthrough.frag"))?,
         })
     }
 }

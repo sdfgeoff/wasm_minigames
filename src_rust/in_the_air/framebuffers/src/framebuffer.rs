@@ -2,7 +2,7 @@ use super::texture::Texture;
 use glow::{Context, HasContext};
 
 pub struct FrameBuffer {
-    framebuffer: glow::Framebuffer,
+    pub framebuffer: glow::Framebuffer,
 }
 
 #[derive(Debug)]
