@@ -76,14 +76,14 @@ structs. There'd be a lot of boilerplate in adding new resources.
 So how can we handle resources and pointers at those resources? We could use hashmaps
 and strings - but that can't be statically checked and has a runtime cost. 
 
-Another option ould be to put all the resourcescount be put inside a ReferenceCounter
+Another option ould be to put all the resources inside a ReferenceCounter
 so they can be referenced directly from multiple places.
 
 To be honest, it wouldn't be so bad if we didn't have to define all those enums. What
 if we could have them all predefined to reduce the boilerplate? Can we use a cargo build
 script to generate the resource structs and accessor functions?
 
-But I'm planning to render like maybe 5 objects, so this whole thing is a bit academic. I'm not
+But I'm planning to render like maybe 5 different objects, so this whole thing is a bit academic. I'm not
 building a general-purpose-rasterizer, I'm building a demo. So I'm going to .... just write render object
 functions directly in the rasterizer. 
 
@@ -110,7 +110,8 @@ struct WorldState {
 }
 ```
 
-And in the rasterizer I'll have a function:
+And in the rasterizer I'll probably a function something
+like:
 ```rust
 fn render_vehicle(gl: &Context, vehicle: &Vehicle) {
 
@@ -247,7 +248,7 @@ up intel_gpu_top, and:
 The render engine claims it is 40% busy, and we're using 3,428MiB/s of memory bandwidth. How close
 is this to capping out? Well, my laptop is DDR4, and it's ram is clocked at 2666Mt/s with a 64 bit bus.
 This gives it a theoretical rate of 170,624 Mbits/s or 21,328MiB/s. This suggests we are using ~16% of
-the processors memory bandwidth. I am suspicious by these calculations - take it with a large grain of
+the processors memory bandwidth. I am suspicious of these calculations - take it with a large grain of
 salt.
 
 
