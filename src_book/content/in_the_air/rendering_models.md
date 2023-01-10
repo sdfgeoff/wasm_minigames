@@ -208,8 +208,11 @@ pub fn render_gbuffer(
 ```
 
 So I set up the shader for the vehicle once, and then render it a bunch of times.
-Plenty of room for optimization here in terms of what data I send to the shader vs what
-I compute on CPU, but I'm not too fussed about optimizing that.
+Plenty of room for optimization here:
+ - I can shift what I compute on CPU vs GPU.
+ - I could use draw instances to render lots within a single draw call.
+
+But I'm not fussed about that yet.
 
 I twiddled my compositing function in the "lighting" pass as well. It now looks like:
 ```frag
@@ -236,5 +239,24 @@ buffers across the entire screen. The good news is it still hits a smooth frame 
 the bandwidth requirements - which was a bit of a worry as it is the main disadvantage of a
 deferred pipeline. 
 
+
+I was curious as to how much of my GPU I'm using to render just this basic scene, so I fired
+up intel_gpu_top, and:
+![Screenshot of intelGPU top](perf.jpg)
+
+The render engine claims it is 40% busy, and we're using 3,428MiB/s of memory bandwidth. How close
+is this to capping out? Well, my laptop is DDR4, and it's ram is clocked at 2666Mt/s with a 64 bit bus.
+This gives it a theoretical rate of 170,624 Mbits/s or 21,328MiB/s. This suggests we are using ~16% of
+the processors memory bandwidth. I am suspicious by these calculations - take it with a large grain of
+salt.
+
+
 What's next? Well, I need to check I've got all my transforms right and then it's on to rendering
 those clouds.
+
+(I checked my transforms, discovered I had got a bunch wrong and fixed them. I had forgotten that
+an objects "world transform" matrix describes how to transform a vector from object-space into
+world-space not the other way around. Thus the matrix is the "model_to_world" matrix in the way
+I like to name them. Sometimes I wonder if I should name matrices using "in" instead of "to". It would
+make the multiplication read nicer as well).
+

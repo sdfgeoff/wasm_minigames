@@ -1,4 +1,4 @@
-use glam::{Vec3, Mat4};
+use glam::{Mat4};
 
 pub struct Camera {
     pub transform: Mat4,
@@ -14,6 +14,7 @@ pub struct Vehicle {
 
 pub struct WorldState {
     pub time: f64,
+    pub time_since_start: f32,
     pub camera: Camera,
     pub vehicles: Vec<Vehicle>,
 }

@@ -23,6 +23,10 @@ macro_rules! log {
     }
 }
 
+pub fn debug_log(msg: &str) {
+    web_sys::console::log_1(&msg.into());
+}
+
 pub struct App {
     world: WorldState,
     canvas: HtmlCanvasElement,
@@ -70,31 +74,37 @@ impl App {
         };
 
         let world = WorldState {
-            time: 0.0,
+            time: Date::new_0().get_time() / 1000.0,
+            time_since_start: 0.0,
+
             camera: Camera {
-                fov: 90.0,
+                fov: 3.14159 / 3.0,
                 near: 0.1,
                 far: 1000.0,
-                transform: Mat4::from_rotation_translation(
-                    Quat::from_euler(EulerRot::XYZ, 0.0, 0.0, 0.0),
-                    Vec3::new(0.0, 0.0, 0.0),
-                )
+                transform: Mat4::from_translation(Vec3::new(0.0, 0.0, 40.0))
             },
 
             vehicles: vec![
                 Vehicle {
                     transform: Mat4::from_rotation_translation(
                         Quat::from_euler(EulerRot::XYZ, 0.0, 0.0, 0.0),
-                        Vec3::new(0.0, 0.0, 10.0),
+                        Vec3::new(0.0, 0.0, 0.0),
                     )
                 },
                 Vehicle {
                     transform: Mat4::from_rotation_translation(
                         Quat::from_euler(EulerRot::XYZ, 0.0, 0.0, 0.0),
-                        Vec3::new(0.0, 0.0, 10.0),
+                        Vec3::new(0.0, 0.0, 0.0),
                     )
-                }
+                },
+                Vehicle {
+                    transform: Mat4::from_rotation_translation(
+                        Quat::from_euler(EulerRot::XYZ, 0.0, 0.0, 0.0),
+                        Vec3::new(0.0, 0.0, 0.0),
+                    )
+                },
             ],
+
         };
 
 
@@ -110,15 +120,24 @@ impl App {
         update_resolution(&self.gl, &self.canvas, &mut self.renderer);
 
         let time = Date::new_0().get_time() / 1000.0;
+        let delta = (self.world.time - time).abs() as f32;
         self.world.time = time;
+        let time_since_start = self.world.time_since_start + delta;
+        self.world.time_since_start = time_since_start;
+
 
         self.world.vehicles[0].transform = Mat4::from_rotation_translation(
-            Quat::from_euler(EulerRot::XYZ, 0.0, time.sin() as f32, 0.0),
-            Vec3::new(0.0, 0.0, 10.0),
+            Quat::from_euler(EulerRot::XYZ, 0.0, time_since_start.sin(), 0.0),
+            Vec3::new(0.0, 10.0, 0.0),
         );
         self.world.vehicles[1].transform = Mat4::from_rotation_translation(
-            Quat::from_euler(EulerRot::XYZ, time.cos() as f32, 0.0, 0.0),
-            Vec3::new(0.0, 0.0, 10.0),
+            Quat::from_euler(EulerRot::XYZ, time_since_start.sin(),0.0,  0.0),
+            Vec3::new(0.0, 0.0, 0.0),
+        );
+
+        self.world.vehicles[2].transform = Mat4::from_rotation_translation(
+            Quat::from_euler(EulerRot::XYZ, 0.0,0.0,  time_since_start + (time_since_start * 2.0).sin()),
+            Vec3::new(time_since_start.cos()*2.0, time_since_start.sin(), 0.0) * 20.0,
         );
 
         render(&self.gl, &self.renderer, &self.world);

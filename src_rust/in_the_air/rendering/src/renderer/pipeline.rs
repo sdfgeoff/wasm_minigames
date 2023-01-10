@@ -1,6 +1,32 @@
 use super::{CameraMatrices, RendererState};
-use crate::world::WorldState;
+use crate::{world::WorldState, shader_program::ShaderProgram};
+use glam::{Mat4, Vec4};
 use glow::{Context, HasContext};
+
+use crate::app::debug_log;
+
+
+pub fn apply_camera_to_shader(gl: &Context, camera: &CameraMatrices, shader: &ShaderProgram) {
+
+    unsafe {
+        gl.uniform_matrix_4_f32_slice(
+            shader.uniforms.get("camera_to_world"),
+            false,
+            &camera.camera_to_world.to_cols_array(),
+        );
+        gl.uniform_matrix_4_f32_slice(
+            shader.uniforms.get("world_to_camera"),
+            false,
+            &camera.world_to_camera.to_cols_array(),
+        );
+        gl.uniform_matrix_4_f32_slice(
+            shader.uniforms.get("camera_to_screen"),
+            false,
+            &camera.camera_to_screen.to_cols_array(),
+        );
+    }
+}
+
 
 pub fn render_gbuffer(
     gl: &Context,
@@ -27,23 +53,7 @@ pub fn render_gbuffer(
     active_shader_program.bind(gl);
     active_mesh.bind(gl, &active_shader_program.attributes);
 
-    unsafe {
-        gl.uniform_matrix_4_f32_slice(
-            active_shader_program.uniforms.get("camera_to_world"),
-            false,
-            &camera_matrices.camera_to_world.to_cols_array(),
-        );
-        gl.uniform_matrix_4_f32_slice(
-            active_shader_program.uniforms.get("world_to_camera"),
-            false,
-            &camera_matrices.world_to_camera.to_cols_array(),
-        );
-        gl.uniform_matrix_4_f32_slice(
-            active_shader_program.uniforms.get("camera_to_screen"),
-            false,
-            &camera_matrices.camera_to_screen.to_cols_array(),
-        );
-    }
+    apply_camera_to_shader(gl, camera_matrices, active_shader_program);
 
     renderer_state
         .static_resources
@@ -68,17 +78,18 @@ pub fn render_gbuffer(
             gl.uniform_matrix_4_f32_slice(
                 active_shader_program.uniforms.get("world_to_model"),
                 false,
-                &vehicle.transform.to_cols_array(),
+                &vehicle.transform.inverse().to_cols_array(),
             );
 
             gl.uniform_matrix_4_f32_slice(
                 active_shader_program.uniforms.get("model_to_world"),
                 false,
-                &vehicle.transform.inverse().to_cols_array(),
+                &vehicle.transform.to_cols_array(),
             );
         }
         active_mesh.render(gl);
     }
+
 }
 
 pub fn render_volume_and_lighting(

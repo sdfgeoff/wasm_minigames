@@ -49,7 +49,8 @@ pub struct CameraMatrices {
 
 
 pub fn camera_to_matrices(camera: &Camera, resolution: &[i32; 2]) -> CameraMatrices {
-    let world_to_camera = camera.transform;
+    let camera_to_world = camera.transform;
+    let world_to_camera = camera_to_world.inverse();
     let camera_to_screen =  Mat4::perspective_rh_gl(
         camera.fov,
         resolution[0] as f32 / resolution[1] as f32,
@@ -58,7 +59,7 @@ pub fn camera_to_matrices(camera: &Camera, resolution: &[i32; 2]) -> CameraMatri
     );
     CameraMatrices {
         world_to_camera,
-        camera_to_world: world_to_camera.inverse(),
+        camera_to_world,
         camera_to_screen,
     }
 }
