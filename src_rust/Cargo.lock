@@ -242,6 +242,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "in_the_air_rendering_volumes"
+version = "0.1.0"
+dependencies = [
+ "console_error_panic_hook",
+ "glam 0.21.3",
+ "glow",
+ "js-sys",
+ "png",
+ "wasm-bindgen",
+ "web-sys",
+]
+
+[[package]]
 name = "indexmap"
 version = "1.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
