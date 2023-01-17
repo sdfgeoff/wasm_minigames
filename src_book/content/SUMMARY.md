@@ -39,3 +39,4 @@
     - [Framebuffers](in_the_air/framebuffers.md)
     - [Rendering Models](in_the_air/rendering_models.md)
     - [Rendering Volumes](in_the_air/rendering_volumes.md)
+    - [Cloud Density](in_the_air/cloud_density.md)
