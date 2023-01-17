@@ -71,4 +71,8 @@ clean:
 	rm -r $(WASM_OUTPUT_FOLDER)
 	rm -r $(BOOK_OUTPUT_FOLDER)
 	rm -r $(BOOK_GENERATED_CONTENT_DIR)
+	
+	
+desktop:
+	cd ${WORKSPACE_DIR}; cargo build
 
