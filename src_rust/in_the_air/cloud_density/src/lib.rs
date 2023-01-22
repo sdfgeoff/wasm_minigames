@@ -2,24 +2,13 @@ use std::cell::RefCell;
 use std::rc::Rc;
 
 use glow::Context;
-use js_sys::{Function, Date};
+use js_sys::{Date, Function};
 
 use wasm_bindgen::prelude::{wasm_bindgen, Closure};
 use wasm_bindgen::JsCast;
 use web_sys::{window, HtmlCanvasElement, KeyboardEvent, MouseEvent};
 
 mod app;
-mod attributes;
-mod framebuffer;
-mod keyboard;
-mod mesh;
-mod mesh_loader;
-mod renderer;
-mod resources;
-mod shader;
-mod shader_program;
-mod texture;
-mod world;
 
 // A macro to provide `println!(..)`-style syntax for `console.log` logging.
 macro_rules! log {
@@ -40,6 +29,7 @@ pub struct Core {
     canvas: Rc<RefCell<HtmlCanvasElement>>,
 }
 
+#[cfg(target_arch = "wasm32")]
 #[wasm_bindgen]
 impl Core {
     #[wasm_bindgen(constructor)]
@@ -75,7 +65,13 @@ impl Core {
         let (target_resolution, pixels_per_centimeter) = calculate_resolution(&canvas);
         let time = Date::new_0().get_time() / 1000.0;
 
-        let app = Rc::new(RefCell::new(app::App::new(gl, options, time, target_resolution, pixels_per_centimeter)));
+        let app = Rc::new(RefCell::new(app::App::new(
+            gl,
+            options,
+            time,
+            target_resolution,
+            pixels_per_centimeter,
+        )));
         let canvas = Rc::new(RefCell::new(canvas));
 
         Self { app, canvas }
@@ -97,7 +93,9 @@ impl Core {
 
             *callback.borrow_mut() = Some(Closure::wrap(Box::new(move || {
                 let mut app_ref = anim_app.borrow_mut();
-                if let Some((target_resolution, pixels_per_centimeter)) = check_update_resolution(&anim_canvas.borrow()) {
+                if let Some((target_resolution, pixels_per_centimeter)) =
+                    check_update_resolution(&anim_canvas.borrow())
+                {
                     app_ref.update_resolution(target_resolution, pixels_per_centimeter);
                 }
 

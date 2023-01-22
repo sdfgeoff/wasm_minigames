@@ -1,5 +1,5 @@
 use super::{CameraMatrices, RendererState};
-use crate::{world::WorldState, shader_program::ShaderProgram};
+use crate::app::{world::WorldState, shader_program::ShaderProgram};
 use glam::{Mat4, Vec3, Quat};
 use glow::{Context, HasContext};
 

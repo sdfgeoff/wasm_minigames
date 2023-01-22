@@ -1,11 +1,11 @@
 /**
  * Functinos to set up the renderer.
  */
-use crate::framebuffer::{
+use crate::app::framebuffer::{
     bind_texture_to_framebuffer_color, bind_texture_to_framebuffer_depth, ColorAttachment, FrameBuffer, FrameBufferError,
 };
-use crate::shader_program::{ShaderProgram, ShaderProgramError};
-use crate::texture::{
+use crate::app::shader_program::{ShaderProgram, ShaderProgramError};
+use crate::app::texture::{
     EdgeMode, InterpolationMode, Texture, TextureConfig, TextureError, TexturePixelFormat,
 };
 use glow::{Context, HasContext};

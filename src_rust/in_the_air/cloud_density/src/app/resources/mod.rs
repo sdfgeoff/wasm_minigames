@@ -1,6 +1,6 @@
-use crate::mesh::{Mesh, MeshError};
-use crate::texture::{Texture, TextureError, TextureConfig};
-use crate::shader::{Shader, ShaderError, ShaderType};
+use crate::app::mesh::{Mesh, MeshError};
+use crate::app::texture::{Texture, TextureError, TextureConfig};
+use crate::app::shader::{Shader, ShaderError, ShaderType};
 
 use glow::{Context};
 

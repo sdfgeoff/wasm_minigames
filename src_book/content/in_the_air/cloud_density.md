@@ -39,5 +39,28 @@ of worldspace (so a 128px square covers 7.6km), and turn it into a density map.
 Why am I going with such a small texture? Well, this function is going to get
 sampled a lot, so if it fits into the GPU's cache, then it will run WAY faster.
 
+So I built it, and it ran terribly. I wanted to do some
+analysis and spector.js didn't give enough detail, so I installed intel's graphics performance
+analyzer and added a desktop/glutin target for the program. This allowed me to debug graphics
+performance without going through a web-browser.
+
+The result:
+![Screenshot of intel graphics analyzer top](perf_all_in_volumetrics.jpg)
+
+All the frame duration is taken in a single draw call: the volumetrics one. This is
+unsurprising though inconvenient. Maybe my implementation is just slow?
+I couldn't see anything particularly bad, and a couple tweaks didn't make anything
+faster. 
+
+However, my demo in shadertoy is way faster - but there's a trick.
+In shadertoy the clouds are rendered at half resolution but here I'm still
+rendering them at screen resolution. Can we render our
+geometry at full resolution but our clouds at half-resolution and then combine
+them? Even though clouds have wispy bits no-one is likely to notice a 2x upscale. There 
+may be slight edge artifacts, but it may be worth trying.
+
+So anyway, here's the slow version that runs a full-screen cloud buffer. It'll run fine when small, but
+if you fullscreen it on an intel card it'll drop a lot of frames.
+
 <canvas id="in_the_air/cloud_density"></canvas>
 

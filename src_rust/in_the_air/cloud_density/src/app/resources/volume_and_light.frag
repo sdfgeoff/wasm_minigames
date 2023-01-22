@@ -100,6 +100,9 @@ void main() {
     float dist_from_camera = 0.0;
     vec4 outCol = vec4(0.0, 0.0, 0.0, 0.001); // This small starting opacity prevents a div-zero error in alpha compositing
 
+    bool hitOpaque = false;
+
+
     for (int i = 0; i < 100; i++) {
         float step_size = 2.0;
         vec3 p1 = ray_start + ray_direction * dist_from_camera;
@@ -111,6 +114,7 @@ void main() {
         if (dist_from_camera > opaque_distance_from_camera) {
             // We've hit something opaque, so light the surface and call
             // it done.
+            hit_opaque = true;
 
             vec4 color = texture(buffer_color, uv);
             vec4 material = texture(buffer_material, uv);
