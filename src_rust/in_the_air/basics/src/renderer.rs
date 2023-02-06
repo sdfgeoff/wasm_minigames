@@ -66,7 +66,7 @@ pub fn load_textures(gl: &Context) -> Result<Textures, TextureError> {
     })
 }
 
-pub fn render(gl: &Context, renderer_state: &RendererState, world_state: &WorldState) {
+pub fn render(gl: &Context, renderer_state: &RendererState, _world_state: &WorldState) {
     unsafe {
         gl.viewport(
             0,

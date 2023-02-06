@@ -9,6 +9,7 @@ use wasm_bindgen::JsCast;
 use web_sys::{window, HtmlCanvasElement, KeyboardEvent, MouseEvent};
 
 mod app;
+use app::keyboard;
 
 // A macro to provide `println!(..)`-style syntax for `console.log` logging.
 macro_rules! log {

@@ -37,7 +37,7 @@ impl App {
     pub fn new(canvas: HtmlCanvasElement) -> Self {
         let gl = get_gl_context(&canvas).expect("No GL Canvas");
 
-        let float_tex_extension = gl.get_extension("EXT_color_buffer_float");
+        let _float_tex_extension = gl.get_extension("EXT_color_buffer_float");
 
         gl.clear_color(0.0, 0.0, 0.0, 1.0);
         gl.enable(WebGl2RenderingContext::DEPTH_TEST);
