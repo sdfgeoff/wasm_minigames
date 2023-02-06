@@ -30,6 +30,30 @@ channel covers a vertical space of 2.56km. However each channel has a base
 spacing of 1.5km so there is an overlap of 1.56km to allow for more interesting
 cloudscapes.
 
+What does sampling this look like?
+
+```glsl
+float sample_volume_density(vec3 point) {
+    vec4 map_sample = (textureLod(cloud_map, point.rg / CLOUD_MAP_EXTENT, 0.0) - 0.5) * 2.0;
+
+    vec4 layer_density = map_sample + CLOUD_DENSITY_MAP_OFFSET;
+    vec4 layer_centerline = CLOUD_LAYER_HEIGHTS + (CLOUD_LAYER_THICKNESS - CLOUD_UNDERHANG) * layer_density;
+    vec4 layer_thickness = max(CLOUD_LAYER_THICKNESS * layer_density, 0.0);
+    vec4 distance_to_centerline = abs(point.z - layer_centerline);
+    vec4 distance_to_surface = distance_to_centerline - layer_thickness;
+    vec4 distance_to_layer = distance_to_surface;
+
+    float distance_to_cloud = min(min(min(distance_to_layer.x, distance_to_layer.y), distance_to_layer.z), distance_to_layer.w);
+
+    float density = -distance_to_cloud;
+    return density * CLOUD_DENSITY_SCALE;
+}
+```
+
+We can take advantage of the GPU's ability to work with vec4's so we don't have to
+iterate over layers. Thus sampling multiple layers is essentially the same cost as
+rendering a single layer.
+
 To reach a 6km rendering distance with 100 raymarcher steps, each step has to be 
 60m. If high altitude clouds are never rendered, we may reduce the vertical scale
 to increase possible cloudscape complexity. I'll have a twiddle with the cloud layer stretch and spacing once I have a prototype.
