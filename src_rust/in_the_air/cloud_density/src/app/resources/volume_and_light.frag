@@ -24,9 +24,9 @@ const vec3 LIGHT_DIRECTION = vec3(0.0, 0.0, 1.0);
 const float WORLD_SCALE = 0.05; // Scale all the cloud parameters by this amount
 
 const float CLOUD_MAP_EXTENT = 128.0 * 60.0 * WORLD_SCALE; // 128 pixels, 60 meters per pixel
-const vec4 CLOUD_LAYER_HEIGHTS = vec4(0.0, 1.0, 2.0, 4.0) * 300.0 * WORLD_SCALE;
-const float CLOUD_LAYER_THICKNESS = 300.0 * WORLD_SCALE; // If this is bigger than the distance between the gap between CLOUD_LAYER_HEIGHTS then the clouds can overlap
-const float CLOUD_UNDERHANG = 20.0 * WORLD_SCALE; // How much the cloud layer extends below the layer height
+const vec4 CLOUD_LAYER_HEIGHTS = vec4(0.0, 1.0, 2.0, 4.0) * 1500.0 * WORLD_SCALE;
+const float CLOUD_LAYER_THICKNESS = 2650.0 * WORLD_SCALE; // If this is bigger than the distance between the gap between CLOUD_LAYER_HEIGHTS then the clouds can overlap
+const float CLOUD_UNDERHANG = CLOUD_LAYER_THICKNESS * 0.5; // How much the cloud layer extends below the layer height
 const vec4 CLOUD_DENSITY_MAP_OFFSET = vec4(0.1); // Constant addition to the density of each layer
 const float CLOUD_DENSITY_SCALE = 0.02;
 
@@ -77,7 +77,7 @@ void main() {
 
     vec4 ray_direction_screen = vec4(screen_pos.xy, 1.0, 1.0);
     vec4 ray_direction_camera = screen_to_camera * ray_direction_screen;
-    vec4 ray_direction_world = camera_to_world * ray_direction_camera;
+    vec4 ray_direction_world = camera_to_world * vec4(ray_direction_camera.xyz, 0.0);
 
     vec3 ray_start = camera_to_world[3].xyz;
     vec3 ray_direction = normalize(ray_direction_world.xyz);
