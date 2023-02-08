@@ -40,7 +40,11 @@ impl App {
             let _float_texture_ext = webgl2_context.get_extension("OES_texture_float");
             let _float_texture_ext = webgl2_context.get_extension("EXT_color_buffer_float");
 
+            #[cfg(target_arch = "wasm32")]
             let gl = Context::from_webgl2_context(webgl2_context);
+            #[cfg(not(target_arch = "wasm32"))]
+            let gl = unimplemented!();
+
             (gl, "#version 300 es")
         };
         log!("[OK] Got GL");

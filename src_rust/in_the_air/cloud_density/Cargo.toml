@@ -1,0 +1,45 @@
+[package]
+name = "in_the_air_cloud_density"
+version = "0.1.0"
+authors = ["Geoffrey Irons <sdfgeoff@gmail.com>"]
+edition = "2018"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+path = "src/lib.rs"
+
+[[bin]]
+name = "in_the_air_cloud_density"
+path = "src/bin.rs"
+
+[dependencies]
+wasm-bindgen="0.2.83"
+js-sys="0.3.60"
+console_error_panic_hook="0.1.7"
+
+glam="0.21.3"
+glow="0.11.2"
+png="0.17.5"
+
+
+[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+glutin = { version = "0.27"}
+
+
+[dependencies.web-sys]
+version = "0.3.4"
+features = [
+    "console",
+    "Document",
+    "Event",
+    "HtmlCanvasElement",
+    "HtmlElement",
+    "KeyboardEvent",
+    "MouseEvent",
+    "WebGl2RenderingContext",
+    "WebGlShader",
+    "WebGlBuffer",
+    "WebGlProgram",
+    "Window",
+]
+

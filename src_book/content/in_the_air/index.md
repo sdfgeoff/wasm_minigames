@@ -60,6 +60,6 @@ need a renderer that can handle both.
 
 So here's the plan.
 
-![Intersections](renderer_design.svg)
+![Renderer Design](renderer_design.svg)
 
 I'm sure it will evolve as we go, but at least it's a start!
