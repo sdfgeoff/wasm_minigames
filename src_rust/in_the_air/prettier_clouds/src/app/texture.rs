@@ -23,6 +23,7 @@ impl InterpolationMode {
     }
 }
 
+#[allow(dead_code)]
 pub enum Dimension {
     D1,
     D2,
@@ -148,7 +149,7 @@ impl Texture {
                 config.edge_behaviour.to_gl(),
             );
 
-            if (dimension == glow::TEXTURE_3D) {
+            if dimension == glow::TEXTURE_3D {
                 gl.tex_parameter_i32(
                     dimension,
                     glow::TEXTURE_WRAP_R,
@@ -156,7 +157,7 @@ impl Texture {
                 );
             }
 
-            if (dimension == glow::TEXTURE_2D) {
+            if dimension == glow::TEXTURE_2D {
                 gl.tex_storage_2d(
                     glow::TEXTURE_2D,
                     levels,
