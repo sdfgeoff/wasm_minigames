@@ -30,9 +30,8 @@ const float WORLD_SCALE = 0.05; // Scale all the cloud parameters by this amount
 
 const float CLOUD_MAP_EXTENT = 128.0 * 500.0 * WORLD_SCALE; // 128 pixels, 200 meters per pixel
 const vec4 CLOUD_LAYER_HEIGHTS = vec4(0.0, 1.0, 2.0, 4.0) * 1500.0 * WORLD_SCALE;
-const float CLOUD_LAYER_THICKNESS = 2650.0 * WORLD_SCALE; // If this is bigger than the distance between the gap between CLOUD_LAYER_HEIGHTS then the clouds can overlap
+const float CLOUD_LAYER_THICKNESS = 1650.0 * WORLD_SCALE; // If this is bigger than the distance between the gap between CLOUD_LAYER_HEIGHTS then the clouds can overlap
 const float CLOUD_UNDERHANG = CLOUD_LAYER_THICKNESS * 0.5; // How much the cloud layer extends below the layer height
-const vec4 CLOUD_DENSITY_MAP_OFFSET = vec4(0.6, 0.2, 0.4, 0.1); // Constant addition to the density of each layer
 const float CLOUD_NOISE_SCALE = WORLD_SCALE * 0.1;
 const vec3 CLOUD_NOISE_SPEED = vec3(0.02, 0.0, 0.0);
 const int CLOUD_NOISE_OCTAVES = 1;
@@ -108,7 +107,7 @@ vec3 renderSky(vec3 direction) {
 
 float sampleCloudMapShape(vec3 point) {
     point.x += time_since_start;
-    vec4 map_sample = (textureLod(cloud_map, point.rg / CLOUD_MAP_EXTENT, 0.0) - 0.5) * 1.0;
+    vec4 map_sample = (textureLod(cloud_map, point.rg / CLOUD_MAP_EXTENT, 0.0) - 0.5) * 2.0;
 
     vec4 layer_density = map_sample;
     vec4 layer_centerline = CLOUD_LAYER_HEIGHTS + (CLOUD_LAYER_THICKNESS - CLOUD_UNDERHANG) * layer_density;
@@ -177,25 +176,6 @@ float addNoiseToDensity(vec3 point, float density, int octaves) {
     }
     return density;
 }
-
-
-
-// float sample_volume_density(vec3 point) {
-//     vec4 map_sample = (textureLod(cloud_map, point.rg / CLOUD_MAP_EXTENT, 0.0) - 0.5) * 2.0;
-
-//     vec4 layer_density = map_sample + CLOUD_DENSITY_MAP_OFFSET;
-//     vec4 layer_centerline = CLOUD_LAYER_HEIGHTS + (CLOUD_LAYER_THICKNESS - CLOUD_UNDERHANG) * layer_density;
-//     vec4 layer_thickness = max(CLOUD_LAYER_THICKNESS * layer_density, 0.0);
-//     vec4 distance_to_centerline = abs(point.z - layer_centerline);
-//     vec4 distance_to_surface = distance_to_centerline - layer_thickness;
-//     vec4 distance_to_layer = distance_to_surface;
-
-//     float distance_to_cloud = min(min(min(distance_to_layer.x, distance_to_layer.y), distance_to_layer.z), distance_to_layer.w);
-
-//     float density = -distance_to_cloud;
-//     return density * CLOUD_DENSITY_SCALE;
-// }
-
 
 
 vec4 light_surface(vec4 color, vec4 geometry, vec4 material, vec3 lightFromSunAtParticle) {
@@ -282,7 +262,7 @@ void main() {
 
             // We only need to sample the detailed cloud texture if
             // we are close and can see it in lots of detail.
-            if (dist_from_camera < DRAW_DISTANCE / 4.0) {
+            if (dist_from_camera < DRAW_DISTANCE / 3.0) {
                 // If we are already mostly opaque, there's no point sampling extra-detail.
                 //vec4 small_noise_tex = textureLod(BUFFER_VOLUME_NOISE, current_position * 0.05 + vec3(0,iTime * 0.02,0), 0.0);
                 //density -= pow(small_noise_tex.r, 3.0) * 3.0;
