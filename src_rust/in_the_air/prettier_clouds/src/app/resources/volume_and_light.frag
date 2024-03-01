@@ -46,7 +46,7 @@ const float OUTSIDE_STEP_SIZE = INSIDE_STEP_SIZE * 4.0;
 const int STEP_OUTSIDE_RATIO = int(ceil(INSIDE_STEP_SIZE / OUTSIDE_STEP_SIZE));
 
 // Cloud Material Parameters
-const float CLOUD_DENSITY_SCALE = 0.05;
+const float CLOUD_DENSITY_SCALE = 0.04;
 
 const float kb = 1.0; // Backscattering
 const float kbp = 30.0; // Backscattering falloff
@@ -55,7 +55,7 @@ const float ks = 0.8; // Onmidirectional Scattering
 const float kt = 1.0; // Transmission Scattering
 const float ktp = 2.0; // Transmission falloff
 
-const float BASE_TRANSMISSION = 0.95; // Light that doesn't get scattered at all
+const float BASE_TRANSMISSION = 0.97; // Light that doesn't get scattered at all
 
 
 // Lighting Parameters
@@ -127,8 +127,8 @@ float sampleCloudMapShape(vec3 point) {
 
 float computeDensityTowardsSun(vec3 current_position, float density_here) {
     float density_sunwards = max(density_here, 0.0);
-    density_sunwards += max(0.0, sampleCloudMapShape(current_position + LIGHT_DIRECTION * 1.0)) * 1.0;
-    density_sunwards += max(0.0, sampleCloudMapShape(current_position + LIGHT_DIRECTION * 4.0)) * 4.0;
+    density_sunwards += max(0.0, sampleCloudMapShape(current_position + LIGHT_DIRECTION * 1.0)) * 60.0 * WORLD_SCALE;
+    density_sunwards += max(0.0, sampleCloudMapShape(current_position + LIGHT_DIRECTION * 4.0)) * 240.0 * WORLD_SCALE;
     
     return density_sunwards;
 }

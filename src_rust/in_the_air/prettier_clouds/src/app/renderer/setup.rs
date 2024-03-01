@@ -7,7 +7,8 @@ use crate::app::framebuffer::{
 };
 use crate::app::shader_program::{ShaderProgram, ShaderProgramError};
 use crate::app::texture::{
-    EdgeMode, InterpolationMode, Texture, TextureConfig, TextureError, TexturePixelFormat, Dimension
+    Dimension, EdgeMode, InterpolationMode, Texture, TextureConfig, TextureError,
+    TexturePixelFormat,
 };
 use glow::{Context, HasContext};
 

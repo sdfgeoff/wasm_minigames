@@ -156,11 +156,12 @@ impl App {
             Vec3::new(time_since_start.cos() * 2.0, time_since_start.sin(), 0.0) * 20.0,
         );
 
-        self.world.vehicles[1].transform = self.world.camera.transform * Mat4::from_translation(Vec3::new(0.0, -5.0, -20.0)) * Mat4::from_rotation_translation(
-            Quat::from_euler(EulerRot::XYZ, -1.5, 0.0, 0.0),
-            Vec3::new(0.0, 0.0, 0.0),
-        ) ;
-        
+        self.world.vehicles[1].transform = self.world.camera.transform
+            * Mat4::from_translation(Vec3::new(0.0, -5.0, -20.0))
+            * Mat4::from_rotation_translation(
+                Quat::from_euler(EulerRot::XYZ, -1.5, 0.0, 0.0),
+                Vec3::new(0.0, 0.0, 0.0),
+            );
 
         render(&self.gl, &self.renderer, &self.world);
     }

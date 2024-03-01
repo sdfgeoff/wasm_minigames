@@ -164,7 +164,7 @@ impl Texture {
                     info.width as i32,
                     info.height as i32,
                 );
-    
+
                 gl.tex_sub_image_2d(
                     glow::TEXTURE_2D,
                     0,
@@ -175,7 +175,7 @@ impl Texture {
                     tex_format.to_format(),
                     tex_format.to_type(),
                     glow::PixelUnpackData::Slice(image_pixels),
-                );   
+                );
             }
             if let Dimension::D3(width, height, depth) = config.dimension {
                 gl.tex_storage_3d(
@@ -186,7 +186,7 @@ impl Texture {
                     height as i32,
                     depth as i32,
                 );
-    
+
                 gl.tex_sub_image_3d(
                     glow::TEXTURE_3D,
                     0,
@@ -199,12 +199,9 @@ impl Texture {
                     tex_format.to_format(),
                     tex_format.to_type(),
                     glow::PixelUnpackData::Slice(image_pixels),
-                );   
+                );
             }
 
-
-
-            
             if levels > 1 {
                 gl.generate_mipmap(dimension);
             }

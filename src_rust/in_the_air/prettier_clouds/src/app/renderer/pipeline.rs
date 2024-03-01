@@ -185,16 +185,19 @@ pub fn render_volume_and_lighting(
             .uniforms
             .get("buffer_material"),
     );
-    renderer_state.static_resources.textures.volume_noise.bind_to_uniform(
-        gl,
-        4,
-        renderer_state
-            .shader_programs
-            .volume_and_light
-            .uniforms
-            .get("buffer_volume_noise"),
-    );
-    
+    renderer_state
+        .static_resources
+        .textures
+        .volume_noise
+        .bind_to_uniform(
+            gl,
+            4,
+            renderer_state
+                .shader_programs
+                .volume_and_light
+                .uniforms
+                .get("buffer_volume_noise"),
+        );
 
     renderer_state
         .static_resources

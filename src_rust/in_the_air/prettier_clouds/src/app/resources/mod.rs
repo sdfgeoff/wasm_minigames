@@ -1,6 +1,8 @@
 use crate::app::mesh::{Mesh, MeshError};
 use crate::app::shader::{Shader, ShaderError, ShaderType};
-use crate::app::texture::{Texture, TextureConfig, TextureError, InterpolationMode, EdgeMode, Dimension};
+use crate::app::texture::{
+    Dimension, EdgeMode, InterpolationMode, Texture, TextureConfig, TextureError,
+};
 
 use glow::Context;
 
