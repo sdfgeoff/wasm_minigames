@@ -2,7 +2,8 @@
  * Functinos to set up the renderer.
  */
 use crate::app::framebuffer::{
-    bind_texture_to_framebuffer_color, bind_texture_to_framebuffer_depth, ColorAttachment, FrameBuffer, FrameBufferError,
+    bind_texture_to_framebuffer_color, bind_texture_to_framebuffer_depth, ColorAttachment,
+    FrameBuffer, FrameBufferError,
 };
 use crate::app::shader_program::{ShaderProgram, ShaderProgramError};
 use crate::app::texture::{
@@ -10,8 +11,7 @@ use crate::app::texture::{
 };
 use glow::{Context, HasContext};
 
-
-use super::{FrameBuffers, Textures, ShaderPrograms, StaticResources};
+use super::{FrameBuffers, ShaderPrograms, StaticResources, Textures};
 
 /// Combines fragment and vertex shaders from the static resources
 /// into shader programs with known uniform names
@@ -27,10 +27,8 @@ pub fn load_shader_programs(
             vec![
                 "metallic_roughness_texture".to_string(),
                 "albedo_texture".to_string(),
-
                 "world_to_model".to_string(),
                 "model_to_world".to_string(),
-
                 "camera_to_screen".to_string(),
                 "camera_to_world".to_string(),
                 "world_to_camera".to_string(),
@@ -44,11 +42,9 @@ pub fn load_shader_programs(
                 "buffer_color".to_string(),
                 "buffer_material".to_string(),
                 "buffer_geometry".to_string(),
-
                 "camera_to_screen".to_string(),
                 "camera_to_world".to_string(),
                 "world_to_camera".to_string(),
-
                 "cloud_map".to_string(),
             ],
         )?,
@@ -159,11 +155,7 @@ pub fn load_framebuffers(
         &textures.buffer_material,
         ColorAttachment::Attachment2,
     );
-    bind_texture_to_framebuffer_depth(
-        gl,
-        &gbuffer,
-        &textures.buffer_depth,
-    );
+    bind_texture_to_framebuffer_depth(gl, &gbuffer, &textures.buffer_depth);
 
     unsafe {
         gl.draw_buffers(&[

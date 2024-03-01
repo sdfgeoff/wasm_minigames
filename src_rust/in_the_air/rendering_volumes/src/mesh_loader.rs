@@ -1,6 +1,5 @@
 use std::convert::TryInto;
 
-
 /// Reads a f32 from a buffer
 fn get_f32(arr: &[u8]) -> f32 {
     f32::from_le_bytes(arr[0..4].try_into().unwrap())

@@ -40,3 +40,4 @@
     - [Rendering Models](in_the_air/rendering_models.md)
     - [Rendering Volumes](in_the_air/rendering_volumes.md)
     - [Cloud Density](in_the_air/cloud_density.md)
+    - [Prettier Clouds](in_the_air/prettier_clouds.md)

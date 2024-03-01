@@ -207,11 +207,7 @@ fn render_gbuffer(gl: &Context, renderer_state: &RendererState, _world_state: &W
         .static_resources
         .textures
         .vehicle_albedo
-        .bind_to_uniform(
-            gl, 
-            0, 
-            active_shader_program.uniforms.get("albedo_texture")
-        );
+        .bind_to_uniform(gl, 0, active_shader_program.uniforms.get("albedo_texture"));
 
     renderer_state
         .static_resources

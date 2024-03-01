@@ -26,7 +26,12 @@ impl FrameBuffer {
     }
 }
 
-pub fn bind_texture_to_framebuffer_color(gl: &Context, framebuffer: &FrameBuffer, texture: &Texture, attach: ColorAttachment) {
+pub fn bind_texture_to_framebuffer_color(
+    gl: &Context,
+    framebuffer: &FrameBuffer,
+    texture: &Texture,
+    attach: ColorAttachment,
+) {
     framebuffer.bind(gl);
     unsafe {
         gl.active_texture(glow::TEXTURE0);
@@ -42,7 +47,6 @@ pub fn bind_texture_to_framebuffer_color(gl: &Context, framebuffer: &FrameBuffer
         );
     }
 }
-
 
 #[allow(dead_code)]
 pub enum ColorAttachment {

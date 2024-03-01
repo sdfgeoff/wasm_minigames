@@ -1,14 +1,14 @@
 use super::framebuffer::FrameBuffer;
 use super::shader_program::ShaderProgram;
 use super::texture::Texture;
-use glow::{Context, HasContext};
 use glam::Mat4;
+use glow::{Context, HasContext};
 
 use super::resources::StaticResources;
-use super::world::{WorldState, Camera};
+use super::world::{Camera, WorldState};
 
-mod setup;
 mod pipeline;
+mod setup;
 pub use setup::{load_framebuffers, load_shader_programs, load_textures};
 
 pub struct ShaderPrograms {
@@ -40,22 +40,20 @@ pub struct RendererState {
     pub static_resources: StaticResources,
 }
 
-
 pub struct CameraMatrices {
     world_to_camera: Mat4,
     camera_to_world: Mat4,
     camera_to_screen: Mat4,
 }
 
-
 pub fn camera_to_matrices(camera: &Camera, resolution: &[i32; 2]) -> CameraMatrices {
     let camera_to_world = camera.transform;
     let world_to_camera = camera_to_world.inverse();
-    let camera_to_screen =  Mat4::perspective_rh_gl(
+    let camera_to_screen = Mat4::perspective_rh_gl(
         camera.fov,
         resolution[0] as f32 / resolution[1] as f32,
         camera.near,
-        camera.far
+        camera.far,
     );
     CameraMatrices {
         world_to_camera,
@@ -65,11 +63,10 @@ pub fn camera_to_matrices(camera: &Camera, resolution: &[i32; 2]) -> CameraMatri
 }
 
 pub fn render(gl: &Context, renderer_state: &RendererState, world_state: &WorldState) {
-
     let camera_matrices = camera_to_matrices(&world_state.camera, &renderer_state.resolution);
 
     unsafe {
-    gl.enable(glow::DEPTH_TEST);
+        gl.enable(glow::DEPTH_TEST);
     }
 
     pipeline::render_gbuffer(gl, renderer_state, world_state, &camera_matrices);

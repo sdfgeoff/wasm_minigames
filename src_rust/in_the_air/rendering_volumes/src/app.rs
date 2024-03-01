@@ -6,7 +6,7 @@ use super::keyboard;
 use super::renderer::{
     load_framebuffers, load_shader_programs, load_textures, render, resize_buffers, RendererState,
 };
-use super::resources::{StaticResources, ResourceError};
+use super::resources::{ResourceError, StaticResources};
 use super::shader::ShaderError;
 use super::world::{Camera, Vehicle, WorldState};
 use glam::{EulerRot, Mat4, Quat, Vec3};
@@ -53,7 +53,6 @@ impl App {
             #[cfg(not(target_arch = "wasm32"))]
             let gl = unimplemented!();
 
-
             (gl, "#version 300 es")
         };
         log!("[OK] Got GL");
@@ -62,10 +61,10 @@ impl App {
 
         let static_resources = match StaticResources::load(&gl) {
             Ok(resources) => resources,
-            Err(ResourceError::ShaderError(ShaderError::ShaderCompileError{
+            Err(ResourceError::ShaderError(ShaderError::ShaderCompileError {
                 shader_type: _,
-                    compiler_output,
-                    shader_text,
+                compiler_output,
+                shader_text,
             })) => {
                 let lines = shader_text.split('\n');
                 for (line_id, line_text) in lines.enumerate() {
@@ -78,7 +77,7 @@ impl App {
                 panic!("Failed to load static resources");
             }
         };
-        
+
         let shader_programs =
             load_shader_programs(&gl, &static_resources).expect("Failed to load shaders");
 

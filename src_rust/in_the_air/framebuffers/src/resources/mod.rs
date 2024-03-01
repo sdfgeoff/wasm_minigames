@@ -1,8 +1,8 @@
 use crate::mesh::{Mesh, MeshError};
-use crate::texture::{Texture, TextureError, TextureConfig};
 use crate::shader::{Shader, ShaderError, ShaderType};
+use crate::texture::{Texture, TextureConfig, TextureError};
 
-use glow::{Context};
+use glow::Context;
 
 pub struct Textures {
     pub vehicle_roughness_metal: Texture,
@@ -12,8 +12,16 @@ pub struct Textures {
 impl Textures {
     pub fn load(gl: &Context) -> Result<Self, TextureError> {
         Ok(Self {
-            vehicle_roughness_metal: Texture::load_from_png(gl, include_bytes!("vehicle_roughness_metal.png"), TextureConfig::default())?,
-            vehicle_albedo: Texture::load_from_png(gl, include_bytes!("vehicle_albedo.png"), TextureConfig::default())?,
+            vehicle_roughness_metal: Texture::load_from_png(
+                gl,
+                include_bytes!("vehicle_roughness_metal.png"),
+                TextureConfig::default(),
+            )?,
+            vehicle_albedo: Texture::load_from_png(
+                gl,
+                include_bytes!("vehicle_albedo.png"),
+                TextureConfig::default(),
+            )?,
         })
     }
 }
@@ -39,7 +47,11 @@ pub struct VertexShaders {
 impl VertexShaders {
     pub fn load(gl: &Context) -> Result<Self, ShaderError> {
         Ok(Self {
-            full_screen_quad: Shader::new(gl, ShaderType::Vertex, include_str!("full_screen_quad.vert"))?,
+            full_screen_quad: Shader::new(
+                gl,
+                ShaderType::Vertex,
+                include_str!("full_screen_quad.vert"),
+            )?,
             model_shader: Shader::new(gl, ShaderType::Vertex, include_str!("model_shader.vert"))?,
         })
     }
@@ -50,17 +62,19 @@ pub struct FragmentShaders {
     pub volume_and_light: Shader,
     pub passthrough: Shader,
 }
-impl FragmentShaders{
+impl FragmentShaders {
     pub fn load(gl: &Context) -> Result<Self, ShaderError> {
         Ok(Self {
             model_shader: Shader::new(gl, ShaderType::Fragment, include_str!("model_shader.frag"))?,
-            volume_and_light: Shader::new(gl, ShaderType::Fragment, include_str!("volume_and_light.frag"))?,
+            volume_and_light: Shader::new(
+                gl,
+                ShaderType::Fragment,
+                include_str!("volume_and_light.frag"),
+            )?,
             passthrough: Shader::new(gl, ShaderType::Fragment, include_str!("passthrough.frag"))?,
         })
     }
 }
-
-
 
 pub struct StaticResources {
     pub textures: Textures,
@@ -76,7 +90,6 @@ impl StaticResources {
             meshes: Meshes::load(gl).expect("Failed loading meshes"),
             fragment_shaders: FragmentShaders::load(gl).expect("Failed loading fragment shaders"),
             vertex_shaders: VertexShaders::load(gl).expect("Failed loading vertex shaders"),
-
         }
     }
 }

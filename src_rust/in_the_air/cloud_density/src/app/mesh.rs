@@ -25,7 +25,7 @@ impl Mesh {
             gl,
             self.position_buffer,
             attribute_positions.position,
-            3
+            3,
         );
         optionally_bind_buffer_to_attribute(gl, self.normal_buffer, attribute_positions.normal, 3);
         optionally_bind_buffer_to_attribute(gl, self.uv0_buffer, attribute_positions.uv0, 2);
@@ -73,7 +73,7 @@ pub fn optionally_bind_buffer_to_attribute(
     gl: &Context,
     buffer: Buffer,
     attribute_position: Option<u32>,
-    size: i32
+    size: i32,
 ) {
     if let Some(attribute_position) = attribute_position {
         unsafe {

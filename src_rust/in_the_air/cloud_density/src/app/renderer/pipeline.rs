@@ -1,11 +1,9 @@
 use super::{CameraMatrices, RendererState};
-use crate::app::{world::WorldState, shader_program::ShaderProgram};
-use glam::{Mat4, Vec3, Quat};
+use crate::app::{shader_program::ShaderProgram, world::WorldState};
+use glam::{Mat4, Quat, Vec3};
 use glow::{Context, HasContext};
 
-
 pub fn apply_camera_to_shader(gl: &Context, camera: &CameraMatrices, shader: &ShaderProgram) {
-
     unsafe {
         gl.uniform_matrix_4_f32_slice(
             shader.uniforms.get("camera_to_world"),
@@ -24,7 +22,6 @@ pub fn apply_camera_to_shader(gl: &Context, camera: &CameraMatrices, shader: &Sh
         );
     }
 }
-
 
 pub fn render_gbuffer(
     gl: &Context,
@@ -92,17 +89,23 @@ pub fn render_gbuffer(
         // Render a test quad with the test texture
         let active_mesh = &renderer_state.static_resources.meshes.quad_quad;
         active_mesh.bind(gl, &active_shader_program.attributes);
-    
-        renderer_state.static_resources.textures.test_tex.bind_to_uniform(
-            gl,
-            0,
-            active_shader_program.uniforms.get("albedo_texture"),
-        );
-        renderer_state.static_resources.textures.test_tex.bind_to_uniform(
-            gl,
-            0,
-            active_shader_program.uniforms.get("metallic_roughness_texture"),
-        );
+
+        renderer_state
+            .static_resources
+            .textures
+            .test_tex
+            .bind_to_uniform(gl, 0, active_shader_program.uniforms.get("albedo_texture"));
+        renderer_state
+            .static_resources
+            .textures
+            .test_tex
+            .bind_to_uniform(
+                gl,
+                0,
+                active_shader_program
+                    .uniforms
+                    .get("metallic_roughness_texture"),
+            );
 
         let world_transform = Mat4::from_scale_rotation_translation(
             Vec3::new(100.0, 100.0, 100.0),
@@ -124,9 +127,7 @@ pub fn render_gbuffer(
             );
         }
         active_mesh.render(gl);
-
     }
-
 }
 
 pub fn render_volume_and_lighting(
@@ -157,7 +158,6 @@ pub fn render_volume_and_lighting(
 
     apply_camera_to_shader(gl, camera_matrices, active_shader_program);
 
-
     renderer_state.textures.buffer_color.bind_to_uniform(
         gl,
         0,
@@ -186,15 +186,19 @@ pub fn render_volume_and_lighting(
             .get("buffer_material"),
     );
 
-    renderer_state.static_resources.textures.cloud_map.bind_to_uniform(
-        gl,
-        3,
-        renderer_state
-            .shader_programs
-            .volume_and_light
-            .uniforms
-            .get("cloud_map"),
-    );
+    renderer_state
+        .static_resources
+        .textures
+        .cloud_map
+        .bind_to_uniform(
+            gl,
+            3,
+            renderer_state
+                .shader_programs
+                .volume_and_light
+                .uniforms
+                .get("cloud_map"),
+        );
 
     active_mesh.render(gl);
 }

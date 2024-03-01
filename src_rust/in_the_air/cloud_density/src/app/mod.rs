@@ -14,15 +14,12 @@ pub mod shader_program;
 pub mod texture;
 pub mod world;
 
-
-
 use renderer::{
     load_framebuffers, load_shader_programs, load_textures, render, resize_buffers, RendererState,
 };
 use resources::{ResourceError, StaticResources};
 use shader::ShaderError;
 use world::{Camera, Vehicle, WorldState};
-
 
 use super::debug_log;
 

@@ -691,6 +691,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "in_the_air_prettier_clouds"
+version = "0.1.0"
+dependencies = [
+ "console_error_panic_hook",
+ "glam 0.21.3",
+ "glow",
+ "glutin",
+ "js-sys",
+ "png",
+ "wasm-bindgen",
+ "web-sys",
+]
+
+[[package]]
 name = "in_the_air_rendering"
 version = "0.1.0"
 dependencies = [

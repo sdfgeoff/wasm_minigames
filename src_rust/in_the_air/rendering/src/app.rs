@@ -3,16 +3,11 @@ use wasm_bindgen::JsCast;
 use web_sys::{window, HtmlCanvasElement, KeyboardEvent, MouseEvent};
 
 use super::renderer::{
-    load_framebuffers, load_shader_programs, load_textures, render, resize_buffers,
-    RendererState,
+    load_framebuffers, load_shader_programs, load_textures, render, resize_buffers, RendererState,
 };
-use super::world::{
-    WorldState,
-    Camera,
-    Vehicle
-};
-use glam::{Vec3, Mat4, Quat, EulerRot};
 use super::resources::StaticResources;
+use super::world::{Camera, Vehicle, WorldState};
+use glam::{EulerRot, Mat4, Quat, Vec3};
 
 use glow::Context;
 
@@ -62,10 +57,10 @@ impl App {
         let target_resolution = calculate_resolution(&canvas);
 
         let static_resources = StaticResources::load(&gl);
-        let shader_programs = load_shader_programs(&gl, &static_resources).expect("Failed to load shaders");
+        let shader_programs =
+            load_shader_programs(&gl, &static_resources).expect("Failed to load shaders");
 
-        let textures = load_textures(&gl, &target_resolution)
-            .expect("Failed to load textures");
+        let textures = load_textures(&gl, &target_resolution).expect("Failed to load textures");
         let framebuffers = load_framebuffers(&gl, &textures).expect("Failed to load Fraimbuffers");
 
         let renderer = RendererState {
@@ -85,7 +80,7 @@ impl App {
                 fov: 3.14159 / 3.0,
                 near: 0.1,
                 far: 1000.0,
-                transform: Mat4::from_translation(Vec3::new(0.0, 0.0, 40.0))
+                transform: Mat4::from_translation(Vec3::new(0.0, 0.0, 40.0)),
             },
 
             vehicles: vec![
@@ -93,24 +88,22 @@ impl App {
                     transform: Mat4::from_rotation_translation(
                         Quat::from_euler(EulerRot::XYZ, 0.0, 0.0, 0.0),
                         Vec3::new(0.0, 0.0, 0.0),
-                    )
+                    ),
                 },
                 Vehicle {
                     transform: Mat4::from_rotation_translation(
                         Quat::from_euler(EulerRot::XYZ, 0.0, 0.0, 0.0),
                         Vec3::new(0.0, 0.0, 0.0),
-                    )
+                    ),
                 },
                 Vehicle {
                     transform: Mat4::from_rotation_translation(
                         Quat::from_euler(EulerRot::XYZ, 0.0, 0.0, 0.0),
                         Vec3::new(0.0, 0.0, 0.0),
-                    )
+                    ),
                 },
             ],
-
         };
-
 
         Self {
             world,
@@ -129,19 +122,23 @@ impl App {
         let time_since_start = self.world.time_since_start + delta;
         self.world.time_since_start = time_since_start;
 
-
         self.world.vehicles[0].transform = Mat4::from_rotation_translation(
             Quat::from_euler(EulerRot::XYZ, 0.0, time_since_start.sin(), 0.0),
             Vec3::new(0.0, 10.0, 0.0),
         );
         self.world.vehicles[1].transform = Mat4::from_rotation_translation(
-            Quat::from_euler(EulerRot::XYZ, time_since_start.sin(),0.0,  0.0),
+            Quat::from_euler(EulerRot::XYZ, time_since_start.sin(), 0.0, 0.0),
             Vec3::new(0.0, 0.0, 0.0),
         );
 
         self.world.vehicles[2].transform = Mat4::from_rotation_translation(
-            Quat::from_euler(EulerRot::XYZ, 0.0,0.0,  time_since_start + (time_since_start * 2.0).sin()),
-            Vec3::new(time_since_start.cos()*2.0, time_since_start.sin(), 0.0) * 20.0,
+            Quat::from_euler(
+                EulerRot::XYZ,
+                0.0,
+                0.0,
+                time_since_start + (time_since_start * 2.0).sin(),
+            ),
+            Vec3::new(time_since_start.cos() * 2.0, time_since_start.sin(), 0.0) * 20.0,
         );
 
         render(&self.gl, &self.renderer, &self.world);
@@ -184,7 +181,6 @@ fn update_resolution(gl: &Context, canvas: &HtmlCanvasElement, state: &mut Rende
     }
 }
 
-
 fn calculate_resolution(canvas: &HtmlCanvasElement) -> [i32; 2] {
     let client_width = canvas.client_width();
     let client_height = canvas.client_height();
@@ -192,6 +188,6 @@ fn calculate_resolution(canvas: &HtmlCanvasElement) -> [i32; 2] {
     let pixel_ratio = window().unwrap().device_pixel_ratio();
     [
         (client_width as f64 * pixel_ratio) as i32,
-        (client_height as f64 * pixel_ratio) as i32
-    ] 
+        (client_height as f64 * pixel_ratio) as i32,
+    ]
 }

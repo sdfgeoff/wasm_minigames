@@ -1,4 +1,4 @@
-use glam::{Mat4};
+use glam::Mat4;
 
 pub struct Camera {
     pub transform: Mat4,
@@ -6,7 +6,6 @@ pub struct Camera {
     pub near: f32,
     pub far: f32,
 }
-
 
 pub struct Vehicle {
     pub transform: Mat4,

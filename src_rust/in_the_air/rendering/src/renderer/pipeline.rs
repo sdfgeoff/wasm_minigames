@@ -1,13 +1,11 @@
 use super::{CameraMatrices, RendererState};
-use crate::{world::WorldState, shader_program::ShaderProgram};
+use crate::{shader_program::ShaderProgram, world::WorldState};
 use glam::{Mat4, Vec4};
 use glow::{Context, HasContext};
 
 use crate::app::debug_log;
 
-
 pub fn apply_camera_to_shader(gl: &Context, camera: &CameraMatrices, shader: &ShaderProgram) {
-
     unsafe {
         gl.uniform_matrix_4_f32_slice(
             shader.uniforms.get("camera_to_world"),
@@ -26,7 +24,6 @@ pub fn apply_camera_to_shader(gl: &Context, camera: &CameraMatrices, shader: &Sh
         );
     }
 }
-
 
 pub fn render_gbuffer(
     gl: &Context,
@@ -89,7 +86,6 @@ pub fn render_gbuffer(
         }
         active_mesh.render(gl);
     }
-
 }
 
 pub fn render_volume_and_lighting(

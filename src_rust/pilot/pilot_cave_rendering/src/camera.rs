@@ -49,8 +49,7 @@ impl Camera {
             Vec3::new(0.0, 0.0, 1.0),
         );
 
-        let camera_to_screen =
-            Mat4::perspective_rh_gl(self.fov, self.aspect, self.near, self.far);
+        let camera_to_screen = Mat4::perspective_rh_gl(self.fov, self.aspect, self.near, self.far);
 
         (world_to_camera, camera_to_screen)
     }

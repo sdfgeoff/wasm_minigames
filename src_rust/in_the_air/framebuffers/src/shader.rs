@@ -14,7 +14,6 @@ impl ShaderType {
     }
 }
 
-
 #[derive(Debug)]
 pub enum ShaderError {
     ShaderAllocError(String),
@@ -31,12 +30,15 @@ pub struct Shader {
 }
 
 impl Shader {
-    pub fn new(gl: &Context, shader_type: ShaderType, shader_text: &str) -> Result<Self, ShaderError> {
+    pub fn new(
+        gl: &Context,
+        shader_type: ShaderType,
+        shader_text: &str,
+    ) -> Result<Self, ShaderError> {
         let shader = unsafe { load_shader(gl, shader_type, shader_text)? };
         Ok(Self { shader })
     }
 }
-
 
 unsafe fn load_shader(
     gl: &Context,
@@ -61,4 +63,3 @@ unsafe fn load_shader(
     }
     Ok(shader)
 }
-

@@ -1,17 +1,14 @@
-
-
 /// The typical key state transitions are:
 /// Released -> JustPressed -> Pressed -> JustReleased -> Released
-/// but it can also transition from 
+/// but it can also transition from
 /// JustReleased -> Pressed
 #[derive(Clone, Copy)]
 enum KeyState {
     Released,
     JustPressed,
-    Pressed,    
+    Pressed,
     JustReleased,
 }
-
 
 impl KeyState {
     pub fn increment(&self, is_down: bool) -> Self {
@@ -48,9 +45,8 @@ impl KeyState {
     }
 }
 
-
 #[derive(Clone, Copy, Debug)]
-pub enum KeyCode{
+pub enum KeyCode {
     W = 87,
     A = 65,
     S = 83,
@@ -94,7 +90,6 @@ impl KeyCode {
         }
     }
 }
-
 
 pub struct Keyboard {
     key_states: [KeyState; 256],

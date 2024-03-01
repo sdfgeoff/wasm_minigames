@@ -3,11 +3,10 @@ use wasm_bindgen::JsCast;
 use web_sys::{window, HtmlCanvasElement, KeyboardEvent, MouseEvent};
 
 use super::renderer::{
-    load_framebuffers, load_shader_programs, load_textures, render, resize_buffers,
-    RendererState,
+    load_framebuffers, load_shader_programs, load_textures, render, resize_buffers, RendererState,
 };
-use super::WorldState;
 use super::resources::StaticResources;
+use super::WorldState;
 
 use glow::Context;
 
@@ -52,10 +51,10 @@ impl App {
         let target_resolution = calculate_resolution(&canvas);
 
         let static_resources = StaticResources::load(&gl);
-        let shader_programs = load_shader_programs(&gl, &static_resources).expect("Failed to load shaders");
+        let shader_programs =
+            load_shader_programs(&gl, &static_resources).expect("Failed to load shaders");
 
-        let textures = load_textures(&gl, &target_resolution)
-            .expect("Failed to load textures");
+        let textures = load_textures(&gl, &target_resolution).expect("Failed to load textures");
         let framebuffers = load_framebuffers(&gl, &textures).expect("Failed to load Fraimbuffers");
 
         let renderer = RendererState {
@@ -116,12 +115,7 @@ fn update_resolution(gl: &Context, canvas: &HtmlCanvasElement, state: &mut Rende
         let pixels_per_centimeter = pixel_ratio * 96.0 / 2.54;
         state.pixels_per_centimeter = pixels_per_centimeter;
     }
-
-
-
-
 }
-
 
 fn calculate_resolution(canvas: &HtmlCanvasElement) -> [i32; 2] {
     let client_width = canvas.client_width();
@@ -131,7 +125,6 @@ fn calculate_resolution(canvas: &HtmlCanvasElement) -> [i32; 2] {
 
     [
         (client_width as f64 * pixel_ratio) as i32,
-        (client_height as f64 * pixel_ratio) as i32
-    ] 
-
+        (client_height as f64 * pixel_ratio) as i32,
+    ]
 }
