@@ -250,10 +250,22 @@ void main() {
     
     float materialTowardsCamera = 0.0;
 
+    float steps = 0.0;
 
     for (int i=0; i<MAX_STEPS; i+=1) {
+        steps = float(i);
         vec3 current_position = ray_start + (dist_from_camera + noise * INSIDE_STEP_SIZE) * ray_direction;
-        
+
+        // If we are higher than the clouds or lower than the clouds, don't compute clouds
+        if (current_position.z > CLOUD_LAYER_HEIGHTS.w + CLOUD_LAYER_THICKNESS && ray_direction.z > 0.0) {
+            //backdrop = vec4(1.0, 0.0, 0.0, 1.0);
+            break;
+        }
+        if (current_position.z < CLOUD_LAYER_HEIGHTS.x - CLOUD_UNDERHANG && ray_direction.z < 0.0) {
+            //backdrop = vec4(0.0, 1.0, 0.0, 1.0);
+            break;
+        }
+
         float cloud_map = sampleCloudMapShape(current_position);
         
         if (cloud_map > 0.0) {
@@ -261,6 +273,7 @@ void main() {
                 // First step into the cloud;
                 steps_outside_cloud = 0;
                 dist_from_camera = dist_from_camera - OUTSIDE_STEP_SIZE + INSIDE_STEP_SIZE;
+                
                 continue;
             }
             steps_outside_cloud = 0;
@@ -271,9 +284,7 @@ void main() {
         
         float step_size = OUTSIDE_STEP_SIZE;
         
-        if (steps_outside_cloud <= STEP_OUTSIDE_RATIO && cloud_map > 0.0) {  
-            step_size = INSIDE_STEP_SIZE;
-            
+        if (steps_outside_cloud <= STEP_OUTSIDE_RATIO && cloud_map > 0.0) {
             float density_here = cloud_map;
 
             // We only need to sample the detailed cloud texture if
@@ -324,6 +335,8 @@ void main() {
     }
     
     accumulation.rgb += beer(materialTowardsCamera * (1.0 - BASE_TRANSMISSION)) * backdrop.rgb;
+
+    // accumulation.rgb = vec3(steps / float(MAX_STEPS));
 
     FragColor = accumulation;
 }
