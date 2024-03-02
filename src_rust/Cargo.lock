@@ -678,6 +678,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "in_the_air_faster_clouds"
+version = "0.1.0"
+dependencies = [
+ "console_error_panic_hook",
+ "glam 0.21.3",
+ "glow",
+ "glutin",
+ "js-sys",
+ "png",
+ "wasm-bindgen",
+ "web-sys",
+]
+
+[[package]]
 name = "in_the_air_framebuffers"
 version = "0.1.0"
 dependencies = [

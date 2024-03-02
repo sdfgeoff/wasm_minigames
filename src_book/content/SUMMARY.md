@@ -41,3 +41,4 @@
     - [Rendering Volumes](in_the_air/rendering_volumes.md)
     - [Cloud Density](in_the_air/cloud_density.md)
     - [Prettier Clouds](in_the_air/prettier_clouds.md)
+    - [Faster Clouds](in_the_air/faster_clouds.md)
