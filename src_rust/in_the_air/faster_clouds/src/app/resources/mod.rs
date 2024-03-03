@@ -87,6 +87,7 @@ pub struct FragmentShaders {
     pub model_shader: Shader,
     pub volume_and_light: Shader,
     pub passthrough: Shader,
+    pub volume: Shader,
 }
 impl FragmentShaders {
     pub fn load(gl: &Context) -> Result<Self, ShaderError> {
@@ -97,6 +98,7 @@ impl FragmentShaders {
                 ShaderType::Fragment,
                 include_str!("volume_and_light.frag"),
             )?,
+            volume: Shader::new(gl, ShaderType::Fragment, include_str!("volume.frag"))?,
             passthrough: Shader::new(gl, ShaderType::Fragment, include_str!("passthrough.frag"))?,
         })
     }

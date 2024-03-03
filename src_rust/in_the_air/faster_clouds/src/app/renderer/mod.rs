@@ -15,6 +15,7 @@ pub struct ShaderPrograms {
     model: ShaderProgram,
     volume_and_light: ShaderProgram,
     passthrough: ShaderProgram,
+    volume: ShaderProgram,
 }
 
 pub struct Textures {
@@ -23,12 +24,14 @@ pub struct Textures {
     buffer_geometry: Texture,
     buffer_depth: Texture,
 
-    buffer_display: Texture,
+    buffer_volume: Texture,
+    buffer_lighting: Texture,
 }
 
 pub struct FrameBuffers {
     gbuffer: FrameBuffer,
-    display_buffer: FrameBuffer,
+    lighting_buffer: FrameBuffer,
+    volume_buffer: FrameBuffer,
 }
 
 pub struct RendererState {
@@ -70,7 +73,8 @@ pub fn render(gl: &Context, renderer_state: &RendererState, world_state: &WorldS
     }
 
     pipeline::render_gbuffer(gl, renderer_state, world_state, &camera_matrices);
-    pipeline::render_volume_and_lighting(gl, renderer_state, world_state, &camera_matrices);
+    pipeline::render_volume(gl, renderer_state, world_state, &camera_matrices);
+    pipeline::render_lighting(gl, renderer_state, world_state, &camera_matrices);
     pipeline::render_to_display(gl, renderer_state, world_state);
 }
 
@@ -96,6 +100,8 @@ pub fn resize_buffers(gl: &Context, renderer_state: &RendererState, resolution: 
 
     renderer_state
         .textures
-        .buffer_display
+        .buffer_lighting
         .resize_render_target(gl, resolution);
+    // renderer_state.textures.buffer_volume.resize_render_target(gl, resolution);
+    renderer_state.textures.buffer_volume.resize_render_target(gl, &[resolution[0] / 2, resolution[1] / 2]);
 }

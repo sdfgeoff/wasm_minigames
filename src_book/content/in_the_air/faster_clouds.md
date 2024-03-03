@@ -73,8 +73,22 @@ ditch the back-tracking after a certain render distance to make better use of st
 if it's to do with the backtracking or some step-size-dependence in my lighting code.
 
 # Split out the volumetrics to a low resolution pass
-Since clouds are fluffy, we should be able to get away with rendering them at 1/2 or 1/4 resolution. FOr this we do need another framebuffer. Fortunately this is
-easy enough now.
+Since clouds are fluffy, we should be able to get away with rendering them at 1/2 resolution. FOr this we do need another framebuffer. Fortunately this is
+easy enough now as we have all the code fairly well abstracted, and we've just
+split our shader to compute the backdrop of opaque and composite things on top.
+
+So after a bit of fillding:
+<img src="outlines.png"/>
+
+Ewwwww. Look at that outline around the cloud and around the vehicle. That's because it's half-resolution. Dang.
+Also, there's now heaps of dupicated shader code. Maybe I need a preprocessor
+to make it easier to have common functions.
+
+Anywah, at least it is fast. I can hit 60FPS in fullscreen now. So I'll call that a win at least. But what can be done about the appearance? Currently we
+use a proper falloff for mixing between the two, but this involves transferring
+data about the material density, and I think this is tripping it up. If I can
+compute the alpha directly in the volumetric pass, then not only is there less
+duplicated shader code, but the compositing may also be cleaner.
 
 
 

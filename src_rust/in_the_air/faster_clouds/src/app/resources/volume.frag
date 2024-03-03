@@ -5,14 +5,10 @@ precision mediump sampler3D;
 in vec4 screen_pos;
 out vec4 FragColor;
 
-// The color buffer contains RGB albedo values
-uniform sampler2D buffer_color;
 
 // The geometry buffer contains the normal and distance from camera
 uniform sampler2D buffer_geometry;
 
-// The material buffer contains the metallic (r channel) and the roughness (g channel)
-uniform sampler2D buffer_material;
 
 uniform sampler2D cloud_map;
 
@@ -86,24 +82,6 @@ float beer(float material_amount) {
 }
 
 
-vec3 renderSky(vec3 direction) {
-    float elevation = 1.0 - dot(direction, vec3(0,0,1));
-    float centered = 1.0 - abs(1.0 - elevation);
-    float sun_direction = dot(direction, LIGHT_DIRECTION);
-
-    vec3 atmosphere_color = mix(AMBIENT_LIGHT, SUN_LIGHT, sun_direction * 0.5);
-    
-    vec3 base = mix(pow(AMBIENT_LIGHT, vec3(4.0)), atmosphere_color, pow(clamp(elevation, 0.0, 1.0), 0.5));
-    float haze = pow(centered + 0.02, 4.0) * (sun_direction * 0.2 + 0.8);
-    
-    vec3 sky = mix(base, SUN_LIGHT, clamp(haze, 0.0, 1.0));
-    
-    float sun = pow(max((sun_direction - 29.0/30.0) * 30.0 - 0.05, 0.0), 6.0);
-    
-    return sky + sun;
-}
-
-
 
 float sampleCloudMapShape(vec3 point) {
     if (point.z > CLOUD_LAYER_HEIGHTS.w + CLOUD_LAYER_THICKNESS || point.z < CLOUD_LAYER_HEIGHTS.x - CLOUD_UNDERHANG) {
@@ -144,8 +122,6 @@ vec3 lightScattering(vec3 light, float angle, float material_amount) {
     // Compute the color/intensity of the light scattering in a particular direction
     // Angle ranges from 1.0 (transmission/forward scattering) to -1.0 (back scattering)  
     
-
-    
     angle = (angle + 1.0) * 0.5; // Angle between 0 and 1
   
   
@@ -154,15 +130,8 @@ vec3 lightScattering(vec3 light, float angle, float material_amount) {
     ratio += kt * pow(angle, ktp);
     ratio = ratio * (1.0 - ks) + ks;
     
-    
-    /*float ratio = 0.0;
-    ratio = (1.0 - smoothstep(0.0, 0.5,(1.0 - angle) * ktp)) * kt;
-    ratio += (1.0 - smoothstep(0.0, 0.5, (angle) * kbp)) * kb;
-    
-    ratio = ratio * (1.0 - ks) + ks;*/
     light = light * ratio * (1.0 - BASE_TRANSMISSION);
     
-    // Transmit....
     return light;
 }
 
@@ -180,29 +149,6 @@ float addNoiseToDensity(vec3 point, float density, int octaves) {
 }
 
 
-vec4 light_surface(vec4 color, vec4 geometry, vec4 material, vec3 lightFromSunAtParticle) {
-    vec3 normal = normalize(geometry.xyz);
-
-    float diffuse = max(dot(normal, LIGHT_DIRECTION), 0.0);
-
-    vec3 view_direction = normalize(camera_to_world[3].xyz - geometry.xyz);
-    vec3 half_vector = normalize(LIGHT_DIRECTION + view_direction);
-    float specular = pow(max(dot(normal, half_vector), 0.0), (material.g + 1.0) * 10.0);
-
-    vec3 d = diffuse * color.rgb * lightFromSunAtParticle;
-    vec3 s = specular * material.r * color.rgb * lightFromSunAtParticle;
-    vec3 a = color.rgb * AMBIENT_LIGHT * AMBIENT_INTENSITY;
-
-    return vec4(d + s + a, 1.0);
-}
-
-vec4 alphaOver(vec4 top, vec4 bottom) {
-    float A1 = bottom.a * (1.0 - top.a);
-
-    float A0 = top.a + A1;
-    return vec4((top.rgb * top.a + bottom.rgb * A1) / A0, A0);
-}
-
 
 void main() {
     vec2 uv = screen_pos.xy * 0.5 + 0.5;
@@ -210,7 +156,6 @@ void main() {
 
     mat4 screen_to_camera = inverse(camera_to_screen);
     mat4 screen_to_world = camera_to_world * screen_to_camera;
-    mat4 world_to_screen = inverse(screen_to_world);
 
     vec4 ray_direction_screen = vec4(screen_pos.xy, 1.0, 1.0);
     vec4 ray_direction_camera = screen_to_camera * ray_direction_screen;
@@ -220,7 +165,7 @@ void main() {
     vec3 ray_direction = normalize(ray_direction_world.xyz);
 
     float dist_from_camera = 0.0;
-    vec4 accumulation = vec4(0.0, 0.0, 0.0, 0.0);
+    vec3 accumulation = vec3(0.0, 0.0, 0.0);
     
     int steps_outside_cloud = 0;
     
@@ -228,27 +173,97 @@ void main() {
     
 
     // Backdrop
-    vec4 backdrop = vec4(0.0);
     vec4 geometry = texture(buffer_geometry, uv);
+    float max_distance = geometry.w == 0.0 ? 10000.0 : geometry.w;
+    
+    float materialTowardsCamera = 0.0;
 
-    if (geometry.w == 0.0) {
-        backdrop = vec4(renderSky(ray_direction), DRAW_DISTANCE);
-    } else {
-        float opaque_distance_from_camera = geometry.w;
-        vec4 color = texture(buffer_color, uv);
-        vec4 material = texture(buffer_material, uv);
-        float materialTowardsSun = computeDensityTowardsSun(ray_start + ray_direction * opaque_distance_from_camera, 0.0);
-        vec3 lightFromSunAtParticle = transmission(
-            SUN_LIGHT * SUN_INTENSITY,
-            materialTowardsSun
-        );
-        backdrop = vec4(
-            light_surface(color, geometry, material, lightFromSunAtParticle).rgb,
-            opaque_distance_from_camera
-        );
+    float steps = 0.0;
+
+    for (int i=0; i<MAX_STEPS; i+=1) {
+        steps = float(i);
+        vec3 current_position = ray_start + (dist_from_camera + noise * INSIDE_STEP_SIZE) * ray_direction;
+
+        // If we are higher than the clouds or lower than the clouds, don't compute clouds
+        if (current_position.z > CLOUD_LAYER_HEIGHTS.w + CLOUD_LAYER_THICKNESS && ray_direction.z > 0.0) {
+            //backdrop = vec4(1.0, 0.0, 0.0, 1.0);
+            break;
+        }
+        if (current_position.z < CLOUD_LAYER_HEIGHTS.x - CLOUD_UNDERHANG && ray_direction.z < 0.0) {
+            //backdrop = vec4(0.0, 1.0, 0.0, 1.0);
+            break;
+        }
+
+        float cloud_map = sampleCloudMapShape(current_position);
+        
+        if (cloud_map > 0.0) {
+            if (steps_outside_cloud != 0) {
+                // First step into the cloud;
+                steps_outside_cloud = 0;
+                dist_from_camera = dist_from_camera - OUTSIDE_STEP_SIZE + INSIDE_STEP_SIZE;
+                
+                continue;
+            }
+            steps_outside_cloud = 0;
+            
+        } else {
+            steps_outside_cloud += 1;
+        }
+        
+        float step_size = OUTSIDE_STEP_SIZE;
+        
+        if (steps_outside_cloud <= STEP_OUTSIDE_RATIO && cloud_map > 0.0) {
+            float density_here = cloud_map;
+
+            // We only need to sample the detailed cloud texture if
+            // we are close and can see it in lots of detail.
+            if (dist_from_camera < DRAW_DISTANCE / 3.0) {
+                density_here = addNoiseToDensity(current_position, density_here, CLOUD_NOISE_OCTAVES);
+            }
+            
+            density_here = smoothstep(0.0, 0.1, density_here);
+            
+            density_here = max(density_here, 0.0);
+            float material_here = density_here * step_size;
+            materialTowardsCamera += material_here;
+            
+            float materialTowardsSun = computeDensityTowardsSun(current_position, density_here);
+            
+            vec3 lightFromSunAtParticle = transmission(
+                SUN_LIGHT * SUN_INTENSITY,
+                materialTowardsSun
+            );
+                        
+            float angleToSun = dot(ray_direction, LIGHT_DIRECTION);
+
+            vec3 lightAtParticle = lightFromSunAtParticle;
+            vec3 lightScatteringTowardsCamera = lightScattering(
+                lightAtParticle * material_here,
+                angleToSun,
+                materialTowardsCamera
+            );
+            vec3 lightReachingCamera = transmission(
+                lightScatteringTowardsCamera,
+                materialTowardsCamera
+            );
+            accumulation.rgb += lightReachingCamera;
+        }
+
+        if (materialTowardsCamera * CLOUD_DENSITY_SCALE > 4.0) {
+            break;
+        }
+        
+        dist_from_camera += step_size;
+        if (dist_from_camera > max_distance) {
+            break;
+        }
+        else if (dist_from_camera > DRAW_DISTANCE) {
+            break;
+        }
     }
     
-    // accumulation.rgb += beer(materialTowardsCamera * (1.0 - BASE_TRANSMISSION)) * backdrop.rgb;
-
-    FragColor = backdrop;
+    FragColor = vec4(
+        accumulation,
+        materialTowardsCamera
+    );
 }

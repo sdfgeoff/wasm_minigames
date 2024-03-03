@@ -51,12 +51,27 @@ pub fn load_shader_programs(
                 "buffer_volume_noise".to_string(),
             ],
         )?,
+        volume: ShaderProgram::new(
+            gl,
+            &static_resources.vertex_shaders.full_screen_quad,
+            &static_resources.fragment_shaders.volume,
+            vec![
+                "buffer_geometry".to_string(),
+                "camera_to_screen".to_string(),
+                "camera_to_world".to_string(),
+                "world_to_camera".to_string(),
+                "cloud_map".to_string(),
+                "time_since_start".to_string(),
+                "buffer_volume_noise".to_string(),
+            ],
+        )?,
         passthrough: ShaderProgram::new(
             gl,
             &static_resources.vertex_shaders.full_screen_quad,
             &static_resources.fragment_shaders.passthrough,
-            vec!["input_texture".to_string()],
+            vec!["lighting_texture".to_string(), "volume_texture".to_string(), "resolution".to_string()],
         )?,
+        
     })
 }
 
@@ -115,7 +130,7 @@ pub fn load_textures(gl: &Context, screen_resolution: &[i32; 2]) -> Result<Textu
     )?;
     buffer_depth.resize_render_target(gl, screen_resolution);
 
-    let buffer_display = Texture::create_render_target(
+    let buffer_lighting = Texture::create_render_target(
         gl,
         TextureConfig {
             generate_mipmap: false,
@@ -126,7 +141,24 @@ pub fn load_textures(gl: &Context, screen_resolution: &[i32; 2]) -> Result<Textu
         },
         TexturePixelFormat::RGBA16F,
     )?;
-    buffer_geometry.resize_render_target(gl, screen_resolution);
+    buffer_lighting.resize_render_target(gl, screen_resolution);
+
+    let buffer_volume = Texture::create_render_target(
+        gl,
+        TextureConfig {
+            generate_mipmap: false,
+            mag_interpolation: InterpolationMode::Linear,
+            min_interpolation: InterpolationMode::Linear,
+            edge_behaviour: EdgeMode::ClampToEdge,
+            dimension: Dimension::D2,
+        },
+        TexturePixelFormat::RGBA16F,
+    )?;
+    //buffer_volume.resize_render_target(gl, screen_resolution);
+    buffer_volume.resize_render_target(gl, &[screen_resolution[0] / 2, screen_resolution[1] / 2]);
+
+
+    
 
     Ok(Textures {
         buffer_color,
@@ -134,7 +166,8 @@ pub fn load_textures(gl: &Context, screen_resolution: &[i32; 2]) -> Result<Textu
         buffer_geometry,
         buffer_depth,
 
-        buffer_display,
+        buffer_lighting,
+        buffer_volume,
     })
 }
 
@@ -173,18 +206,31 @@ pub fn load_framebuffers(
         ]);
     }
 
-    let display_buffer = FrameBuffer::new(gl)?;
+    let volume_buffer = FrameBuffer::new(gl)?;
     bind_texture_to_framebuffer_color(
         gl,
-        &display_buffer,
-        &textures.buffer_display,
+        &volume_buffer,
+        &textures.buffer_volume,
         ColorAttachment::Attachment0,
     );
     unsafe {
         gl.draw_buffers(&[glow::COLOR_ATTACHMENT0]);
     }
+
+    let lighting_buffer = FrameBuffer::new(gl)?;
+    bind_texture_to_framebuffer_color(
+        gl,
+        &lighting_buffer,
+        &textures.buffer_lighting,
+        ColorAttachment::Attachment0,
+    );
+    unsafe {
+        gl.draw_buffers(&[glow::COLOR_ATTACHMENT0]);
+    }
+
     Ok(FrameBuffers {
         gbuffer: gbuffer,
-        display_buffer: display_buffer,
+        volume_buffer,
+        lighting_buffer,
     })
 }

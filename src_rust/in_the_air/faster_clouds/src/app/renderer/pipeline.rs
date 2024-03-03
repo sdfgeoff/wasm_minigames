@@ -130,14 +130,80 @@ pub fn render_gbuffer(
     }
 }
 
-pub fn render_volume_and_lighting(
+pub fn render_volume(
     gl: &Context,
     renderer_state: &RendererState,
     world_state: &WorldState,
     camera_matrices: &CameraMatrices,
 ) {
     // Render our GBuffer to the Display Buffer
-    renderer_state.framebuffers.display_buffer.bind(gl);
+    renderer_state.framebuffers.volume_buffer.bind(gl);
+
+    unsafe {
+        gl.viewport(
+            0,
+            0,
+            renderer_state.resolution[0]  / 2,
+            renderer_state.resolution[1] / 2,
+        );
+        gl.clear_color(0.0, 0.0, 0.0, 0.0);
+        gl.clear(glow::COLOR_BUFFER_BIT | glow::DEPTH_BUFFER_BIT);
+    }
+
+    let active_shader_program = &renderer_state.shader_programs.volume;
+    let active_mesh = &renderer_state.static_resources.meshes.quad_quad;
+
+    active_shader_program.bind(gl);
+    active_mesh.bind(gl, &active_shader_program.attributes);
+
+    apply_camera_to_shader(gl, camera_matrices, active_shader_program);
+
+    renderer_state.textures.buffer_geometry.bind_to_uniform(
+        gl,
+        2,
+        active_shader_program.uniforms
+            .get("buffer_geometry"),
+    );
+    renderer_state
+        .static_resources
+        .textures
+        .volume_noise
+        .bind_to_uniform(
+            gl,
+            4,
+            active_shader_program.uniforms
+                .get("buffer_volume_noise"),
+        );
+
+    renderer_state
+        .static_resources
+        .textures
+        .cloud_map
+        .bind_to_uniform(
+            gl,
+            3,
+            active_shader_program.uniforms
+                .get("cloud_map"),
+        );
+    unsafe {
+        gl.uniform_1_f32(
+            active_shader_program.uniforms.get("time_since_start"),
+            world_state.time_since_start,
+        );
+    }
+
+    active_mesh.render(gl);
+}
+
+
+pub fn render_lighting(
+    gl: &Context,
+    renderer_state: &RendererState,
+    world_state: &WorldState,
+    camera_matrices: &CameraMatrices,
+) {
+    // Render our GBuffer to the Display Buffer
+    renderer_state.framebuffers.lighting_buffer.bind(gl);
 
     unsafe {
         gl.viewport(
@@ -220,7 +286,11 @@ pub fn render_volume_and_lighting(
     }
 
     active_mesh.render(gl);
+
 }
+
+
+
 
 pub fn render_to_display(gl: &Context, renderer_state: &RendererState, _world_state: &WorldState) {
     // Forward the display buffer to the screen
@@ -244,15 +314,28 @@ pub fn render_to_display(gl: &Context, renderer_state: &RendererState, _world_st
     renderer_state.shader_programs.passthrough.bind(gl);
     active_mesh.bind(gl, &active_shader_program.attributes);
 
-    renderer_state.textures.buffer_display.bind_to_uniform(
+    renderer_state.textures.buffer_lighting.bind_to_uniform(
         gl,
         0,
-        renderer_state
-            .shader_programs
-            .passthrough
-            .uniforms
-            .get("input_texture"),
+        active_shader_program.uniforms
+            .get("lighting_texture"),
     );
+    renderer_state.textures.buffer_volume.bind_to_uniform(
+        gl,
+        1,
+        active_shader_program.uniforms
+            .get("volume_texture"),
+    );
+
+    unsafe {
+        gl.uniform_2_f32(
+            active_shader_program.uniforms.get("resolution"),
+            renderer_state.resolution[0] as f32,
+            renderer_state.resolution[1] as f32,
+        );
+    }
+
+
 
     active_mesh.render(gl);
 }
