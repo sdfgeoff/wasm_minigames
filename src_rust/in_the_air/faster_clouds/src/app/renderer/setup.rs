@@ -147,12 +147,12 @@ pub fn load_textures(gl: &Context, screen_resolution: &[i32; 2]) -> Result<Textu
         gl,
         TextureConfig {
             generate_mipmap: false,
-            mag_interpolation: InterpolationMode::Linear,
-            min_interpolation: InterpolationMode::Linear,
+            mag_interpolation: InterpolationMode::Nearest,
+            min_interpolation: InterpolationMode::Nearest,
             edge_behaviour: EdgeMode::ClampToEdge,
             dimension: Dimension::D2,
         },
-        TexturePixelFormat::RGBA16F,
+        TexturePixelFormat::RGBA32F,
     )?;
     //buffer_volume.resize_render_target(gl, screen_resolution);
     buffer_volume.resize_render_target(gl, &[screen_resolution[0] / 2, screen_resolution[1] / 2]);

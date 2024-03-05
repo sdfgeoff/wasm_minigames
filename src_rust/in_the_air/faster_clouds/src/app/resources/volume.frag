@@ -1,19 +1,17 @@
 #version 300 es
 
-precision mediump float;
+precision highp float;
+precision highp int;
 precision mediump sampler3D;
 in vec4 screen_pos;
 out vec4 FragColor;
 
-
 // The geometry buffer contains the normal and distance from camera
 uniform sampler2D buffer_geometry;
-
 
 uniform sampler2D cloud_map;
 
 uniform sampler3D buffer_volume_noise;
-
 
 uniform mat4 camera_to_screen;
 uniform mat4 camera_to_world;
@@ -21,57 +19,50 @@ uniform mat4 world_to_camera;
 
 uniform float time_since_start;
 
+const float WORLD_SCALE = 0.05f; // Scale all the cloud parameters by this amount
 
-const float WORLD_SCALE = 0.05; // Scale all the cloud parameters by this amount
-
-const float CLOUD_MAP_EXTENT = 128.0 * 500.0 * WORLD_SCALE; // 128 pixels, 200 meters per pixel
-const vec4 CLOUD_LAYER_HEIGHTS = vec4(0.0, 1.0, 2.0, 4.0) * 1500.0 * WORLD_SCALE;
-const float CLOUD_LAYER_THICKNESS = 1650.0 * WORLD_SCALE; // If this is bigger than the distance between the gap between CLOUD_LAYER_HEIGHTS then the clouds can overlap
-const float CLOUD_UNDERHANG = CLOUD_LAYER_THICKNESS * 0.5; // How much the cloud layer extends below the layer height
-const float CLOUD_NOISE_SCALE = WORLD_SCALE * 0.1;
-const vec3 CLOUD_NOISE_SPEED = vec3(0.02, 0.0, 0.0);
+const float CLOUD_MAP_EXTENT = 128.0f * 500.0f * WORLD_SCALE; // 128 pixels, 200 meters per pixel
+const vec4 CLOUD_LAYER_HEIGHTS = vec4(0.0f, 1.0f, 2.0f, 4.0f) * 1500.0f * WORLD_SCALE;
+const float CLOUD_LAYER_THICKNESS = 1650.0f * WORLD_SCALE; // If this is bigger than the distance between the gap between CLOUD_LAYER_HEIGHTS then the clouds can overlap
+const float CLOUD_UNDERHANG = CLOUD_LAYER_THICKNESS * 0.5f; // How much the cloud layer extends below the layer height
+const float CLOUD_NOISE_SCALE = WORLD_SCALE * 0.1f;
+const vec3 CLOUD_NOISE_SPEED = vec3(0.02f, 0.0f, 0.0f);
 const int CLOUD_NOISE_OCTAVES = 1;
-const float CLOUD_NOISE_DENSITY_VARIATION = 30.0;
-
+const float CLOUD_NOISE_DENSITY_VARIATION = 30.0f;
 
 // Raymarcher Parameters
 const int MAX_STEPS = 128;
-const float DRAW_DISTANCE = 2000.0;
-const float INSIDE_STEP_SIZE = 3.0;
-const float OUTSIDE_STEP_SIZE = INSIDE_STEP_SIZE * 4.0;
+const float DRAW_DISTANCE = 1000.0f;
+const float INSIDE_STEP_SIZE = 3.0f;
+const float OUTSIDE_STEP_SIZE = INSIDE_STEP_SIZE * 4.0f;
 const int STEP_OUTSIDE_RATIO = int(ceil(INSIDE_STEP_SIZE / OUTSIDE_STEP_SIZE));
 
 // Cloud Material Parameters
-const float CLOUD_DENSITY_SCALE = 0.04;
+const float CLOUD_DENSITY_SCALE = 0.04f;
 
-const float kb = 1.0; // Backscattering
-const float kbp = 30.0; // Backscattering falloff
+const float kb = 1.0f; // Backscattering
+const float kbp = 30.0f; // Backscattering falloff
 
-const float ks = 0.8; // Onmidirectional Scattering
-const float kt = 1.0; // Transmission Scattering
-const float ktp = 2.0; // Transmission falloff
+const float ks = 0.8f; // Onmidirectional Scattering
+const float kt = 1.0f; // Transmission Scattering
+const float ktp = 2.0f; // Transmission falloff
 
-const float BASE_TRANSMISSION = 0.97; // Light that doesn't get scattered at all
-
+const float BASE_TRANSMISSION = 0.97f; // Light that doesn't get scattered at all
 
 // Lighting Parameters
-const vec3 LIGHT_DIRECTION = normalize(vec3(0,1.0,0.5));
-const vec3 SUN_LIGHT = vec3(0.99, 0.97, 0.96);
-const vec3 AMBIENT_LIGHT = vec3(0.52,0.80,0.92);
-const float AMBIENT_INTENSITY = 0.2; // How "strong" is the ambient light
-const float SUN_INTENSITY = 1.2; // How "strong" is the sun
+const vec3 LIGHT_DIRECTION = normalize(vec3(0, 1.0f, 0.5f));
+const vec3 SUN_LIGHT = vec3(0.99f, 0.97f, 0.96f);
+const vec3 AMBIENT_LIGHT = vec3(0.52f, 0.80f, 0.92f);
+const float AMBIENT_INTENSITY = 0.2f; // How "strong" is the ambient light
+const float SUN_INTENSITY = 1.2f; // How "strong" is the sun
 
+const float E = 2.718f;
 
-const float E = 2.718;
-
-
-float hash14(vec4 p4)
-{
-	p4 = fract(p4  * vec4(.1031, .1030, .0973, .1099));
-    p4 += dot(p4, p4.wzxy+33.33);
+float hash14(vec4 p4) {
+    p4 = fract(p4 * vec4(.1031f, .1030f, .0973f, .1099f));
+    p4 += dot(p4, p4.wzxy + 33.33f);
     return fract((p4.x + p4.y) * (p4.z + p4.w));
 }
-
 
 float beerPowder(float material_amount) {
     return pow(E, -material_amount) - pow(E, -material_amount * material_amount);
@@ -81,17 +72,15 @@ float beer(float material_amount) {
     return pow(E, -material_amount);
 }
 
-
-
 float sampleCloudMapShape(vec3 point) {
-    if (point.z > CLOUD_LAYER_HEIGHTS.w + CLOUD_LAYER_THICKNESS || point.z < CLOUD_LAYER_HEIGHTS.x - CLOUD_UNDERHANG) {
-        return -100.0;
+    if(point.z > CLOUD_LAYER_HEIGHTS.w + CLOUD_LAYER_THICKNESS || point.z < CLOUD_LAYER_HEIGHTS.x - CLOUD_UNDERHANG) {
+        return -100.0f;
     }
-    vec4 map_sample = (textureLod(cloud_map, point.rg / CLOUD_MAP_EXTENT, 0.0) - 0.5) * 2.0;
+    vec4 map_sample = (textureLod(cloud_map, point.rg / CLOUD_MAP_EXTENT, 0.0f) - 0.5f) * 2.0f;
 
     vec4 layer_density = map_sample;
     vec4 layer_centerline = CLOUD_LAYER_HEIGHTS + (CLOUD_LAYER_THICKNESS - CLOUD_UNDERHANG) * layer_density;
-    vec4 layer_thickness = max(CLOUD_LAYER_THICKNESS * layer_density, 0.0);
+    vec4 layer_thickness = max(CLOUD_LAYER_THICKNESS * layer_density, 0.0f);
     vec4 distance_to_centerline = abs(point.z - layer_centerline);
     vec4 distance_to_surface = distance_to_centerline - layer_thickness;
     vec4 distance_to_layer = distance_to_surface;
@@ -102,168 +91,157 @@ float sampleCloudMapShape(vec3 point) {
     return density * CLOUD_DENSITY_SCALE;
 }
 
-
-
-
 float computeDensityTowardsSun(vec3 current_position, float density_here) {
-    float density_sunwards = max(density_here, 0.0);
-    density_sunwards += max(0.0, sampleCloudMapShape(current_position + LIGHT_DIRECTION * 1.0)) * 60.0 * WORLD_SCALE;
-    density_sunwards += max(0.0, sampleCloudMapShape(current_position + LIGHT_DIRECTION * 4.0)) * 240.0 * WORLD_SCALE;
-    
+    float density_sunwards = max(density_here, 0.0f);
+    density_sunwards += max(0.0f, sampleCloudMapShape(current_position + LIGHT_DIRECTION * 1.0f)) * 60.0f * WORLD_SCALE;
+    density_sunwards += max(0.0f, sampleCloudMapShape(current_position + LIGHT_DIRECTION * 4.0f)) * 240.0f * WORLD_SCALE;
+
     return density_sunwards;
 }
 
-
-vec3 transmission(vec3 light,float material_amount) {
-    return beer(material_amount * (1.0 - BASE_TRANSMISSION)) * light;
+vec3 transmission(vec3 light, float material_amount) {
+    return beer(material_amount * (1.0f - BASE_TRANSMISSION)) * light;
 }
 
 vec3 lightScattering(vec3 light, float angle, float material_amount) {
     // Compute the color/intensity of the light scattering in a particular direction
     // Angle ranges from 1.0 (transmission/forward scattering) to -1.0 (back scattering)  
-    
-    angle = (angle + 1.0) * 0.5; // Angle between 0 and 1
-  
-  
-    float ratio = 0.0;
-    ratio += kb * pow(1.0 - angle, kbp);
+
+    angle = (angle + 1.0f) * 0.5f; // Angle between 0 and 1
+
+    float ratio = 0.0f;
+    ratio += kb * pow(1.0f - angle, kbp);
     ratio += kt * pow(angle, ktp);
-    ratio = ratio * (1.0 - ks) + ks;
-    
-    light = light * ratio * (1.0 - BASE_TRANSMISSION);
-    
+    ratio = ratio * (1.0f - ks) + ks;
+
+    light = light * ratio * (1.0f - BASE_TRANSMISSION);
+
     return light;
 }
 
-
 float addNoiseToDensity(vec3 point, float density, int octaves) {
-    for (int j = 0; j < octaves; j++) {
-        float level = float(j) + 1.0;
+    for(int j = 0; j < octaves; j++) {
+        float level = float(j) + 1.0f;
         float l2 = level * level;
         float scale = CLOUD_NOISE_SCALE * level;
         vec3 position_offset = time_since_start * CLOUD_NOISE_SPEED * l2;
-        vec4 small_noise_tex = textureLod(buffer_volume_noise, point * scale + position_offset, 0.0);
-        density -= pow(small_noise_tex.r, 2.0) * CLOUD_NOISE_DENSITY_VARIATION  * CLOUD_DENSITY_SCALE * density;
+        vec4 small_noise_tex = textureLod(buffer_volume_noise, point * scale + position_offset, 0.0f);
+        density -= pow(small_noise_tex.r, 2.0f) * CLOUD_NOISE_DENSITY_VARIATION * CLOUD_DENSITY_SCALE * density;
     }
     return density;
 }
 
-
-
 void main() {
-    vec2 uv = screen_pos.xy * 0.5 + 0.5;
-
+    vec2 uv = screen_pos.xy * 0.5f + 0.5f;
 
     mat4 screen_to_camera = inverse(camera_to_screen);
     mat4 screen_to_world = camera_to_world * screen_to_camera;
 
-    vec4 ray_direction_screen = vec4(screen_pos.xy, 1.0, 1.0);
+    vec4 ray_direction_screen = vec4(screen_pos.xy, 1.0f, 1.0f);
     vec4 ray_direction_camera = screen_to_camera * ray_direction_screen;
-    vec4 ray_direction_world = camera_to_world * vec4(ray_direction_camera.xyz, 0.0);
+    vec4 ray_direction_world = camera_to_world * vec4(ray_direction_camera.xyz, 0.0f);
 
     vec3 ray_start = camera_to_world[3].xyz;
     vec3 ray_direction = normalize(ray_direction_world.xyz);
 
-    float dist_from_camera = 0.0;
-    vec3 accumulation = vec3(0.0, 0.0, 0.0);
-    
+    float dist_from_camera = 0.0f;
+    vec3 accumulation = vec3(0.0f, 0.0f, 0.0f);
+
     int steps_outside_cloud = 0;
-    
-    float noise = hash14(vec4(ray_direction * 1000.0, time_since_start * 10.0));
-    
+
+    float noise = hash14(vec4(ray_direction * 1000.0f, time_since_start * 10.0f));
 
     // Backdrop
     vec4 geometry = texture(buffer_geometry, uv);
-    float max_distance = geometry.w == 0.0 ? 10000.0 : geometry.w;
-    
-    float materialTowardsCamera = 0.0;
+    float max_distance = geometry.w == 0.0f ? DRAW_DISTANCE : geometry.w;
 
-    float steps = 0.0;
+    float materialTowardsCamera = 0.0f;
 
-    for (int i=0; i<MAX_STEPS; i+=1) {
+    float steps = 0.0f;
+
+    for(int i = 0; i < MAX_STEPS; i += 1) {
         steps = float(i);
         vec3 current_position = ray_start + (dist_from_camera + noise * INSIDE_STEP_SIZE) * ray_direction;
 
         // If we are higher than the clouds or lower than the clouds, don't compute clouds
-        if (current_position.z > CLOUD_LAYER_HEIGHTS.w + CLOUD_LAYER_THICKNESS && ray_direction.z > 0.0) {
+        if(current_position.z > CLOUD_LAYER_HEIGHTS.w + CLOUD_LAYER_THICKNESS && ray_direction.z > 0.0f) {
             //backdrop = vec4(1.0, 0.0, 0.0, 1.0);
+            dist_from_camera = DRAW_DISTANCE;
             break;
         }
-        if (current_position.z < CLOUD_LAYER_HEIGHTS.x - CLOUD_UNDERHANG && ray_direction.z < 0.0) {
+        if(current_position.z < CLOUD_LAYER_HEIGHTS.x - CLOUD_UNDERHANG && ray_direction.z < 0.0f) {
             //backdrop = vec4(0.0, 1.0, 0.0, 1.0);
+            dist_from_camera = DRAW_DISTANCE;
             break;
         }
 
         float cloud_map = sampleCloudMapShape(current_position);
-        
-        if (cloud_map > 0.0) {
-            if (steps_outside_cloud != 0) {
+
+        if(cloud_map > 0.0f) {
+            if(steps_outside_cloud != 0) {
                 // First step into the cloud;
                 steps_outside_cloud = 0;
                 dist_from_camera = dist_from_camera - OUTSIDE_STEP_SIZE + INSIDE_STEP_SIZE;
-                
+
                 continue;
             }
             steps_outside_cloud = 0;
-            
+
         } else {
             steps_outside_cloud += 1;
         }
-        
+
         float step_size = OUTSIDE_STEP_SIZE;
-        
-        if (steps_outside_cloud <= STEP_OUTSIDE_RATIO && cloud_map > 0.0) {
+
+        if(steps_outside_cloud <= STEP_OUTSIDE_RATIO && cloud_map > 0.0f) {
             float density_here = cloud_map;
 
             // We only need to sample the detailed cloud texture if
             // we are close and can see it in lots of detail.
-            if (dist_from_camera < DRAW_DISTANCE / 3.0) {
+            if(dist_from_camera < DRAW_DISTANCE / 3.0f) {
                 density_here = addNoiseToDensity(current_position, density_here, CLOUD_NOISE_OCTAVES);
             }
-            
-            density_here = smoothstep(0.0, 0.1, density_here);
-            
-            density_here = max(density_here, 0.0);
+
+            density_here = smoothstep(0.0f, 0.2f, density_here);
+
+            density_here = max(density_here, 0.0f);
             float material_here = density_here * step_size;
             materialTowardsCamera += material_here;
-            
+
             float materialTowardsSun = computeDensityTowardsSun(current_position, density_here);
-            
-            vec3 lightFromSunAtParticle = transmission(
-                SUN_LIGHT * SUN_INTENSITY,
-                materialTowardsSun
-            );
-                        
+
+            vec3 lightFromSunAtParticle = transmission(SUN_LIGHT * SUN_INTENSITY, materialTowardsSun);
+
             float angleToSun = dot(ray_direction, LIGHT_DIRECTION);
 
             vec3 lightAtParticle = lightFromSunAtParticle;
-            vec3 lightScatteringTowardsCamera = lightScattering(
-                lightAtParticle * material_here,
-                angleToSun,
-                materialTowardsCamera
-            );
-            vec3 lightReachingCamera = transmission(
-                lightScatteringTowardsCamera,
-                materialTowardsCamera
-            );
+            vec3 lightScatteringTowardsCamera = lightScattering(lightAtParticle * material_here, angleToSun, materialTowardsCamera);
+            vec3 lightReachingCamera = transmission(lightScatteringTowardsCamera, materialTowardsCamera);
             accumulation.rgb += lightReachingCamera;
         }
 
-        if (materialTowardsCamera * CLOUD_DENSITY_SCALE > 4.0) {
+        if(materialTowardsCamera * CLOUD_DENSITY_SCALE > 4.0f) {
             break;
         }
-        
+
         dist_from_camera += step_size;
-        if (dist_from_camera > max_distance) {
-            break;
-        }
-        else if (dist_from_camera > DRAW_DISTANCE) {
+        if(dist_from_camera > max_distance) {
             break;
         }
     }
-    
+
+    //float alpha = 1.0f - beer(materialTowardsCamera * (1.0f - BASE_TRANSMISSION));
+
+    vec2 datavec = vec2(materialTowardsCamera, max_distance);
+    uint data = packHalf2x16(datavec);
+    float d = uintBitsToFloat(data);
+
+
+
     FragColor = vec4(
+       
         accumulation,
-        materialTowardsCamera
+        d
+        
     );
 }
