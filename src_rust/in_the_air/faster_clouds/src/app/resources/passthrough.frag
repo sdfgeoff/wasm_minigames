@@ -1,8 +1,3 @@
-#version 300 es
-
-precision highp float;
-precision highp int;
-
 in vec4 screen_pos;
 out vec4 FragColor;
 
@@ -10,16 +5,6 @@ uniform vec2 resolution;
 
 uniform sampler2D lighting_texture;
 uniform sampler2D volume_texture;
-
-const float BASE_TRANSMISSION = 0.97; // Light that doesn't get scattered at all
-
-const float E = 2.718;
-
-
-
-float beer(float material_amount) {
-    return pow(E, -material_amount);
-}
 
 
 vec4 sample_volume(in vec2 uv, out float depth) {
@@ -40,9 +25,8 @@ vec4 sample_volume(in vec2 uv, out float depth) {
 void main() {
     vec2 uv = screen_pos.xy * 0.5 + 0.5;
 
-    vec4 light = texture(lighting_texture, uv);
-
-    float surfaceDepth = light.a;
+    vec4 opaque = texture(lighting_texture, uv);
+    float surfaceDepth = opaque.a;
 
     vec2 offset = 1.0 / resolution * 2.0;
     float depth1, depth2, depth3, depth4 = 0.0;
@@ -68,7 +52,7 @@ void main() {
     
     float materialTowardsCamera = volume.a;
 
-    vec3 color = volume.rgb + beer(materialTowardsCamera * (1.0 - BASE_TRANSMISSION)) * light.rgb;
+    vec3 color = volume.rgb + beer(materialTowardsCamera * (1.0 - BASE_TRANSMISSION)) * opaque.rgb;
 
     FragColor = vec4(color.rgb, 1.0);
 }

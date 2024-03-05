@@ -143,7 +143,7 @@ pub fn render_volume(
         gl.viewport(
             0,
             0,
-            renderer_state.resolution[0]  / 2,
+            renderer_state.resolution[0] / 2,
             renderer_state.resolution[1] / 2,
         );
         gl.clear_color(0.0, 0.0, 0.0, 0.0);
@@ -161,8 +161,7 @@ pub fn render_volume(
     renderer_state.textures.buffer_geometry.bind_to_uniform(
         gl,
         2,
-        active_shader_program.uniforms
-            .get("buffer_geometry"),
+        active_shader_program.uniforms.get("buffer_geometry"),
     );
     renderer_state
         .static_resources
@@ -171,20 +170,14 @@ pub fn render_volume(
         .bind_to_uniform(
             gl,
             4,
-            active_shader_program.uniforms
-                .get("buffer_volume_noise"),
+            active_shader_program.uniforms.get("buffer_volume_noise"),
         );
 
     renderer_state
         .static_resources
         .textures
         .cloud_map
-        .bind_to_uniform(
-            gl,
-            3,
-            active_shader_program.uniforms
-                .get("cloud_map"),
-        );
+        .bind_to_uniform(gl, 3, active_shader_program.uniforms.get("cloud_map"));
     unsafe {
         gl.uniform_1_f32(
             active_shader_program.uniforms.get("time_since_start"),
@@ -194,7 +187,6 @@ pub fn render_volume(
 
     active_mesh.render(gl);
 }
-
 
 pub fn render_lighting(
     gl: &Context,
@@ -286,11 +278,7 @@ pub fn render_lighting(
     }
 
     active_mesh.render(gl);
-
 }
-
-
-
 
 pub fn render_to_display(gl: &Context, renderer_state: &RendererState, _world_state: &WorldState) {
     // Forward the display buffer to the screen
@@ -317,14 +305,12 @@ pub fn render_to_display(gl: &Context, renderer_state: &RendererState, _world_st
     renderer_state.textures.buffer_lighting.bind_to_uniform(
         gl,
         0,
-        active_shader_program.uniforms
-            .get("lighting_texture"),
+        active_shader_program.uniforms.get("lighting_texture"),
     );
     renderer_state.textures.buffer_volume.bind_to_uniform(
         gl,
         1,
-        active_shader_program.uniforms
-            .get("volume_texture"),
+        active_shader_program.uniforms.get("volume_texture"),
     );
 
     unsafe {
@@ -334,8 +320,6 @@ pub fn render_to_display(gl: &Context, renderer_state: &RendererState, _world_st
             renderer_state.resolution[1] as f32,
         );
     }
-
-
 
     active_mesh.render(gl);
 }

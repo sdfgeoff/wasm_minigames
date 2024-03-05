@@ -69,9 +69,12 @@ pub fn load_shader_programs(
             gl,
             &static_resources.vertex_shaders.full_screen_quad,
             &static_resources.fragment_shaders.passthrough,
-            vec!["lighting_texture".to_string(), "volume_texture".to_string(), "resolution".to_string()],
+            vec![
+                "lighting_texture".to_string(),
+                "volume_texture".to_string(),
+                "resolution".to_string(),
+            ],
         )?,
-        
     })
 }
 
@@ -156,9 +159,6 @@ pub fn load_textures(gl: &Context, screen_resolution: &[i32; 2]) -> Result<Textu
     )?;
     //buffer_volume.resize_render_target(gl, screen_resolution);
     buffer_volume.resize_render_target(gl, &[screen_resolution[0] / 2, screen_resolution[1] / 2]);
-
-
-    
 
     Ok(Textures {
         buffer_color,

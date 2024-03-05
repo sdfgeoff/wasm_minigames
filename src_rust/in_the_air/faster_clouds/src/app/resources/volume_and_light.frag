@@ -1,7 +1,5 @@
-#version 300 es
 
-precision mediump float;
-precision mediump sampler3D;
+
 in vec4 screen_pos;
 out vec4 FragColor;
 
@@ -26,64 +24,6 @@ uniform mat4 world_to_camera;
 uniform float time_since_start;
 
 
-const float WORLD_SCALE = 0.05; // Scale all the cloud parameters by this amount
-
-const float CLOUD_MAP_EXTENT = 128.0 * 500.0 * WORLD_SCALE; // 128 pixels, 200 meters per pixel
-const vec4 CLOUD_LAYER_HEIGHTS = vec4(0.0, 1.0, 2.0, 4.0) * 1500.0 * WORLD_SCALE;
-const float CLOUD_LAYER_THICKNESS = 1650.0 * WORLD_SCALE; // If this is bigger than the distance between the gap between CLOUD_LAYER_HEIGHTS then the clouds can overlap
-const float CLOUD_UNDERHANG = CLOUD_LAYER_THICKNESS * 0.5; // How much the cloud layer extends below the layer height
-const float CLOUD_NOISE_SCALE = WORLD_SCALE * 0.1;
-const vec3 CLOUD_NOISE_SPEED = vec3(0.02, 0.0, 0.0);
-const int CLOUD_NOISE_OCTAVES = 1;
-const float CLOUD_NOISE_DENSITY_VARIATION = 30.0;
-
-
-// Raymarcher Parameters
-const int MAX_STEPS = 128;
-const float DRAW_DISTANCE = 2000.0;
-const float INSIDE_STEP_SIZE = 3.0;
-const float OUTSIDE_STEP_SIZE = INSIDE_STEP_SIZE * 4.0;
-const int STEP_OUTSIDE_RATIO = int(ceil(INSIDE_STEP_SIZE / OUTSIDE_STEP_SIZE));
-
-// Cloud Material Parameters
-const float CLOUD_DENSITY_SCALE = 0.04;
-
-const float kb = 1.0; // Backscattering
-const float kbp = 30.0; // Backscattering falloff
-
-const float ks = 0.8; // Onmidirectional Scattering
-const float kt = 1.0; // Transmission Scattering
-const float ktp = 2.0; // Transmission falloff
-
-const float BASE_TRANSMISSION = 0.97; // Light that doesn't get scattered at all
-
-
-// Lighting Parameters
-const vec3 LIGHT_DIRECTION = normalize(vec3(0,1.0,0.5));
-const vec3 SUN_LIGHT = vec3(0.99, 0.97, 0.96);
-const vec3 AMBIENT_LIGHT = vec3(0.52,0.80,0.92);
-const float AMBIENT_INTENSITY = 0.2; // How "strong" is the ambient light
-const float SUN_INTENSITY = 1.2; // How "strong" is the sun
-
-
-const float E = 2.718;
-
-
-float hash14(vec4 p4)
-{
-	p4 = fract(p4  * vec4(.1031, .1030, .0973, .1099));
-    p4 += dot(p4, p4.wzxy+33.33);
-    return fract((p4.x + p4.y) * (p4.z + p4.w));
-}
-
-
-float beerPowder(float material_amount) {
-    return pow(E, -material_amount) - pow(E, -material_amount * material_amount);
-}
-
-float beer(float material_amount) {
-    return pow(E, -material_amount);
-}
 
 
 vec3 renderSky(vec3 direction) {
@@ -104,82 +44,6 @@ vec3 renderSky(vec3 direction) {
 }
 
 
-
-float sampleCloudMapShape(vec3 point) {
-    if (point.z > CLOUD_LAYER_HEIGHTS.w + CLOUD_LAYER_THICKNESS || point.z < CLOUD_LAYER_HEIGHTS.x - CLOUD_UNDERHANG) {
-        return -100.0;
-    }
-    vec4 map_sample = (textureLod(cloud_map, point.rg / CLOUD_MAP_EXTENT, 0.0) - 0.5) * 2.0;
-
-    vec4 layer_density = map_sample;
-    vec4 layer_centerline = CLOUD_LAYER_HEIGHTS + (CLOUD_LAYER_THICKNESS - CLOUD_UNDERHANG) * layer_density;
-    vec4 layer_thickness = max(CLOUD_LAYER_THICKNESS * layer_density, 0.0);
-    vec4 distance_to_centerline = abs(point.z - layer_centerline);
-    vec4 distance_to_surface = distance_to_centerline - layer_thickness;
-    vec4 distance_to_layer = distance_to_surface;
-
-    float distance_to_cloud = min(min(min(distance_to_layer.x, distance_to_layer.y), distance_to_layer.z), distance_to_layer.w);
-
-    float density = -distance_to_cloud;
-    return density * CLOUD_DENSITY_SCALE;
-}
-
-
-
-
-float computeDensityTowardsSun(vec3 current_position, float density_here) {
-    float density_sunwards = max(density_here, 0.0);
-    density_sunwards += max(0.0, sampleCloudMapShape(current_position + LIGHT_DIRECTION * 1.0)) * 60.0 * WORLD_SCALE;
-    density_sunwards += max(0.0, sampleCloudMapShape(current_position + LIGHT_DIRECTION * 4.0)) * 240.0 * WORLD_SCALE;
-    
-    return density_sunwards;
-}
-
-
-vec3 transmission(vec3 light,float material_amount) {
-    return beer(material_amount * (1.0 - BASE_TRANSMISSION)) * light;
-}
-
-vec3 lightScattering(vec3 light, float angle, float material_amount) {
-    // Compute the color/intensity of the light scattering in a particular direction
-    // Angle ranges from 1.0 (transmission/forward scattering) to -1.0 (back scattering)  
-    
-
-    
-    angle = (angle + 1.0) * 0.5; // Angle between 0 and 1
-  
-  
-    float ratio = 0.0;
-    ratio += kb * pow(1.0 - angle, kbp);
-    ratio += kt * pow(angle, ktp);
-    ratio = ratio * (1.0 - ks) + ks;
-    
-    
-    /*float ratio = 0.0;
-    ratio = (1.0 - smoothstep(0.0, 0.5,(1.0 - angle) * ktp)) * kt;
-    ratio += (1.0 - smoothstep(0.0, 0.5, (angle) * kbp)) * kb;
-    
-    ratio = ratio * (1.0 - ks) + ks;*/
-    light = light * ratio * (1.0 - BASE_TRANSMISSION);
-    
-    // Transmit....
-    return light;
-}
-
-
-float addNoiseToDensity(vec3 point, float density, int octaves) {
-    for (int j = 0; j < octaves; j++) {
-        float level = float(j) + 1.0;
-        float l2 = level * level;
-        float scale = CLOUD_NOISE_SCALE * level;
-        vec3 position_offset = time_since_start * CLOUD_NOISE_SPEED * l2;
-        vec4 small_noise_tex = textureLod(buffer_volume_noise, point * scale + position_offset, 0.0);
-        density -= pow(small_noise_tex.r, 2.0) * CLOUD_NOISE_DENSITY_VARIATION  * CLOUD_DENSITY_SCALE * density;
-    }
-    return density;
-}
-
-
 vec4 light_surface(vec4 color, vec4 geometry, vec4 material, vec3 lightFromSunAtParticle) {
     vec3 normal = normalize(geometry.xyz);
 
@@ -196,12 +60,6 @@ vec4 light_surface(vec4 color, vec4 geometry, vec4 material, vec3 lightFromSunAt
     return vec4(d + s + a, 1.0);
 }
 
-vec4 alphaOver(vec4 top, vec4 bottom) {
-    float A1 = bottom.a * (1.0 - top.a);
-
-    float A0 = top.a + A1;
-    return vec4((top.rgb * top.a + bottom.rgb * A1) / A0, A0);
-}
 
 
 void main() {
@@ -237,7 +95,7 @@ void main() {
         float opaque_distance_from_camera = geometry.w;
         vec4 color = texture(buffer_color, uv);
         vec4 material = texture(buffer_material, uv);
-        float materialTowardsSun = computeDensityTowardsSun(ray_start + ray_direction * opaque_distance_from_camera, 0.0);
+        float materialTowardsSun = computeDensityTowardsSun(cloud_map, ray_start + ray_direction * opaque_distance_from_camera, 0.0);
         vec3 lightFromSunAtParticle = transmission(
             SUN_LIGHT * SUN_INTENSITY,
             materialTowardsSun

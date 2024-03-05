@@ -80,18 +80,99 @@ split our shader to compute the backdrop of opaque and composite things on top.
 So after a bit of fillding:
 <img src="outlines.png"/>
 
-Ewwwww. Look at that outline around the cloud and around the vehicle. That's because it's half-resolution. Dang.
+Ewwwww. Look at that outline around the cloud and around the vehicle. That's because it's half-resolution. Dang. Anywah, at least it is fast. I can hit 60FPS in fullscreen now. So I'll call that a win at least. But what can be done about the appearance? 
+
+The issue is that the volume buffer is half-resolution, so around the edges of objects it will alias as sometimes it will get the voume buffer at the right depth, and sometimes it will get it at the wrong depth.
+
+We need to do a depth-aware sample of the volume buffer to ensure that we occlude using the sample closest to the depth of the surface.
+
+I couldn't think of a nice way to do this so I packed the depth into the alpha channel of the volume buffer and...
+
+```glsl
+
+vec4 sample_volume(in vec2 uv, out float depth) {
+    vec4 raw = texture(volume_texture, uv);
+    uint data_uint = floatBitsToUint(raw.a);
+    vec2 data = unpackHalf2x16(data_uint);
+
+    depth = data.y;
+    float mat = data.x;
+
+    return vec4(
+        raw.rgb,
+        mat
+    );
+}
+
+
+void main() {
+    vec2 uv = screen_pos.xy * 0.5 + 0.5;
+
+    vec4 opaque = texture(lighting_texture, uv);
+    float surfaceDepth = opaque.a;
+
+    vec2 offset = 1.0 / resolution * 2.0;
+    float depth1, depth2, depth3, depth4 = 0.0;
+    vec4 v1 = sample_volume(uv + offset * vec2(-1, 0), depth1);
+    vec4 v2 = sample_volume(uv + offset * vec2(1, 0), depth2);
+    vec4 v3 = sample_volume(uv + offset * vec2(0, 1), depth3);
+    vec4 v4 = sample_volume(uv + offset * vec2(0, -1), depth4);
+
+    // Find out which volume sample that is nearest to the surfae depth
+    vec4 deltas = abs(vec4(surfaceDepth) - vec4(depth1, depth2, depth3, depth4));
+    float minDelta = min(min(min(deltas.x, deltas.y), deltas.z), deltas.w);
+
+    vec4 volume = v1;
+    if (minDelta == deltas.x) {
+        volume = v1;
+    } else if (minDelta == deltas.y) {
+        volume = v2;
+    } else if (minDelta == deltas.z) {
+        volume = v3;
+    } else if (minDelta == deltas.w) {
+        volume = v4;
+    }
+    
+    float materialTowardsCamera = volume.a;
+
+    vec3 color = volume.rgb + beer(materialTowardsCamera * (1.0 - BASE_TRANSMISSION)) * opaque.rgb;
+
+    FragColor = vec4(color.rgb, 1.0);
+}
+
+```
+It's kinda verbose and branch-y, but it works and runs like butter at 1080p on my laptop.
+
+
 Also, there's now heaps of dupicated shader code. Maybe I need a preprocessor
-to make it easier to have common functions.
+to make it easier to have common functions. Plain old string concatenation will work fine.
 
-Anywah, at least it is fast. I can hit 60FPS in fullscreen now. So I'll call that a win at least. But what can be done about the appearance? Currently we
-use a proper falloff for mixing between the two, but this involves transferring
-data about the material density, and I think this is tripping it up. If I can
-compute the alpha directly in the volumetric pass, then not only is there less
-duplicated shader code, but the compositing may also be cleaner.
+```rust
+impl FragmentShaders {
+    pub fn load(gl: &Context) -> Result<Self, ShaderError> {
+        Ok(Self {
+            model_shader: Shader::new(gl, ShaderType::Fragment, include_str!("model_shader.frag"))?,
+            volume_and_light: Shader::new(
+                gl,
+                ShaderType::Fragment,
+                &(include_str!("common.frag").to_owned() + include_str!("volume_and_light.frag")),
+            )?,
+            volume: Shader::new(
+                gl,
+                ShaderType::Fragment,
+                &(include_str!("common.frag").to_owned() + include_str!("volume.frag")),
+            )?,
+            passthrough: Shader::new(
+                gl,
+                ShaderType::Fragment,
+                &(include_str!("common.frag").to_owned() + include_str!("passthrough.frag")),
+            )?,
+        })
+    }
+}
+```
 
-
-
+My IDE now screams at me about undefined variables, but it all compiles and runs, so I don't really mind.
 
 
 

@@ -103,5 +103,8 @@ pub fn resize_buffers(gl: &Context, renderer_state: &RendererState, resolution: 
         .buffer_lighting
         .resize_render_target(gl, resolution);
     // renderer_state.textures.buffer_volume.resize_render_target(gl, resolution);
-    renderer_state.textures.buffer_volume.resize_render_target(gl, &[resolution[0] / 2, resolution[1] / 2]);
+    renderer_state
+        .textures
+        .buffer_volume
+        .resize_render_target(gl, &[resolution[0] / 2, resolution[1] / 2]);
 }

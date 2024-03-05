@@ -96,10 +96,18 @@ impl FragmentShaders {
             volume_and_light: Shader::new(
                 gl,
                 ShaderType::Fragment,
-                include_str!("volume_and_light.frag"),
+                &(include_str!("common.frag").to_owned() + include_str!("volume_and_light.frag")),
             )?,
-            volume: Shader::new(gl, ShaderType::Fragment, include_str!("volume.frag"))?,
-            passthrough: Shader::new(gl, ShaderType::Fragment, include_str!("passthrough.frag"))?,
+            volume: Shader::new(
+                gl,
+                ShaderType::Fragment,
+                &(include_str!("common.frag").to_owned() + include_str!("volume.frag")),
+            )?,
+            passthrough: Shader::new(
+                gl,
+                ShaderType::Fragment,
+                &(include_str!("common.frag").to_owned() + include_str!("passthrough.frag")),
+            )?,
         })
     }
 }

@@ -1,8 +1,6 @@
-#version 300 es
 
-precision highp float;
-precision highp int;
 precision mediump sampler3D;
+
 in vec4 screen_pos;
 out vec4 FragColor;
 
@@ -19,89 +17,7 @@ uniform mat4 world_to_camera;
 
 uniform float time_since_start;
 
-const float WORLD_SCALE = 0.05f; // Scale all the cloud parameters by this amount
 
-const float CLOUD_MAP_EXTENT = 128.0f * 500.0f * WORLD_SCALE; // 128 pixels, 200 meters per pixel
-const vec4 CLOUD_LAYER_HEIGHTS = vec4(0.0f, 1.0f, 2.0f, 4.0f) * 1500.0f * WORLD_SCALE;
-const float CLOUD_LAYER_THICKNESS = 1650.0f * WORLD_SCALE; // If this is bigger than the distance between the gap between CLOUD_LAYER_HEIGHTS then the clouds can overlap
-const float CLOUD_UNDERHANG = CLOUD_LAYER_THICKNESS * 0.5f; // How much the cloud layer extends below the layer height
-const float CLOUD_NOISE_SCALE = WORLD_SCALE * 0.1f;
-const vec3 CLOUD_NOISE_SPEED = vec3(0.02f, 0.0f, 0.0f);
-const int CLOUD_NOISE_OCTAVES = 1;
-const float CLOUD_NOISE_DENSITY_VARIATION = 30.0f;
-
-// Raymarcher Parameters
-const int MAX_STEPS = 128;
-const float DRAW_DISTANCE = 1000.0f;
-const float INSIDE_STEP_SIZE = 3.0f;
-const float OUTSIDE_STEP_SIZE = INSIDE_STEP_SIZE * 4.0f;
-const int STEP_OUTSIDE_RATIO = int(ceil(INSIDE_STEP_SIZE / OUTSIDE_STEP_SIZE));
-
-// Cloud Material Parameters
-const float CLOUD_DENSITY_SCALE = 0.04f;
-
-const float kb = 1.0f; // Backscattering
-const float kbp = 30.0f; // Backscattering falloff
-
-const float ks = 0.8f; // Onmidirectional Scattering
-const float kt = 1.0f; // Transmission Scattering
-const float ktp = 2.0f; // Transmission falloff
-
-const float BASE_TRANSMISSION = 0.97f; // Light that doesn't get scattered at all
-
-// Lighting Parameters
-const vec3 LIGHT_DIRECTION = normalize(vec3(0, 1.0f, 0.5f));
-const vec3 SUN_LIGHT = vec3(0.99f, 0.97f, 0.96f);
-const vec3 AMBIENT_LIGHT = vec3(0.52f, 0.80f, 0.92f);
-const float AMBIENT_INTENSITY = 0.2f; // How "strong" is the ambient light
-const float SUN_INTENSITY = 1.2f; // How "strong" is the sun
-
-const float E = 2.718f;
-
-float hash14(vec4 p4) {
-    p4 = fract(p4 * vec4(.1031f, .1030f, .0973f, .1099f));
-    p4 += dot(p4, p4.wzxy + 33.33f);
-    return fract((p4.x + p4.y) * (p4.z + p4.w));
-}
-
-float beerPowder(float material_amount) {
-    return pow(E, -material_amount) - pow(E, -material_amount * material_amount);
-}
-
-float beer(float material_amount) {
-    return pow(E, -material_amount);
-}
-
-float sampleCloudMapShape(vec3 point) {
-    if(point.z > CLOUD_LAYER_HEIGHTS.w + CLOUD_LAYER_THICKNESS || point.z < CLOUD_LAYER_HEIGHTS.x - CLOUD_UNDERHANG) {
-        return -100.0f;
-    }
-    vec4 map_sample = (textureLod(cloud_map, point.rg / CLOUD_MAP_EXTENT, 0.0f) - 0.5f) * 2.0f;
-
-    vec4 layer_density = map_sample;
-    vec4 layer_centerline = CLOUD_LAYER_HEIGHTS + (CLOUD_LAYER_THICKNESS - CLOUD_UNDERHANG) * layer_density;
-    vec4 layer_thickness = max(CLOUD_LAYER_THICKNESS * layer_density, 0.0f);
-    vec4 distance_to_centerline = abs(point.z - layer_centerline);
-    vec4 distance_to_surface = distance_to_centerline - layer_thickness;
-    vec4 distance_to_layer = distance_to_surface;
-
-    float distance_to_cloud = min(min(min(distance_to_layer.x, distance_to_layer.y), distance_to_layer.z), distance_to_layer.w);
-
-    float density = -distance_to_cloud;
-    return density * CLOUD_DENSITY_SCALE;
-}
-
-float computeDensityTowardsSun(vec3 current_position, float density_here) {
-    float density_sunwards = max(density_here, 0.0f);
-    density_sunwards += max(0.0f, sampleCloudMapShape(current_position + LIGHT_DIRECTION * 1.0f)) * 60.0f * WORLD_SCALE;
-    density_sunwards += max(0.0f, sampleCloudMapShape(current_position + LIGHT_DIRECTION * 4.0f)) * 240.0f * WORLD_SCALE;
-
-    return density_sunwards;
-}
-
-vec3 transmission(vec3 light, float material_amount) {
-    return beer(material_amount * (1.0f - BASE_TRANSMISSION)) * light;
-}
 
 vec3 lightScattering(vec3 light, float angle, float material_amount) {
     // Compute the color/intensity of the light scattering in a particular direction
@@ -175,9 +91,9 @@ void main() {
             break;
         }
 
-        float cloud_map = sampleCloudMapShape(current_position);
+        float cloud_density_map = sampleCloudMapShape(cloud_map, current_position);
 
-        if(cloud_map > 0.0f) {
+        if(cloud_density_map > 0.0f) {
             if(steps_outside_cloud != 0) {
                 // First step into the cloud;
                 steps_outside_cloud = 0;
@@ -193,8 +109,8 @@ void main() {
 
         float step_size = OUTSIDE_STEP_SIZE;
 
-        if(steps_outside_cloud <= STEP_OUTSIDE_RATIO && cloud_map > 0.0f) {
-            float density_here = cloud_map;
+        if(steps_outside_cloud <= STEP_OUTSIDE_RATIO && cloud_density_map > 0.0f) {
+            float density_here = cloud_density_map;
 
             // We only need to sample the detailed cloud texture if
             // we are close and can see it in lots of detail.
@@ -208,7 +124,7 @@ void main() {
             float material_here = density_here * step_size;
             materialTowardsCamera += material_here;
 
-            float materialTowardsSun = computeDensityTowardsSun(current_position, density_here);
+            float materialTowardsSun = computeDensityTowardsSun(cloud_map, current_position, density_here);
 
             vec3 lightFromSunAtParticle = transmission(SUN_LIGHT * SUN_INTENSITY, materialTowardsSun);
 
